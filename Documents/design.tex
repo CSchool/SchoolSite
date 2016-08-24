@@ -1,0 +1,51 @@
+\documentclass[14pt]{article}
+
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+
+\usepackage[simplified]{pgf-umlcd}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric,backgrounds,calc,positioning,arrows,
+                chains,decorations.markings,patterns,fadings,shapes.multipart,trees}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \begin{class}[text width=6cm]{User}{0,0}
+    \attribute{id : Integer}
+    \attribute{зарегистрирован : Date}
+    \attribute{Фамилия : String}
+    \attribute{Имя : String}
+    \attribute{Отчество : String}
+  \end{class}
+
+  \begin{class}{Group}{10,0}
+    \attribute{id : Integer}
+    \attribute{Название : String}
+    \attribute{Тип группы}
+  \end{class}
+  
+  \begin{class}{Period}{10,5}
+    \attribute{id : Integer}
+    \attribute{Название : String}
+    \attribute{Начало : Date}
+    \attribute{Окончание : Date}
+  \end{class}
+
+  \association{User}{}{0..*}{Group}{}{0..*}
+  \association{Period}{}{1}{Group}{}{0..*}
+
+\end{tikzpicture}
+
+\section{Сущности}
+
+\subsection{Пользователь}
+
+\subsection{Группа}
+
+Группы объединяют пользователей. Каждый из них может входить в любое количество групп.
+
+Группы могут быть двух типов: учебные и отряды в лагере.
+
+\end{document}
