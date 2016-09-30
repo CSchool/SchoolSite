@@ -1,5 +1,7 @@
 \documentclass[14pt]{article}
 
+\usepackage[letterpaper, landscape, margin=1.5cm]{geometry}
+
 \usepackage[T2A]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[english,russian]{babel}
@@ -11,41 +13,170 @@
 
 \begin{document}
 
-\begin{tikzpicture}
-  \begin{class}[text width=6cm]{User}{0,0}
-    \attribute{id : Integer}
-    \attribute{зарегистрирован : Date}
-    \attribute{Фамилия : String}
-    \attribute{Имя : String}
-    \attribute{Отчество : String}
-  \end{class}
+\section{Структура базы данных}
 
-  \begin{class}{Group}{10,0}
-    \attribute{id : Integer}
-    \attribute{Название : String}
-    \attribute{Тип группы}
-  \end{class}
+\begin{center}
+  \ttfamily
+  \begin{tikzpicture}
+    \begin{class}[text width=6cm]{User}{0,4}
+      \attribute{id : Integer (\textbf{PK})}
+      \attribute{registration : Date}
+      \attribute{surname : String}
+      \attribute{name : String}
+      \attribute{patronymic : String}
+      \attribute{role : UserRole enum}
+    \end{class}
+    
+    \begin{class}{UserRole}{-7, 4}
+    	\attribute{* Student}
+    	\attribute{* Parent}
+    	\attribute{* Сommittee}
+    	\attribute{* Teacher}
+    	\attribute{* Administrator}
+    \end{class}
+    
+    \begin{class}{Relationship}{-7, 0}
+       \attribute{id : Integer (\textbf{PK})}
+       \attribute{parent : Integer (\textbf{FK})}
+       \attribute{child : Integer (\textbf{FK})}
+       \attribute{state : RequestState enum}
+    \end{class}
+    
+    \begin{class}{RequestState}{-7, -4}
+      \attribute{* Waiting}
+      \attribute{* Approved}
+      \attribute{* Declined}
+    \end{class}
+
+    \begin{class}{GroupList}{0,0}
+      \attribute{id : Integer (\textbf{PK})}
+      \attribute{userId : Integer (\textbf{FK})}
+      \attribute{groupId : Integer (\textbf{FK})}
+      \attribute{state : RequestState}
+    \end{class}
+
+    \begin{class}{Group}{7,0}
+      \attribute{id : Integer (\textbf{PK})}
+      \attribute{periodId : Integer (\textbf{FK})}
+      \attribute{name : String}
+      \attribute{isOpen : bool}
+      \attribute{type : GroupType enum}
+    \end{class}
   
-  \begin{class}{Period}{10,5}
-    \attribute{id : Integer}
-    \attribute{Название : String}
-    \attribute{Начало : Date}
-    \attribute{Окончание : Date}
-  \end{class}
+    \begin{class}{Period}{7,4}
+      \attribute{id : Integer (\textbf{PK})}
+      \attribute{name : String}
+      \attribute{beginDate : Date}
+      \attribute{endDate : Date}
+    \end{class}
+    
+    \begin{class}{GroupType}{7, -4}
+      \attribute{* Study}
+      \attribute{* Camp}
+    \end{class}
 
-  \association{User}{}{0..*}{Group}{}{0..*}
-  \association{Period}{}{1}{Group}{}{0..*}
-
-\end{tikzpicture}
-
+    \association{User}{}{0..*}{GroupList}{}{}
+    \association{User}{}{}{UserRole}{}{}
+    \association{User}{}{}{Relationship}{}{}
+    \association{Relationship}{}{}{RequestState}{}{}
+    \association{GroupList}{}{}{Group}{}{0..*}
+    \association{GroupList}{}{}{RequestState}{}{}
+    \association{Period}{}{1}{Group}{}{0..*}
+    \association{Group}{}{}{GroupType}{}{}
+  \end{tikzpicture}
+\end{center}
 \section{Сущности}
 
-\subsection{Пользователь}
+\subsection{Пользователь (User)}
 
-\subsection{Группа}
+Пользователь сайта. 
+
+Атрибуты:
+
+\begin{itemize}
+	\item \emph{id}~---~идентификатор пользователя, является PK;
+	\item \emph{registration}~---~дата регистрации на сайте;
+	\item \emph{surname}~---~Фамилия пользователя;
+	\item \emph{name}~---~Имя пользователя;
+	\item \emph{patronymic}~---~Отчество пользователя;
+	\item \emph{role}~---~Роль пользователя в системе, является экземпляром перечисления ``Роли пользователей''.
+\end{itemize}
+
+\subsection{Роли пользователей (UserRole)}
+
+У пользователей сайта могут быть разные роли: возможности и уровень доступа у разных пользователей могут отличаться.
+Текущие роли:
+\begin{itemize}
+	\item Ученик (Student);
+	\item Родитель (Parent);
+	\item Представитель комитета (Committee);
+	\item Преподаватель (Teacher);
+	\item Админстратор (Administrator).
+\end{itemize}
+
+\subsection{Родственники (Relationship)}
+
+Таблица, устанавливающая связи между пользователями с ролью ``Родитель'' и ``Ученик'' и отслеживающая состояние заявок на родство между пользователеми.
+
+Атрибуты:
+\begin{itemize}
+	\item \emph{id}~---~идентификатор пользователя, является PK;
+	\item \emph{parent}~---~ссылка на id пользователя-родителя, является FK;
+	\item \emph{child}~---~ссылка на id пользователя-ученика (ребенка), является FK;
+	\item \emph{state}~---~состояние заявки на родство между пользователями, является экземпляром перечисления ``Состояние заявки''.
+\end{itemize}
+
+\subsection{Состояние заявки (RequestState)}
+
+Состояние заявки.
+
+Текущие состояния:
+\begin{itemize}
+	\item \emph{Waiting}~---~Заявка отправлена и ожидает принятия или отказа;
+	\item \emph{Approved}~---~Заявка принята;
+	\item \emph{Declined}~---~В заявке отказано.
+\end{itemize}
+
+\subsection{Период обучения (Period)}
+
+Учебный период в КШ.
+
+Атрибуты:
+\begin{itemize}
+	\item \emph{id}~---~идентификатор пользователя, является PK;
+	\item \emph{name}~---~название учебного периода;
+	\item \emph{beginDate}~---~начало периода;
+	\item \emph{endDate}~---~окончание периода.
+\end{itemize}
+
+\subsection{Группа (Group)}
 
 Группы объединяют пользователей. Каждый из них может входить в любое количество групп.
 
-Группы могут быть двух типов: учебные и отряды в лагере.
+Атрибуты:
+\begin{itemize}
+	\item \emph{id}~---~идентификатор пользователя, является PK;
+	\item \emph{periodId}~---~ссылка на учебный период, к которому относится группа, является FK;
+	\item \emph{name}~---~название учебной группы;
+	\item \emph{isOpen}~---~открыт ли набор в данную группу, \emph{true} в случае, если открыт, в противном~---~\emph{false};
+	\item \emph{type}~---~тип группы, является экземпляром перечисления ``Тип группы''.
+\end{itemize}
+
+\subsection{Список группы (GroupList)}
+
+Список участников групп. Каждая запись указывается принадлежность пользователя к группе.
+
+Атрибуты:
+\begin{enumerate}
+	\item \emph{id}~---~идентификатор пользователя, является PK; 
+	\item \emph{userId}~---~ссылка на пользователя-участника, является FK;
+	\item \emph{groupId}~---~ссылка на группу, является FK;
+	\item \emph{state}~---~состояние заявки на вступление, является экземпляром перечисления ``Состояние заявки''.
+\end{enumerate}
+
+
+\subsection{Тип группы (GroupType)}
+
+Группы могут быть двух типов: учебные (Study) и отряды в лагере (Camp).
 
 \end{document}
