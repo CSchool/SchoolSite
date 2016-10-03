@@ -18,7 +18,7 @@
 \begin{center}
   \ttfamily
   \begin{tikzpicture}
-    \begin{class}[text width=6cm]{User}{0,4}
+    \begin{class}[text width=6cm]{User}{0, 5}
       \attribute{id : Integer (\textbf{PK})}
       \attribute{registration : Date}
       \attribute{surname : String}
@@ -27,7 +27,7 @@
       \attribute{role : UserRole enum}
     \end{class}
     
-    \begin{class}{UserRole}{-7, 4}
+    \begin{class}{UserRole}{-10, 5}
     	\attribute{* Student}
     	\attribute{* Parent}
     	\attribute{* Сommittee}
@@ -35,14 +35,14 @@
     	\attribute{* Administrator}
     \end{class}
     
-    \begin{class}{Relationship}{-7, 0}
+    \begin{class}{Relationship}{-10, 0}
        \attribute{id : Integer (\textbf{PK})}
        \attribute{parent : Integer (\textbf{FK})}
        \attribute{child : Integer (\textbf{FK})}
        \attribute{state : RequestState enum}
     \end{class}
     
-    \begin{class}{RequestState}{-7, -4}
+    \begin{class}{RequestState}{-10, -5}
       \attribute{* Waiting}
       \attribute{* Approved}
       \attribute{* Declined}
@@ -55,34 +55,62 @@
       \attribute{state : RequestState}
     \end{class}
 
-    \begin{class}{Group}{7,0}
+    \begin{class}{Group}{10,0}
       \attribute{id : Integer (\textbf{PK})}
       \attribute{periodId : Integer (\textbf{FK})}
       \attribute{name : String}
       \attribute{isOpen : bool}
-      \attribute{type : GroupType enum}
+      \attribute{type : GroupListStatus enum}
     \end{class}
   
-    \begin{class}{Period}{7,4}
+    \begin{class}{Period}{10,5}
       \attribute{id : Integer (\textbf{PK})}
       \attribute{name : String}
       \attribute{beginDate : Date}
       \attribute{endDate : Date}
     \end{class}
     
-    \begin{class}{GroupType}{7, -4}
+    \begin{class}{GroupType}{10, -5}
       \attribute{* Study}
       \attribute{* Camp}
+    \end{class}
+    
+	\begin{class}{GroupListStatus}{0, -5}
+		\attribute{* Testing}
+	\end{class}   
+       
+    \begin{class}{Applications}{0, 10}
+    	\attribute{id : Integer (\textbf{PK})}
+    	\attribute{userId : Integer (\textbf{FK})}
+    	\attribute{periodId : Integer (\textbf{FK})}
+    	\attribute{state : ApplicationState enum}
+    \end{class}
+    
+    \begin{class}{ApplicationState}{10, 10}
+      \attribute{* WaitingPayment}
+      \attribute{* Declined}
+      \attribute{* Paid}
+      \attribute{* Approved}
     \end{class}
 
     \association{User}{}{0..*}{GroupList}{}{}
     \association{User}{}{}{UserRole}{}{}
     \association{User}{}{}{Relationship}{}{}
+    \association{User}{}{}{Applications}{}{}
+    
     \association{Relationship}{}{}{RequestState}{}{}
+    
     \association{GroupList}{}{}{Group}{}{0..*}
-    \association{GroupList}{}{}{RequestState}{}{}
+        
     \association{Period}{}{1}{Group}{}{0..*}
+    \association{Period}{}{}{Applications}{}{}
+    
     \association{Group}{}{}{GroupType}{}{}
+    
+    \association{GroupListStatus}{}{}{RequestState}{Inheritance}{}
+    \association{GroupListStatus}{}{}{GroupList}{}{}
+
+    \association{Applications}{}{}{ApplicationState}{}{}
   \end{tikzpicture}
 \end{center}
 \section{Сущности}
@@ -171,12 +199,45 @@
 	\item \emph{id}~---~идентификатор пользователя, является PK; 
 	\item \emph{userId}~---~ссылка на пользователя-участника, является FK;
 	\item \emph{groupId}~---~ссылка на группу, является FK;
-	\item \emph{state}~---~состояние заявки на вступление, является экземпляром перечисления ``Состояние заявки''.
+	\item \emph{state}~---~состояние заявки на вступление, является экземпляром перечисления ``Состояние заявки в группу''.
 \end{enumerate}
 
+\subsection{Состояние заявки в группу (GroupListStatus)}
+
+Состояние заявки ученика в группу. Включает в себя элементы перечисления ``Состояние заявки'' и добавляет свои состояния.
+
+Дополнительные состояния:
+\begin{enumerate}
+	\item \emph{Testing}~---~участник тестируется на вхождению в группу.
+\end{enumerate}
 
 \subsection{Тип группы (GroupType)}
 
 Группы могут быть двух типов: учебные (Study) и отряды в лагере (Camp).
+
+\subsection{Заявки (Applications)}
+
+Заявки учеников на участие в смене ЛКШ.
+
+Атрибуты:
+\begin{enumerate}
+	\item \emph{id}~---~идентификатор пользователя, является PK; 
+	\item \emph{userId}~---~ссылка на пользователя-участника, является FK;
+	\item \emph{periodId}~---~ссылка на учебный период, к которому относится группа, является FK;
+	\item \emph{state}~---~состояние заявки на участие в смене, является экземпляром перечисления ``Состояние заявки на участие в смене''. 
+\end{enumerate}
+
+\subsection{Состояние заявки на участие в смене (ApplicationState)}
+
+Состояние заявки на участие в смене.
+
+Текущие состояния:
+
+\begin{enumerate}
+	\item \emph{WaitingPayment}~---~заявка ожидает оплаты;
+	\item \emph{Declined}~---~заявка отклонена;
+	\item \emph{Paid}~---~заявка оплачена;
+	\item \emph{Approved}~---~заявка одобрена.
+\end{enumerate}
 
 \end{document}
