@@ -19,15 +19,17 @@
   \ttfamily
   \begin{tikzpicture}
     \begin{class}[text width=6cm]{User}{0, 5}
-      \attribute{id : Integer (\textbf{PK})}
-      \attribute{registration : Date}
-      \attribute{surname : String}
-      \attribute{name : String}
-      \attribute{patronymic : String}
-      \attribute{role : UserRole enum}
+        \attribute{id : Integer (\textbf{PK})}
+        \attribute{registration : Date}
+        \attribute{surname : String}
+        \attribute{name : String}
+        \attribute{patronymic : String}
+        \attribute{email: String}
+        \attribute{birthday: Date}
+        \attribute{role: UserRole enum}
     \end{class}
     
-    \begin{class}{UserRole}{-10, 5}
+    \begin{class}{UserRole}{10, -3}
     	\attribute{* Student}
     	\attribute{* Parent}
     	\attribute{* Сommittee}
@@ -53,9 +55,10 @@
       \attribute{userId : Integer (\textbf{FK})}
       \attribute{groupId : Integer (\textbf{FK})}
       \attribute{state : RequestState}
+      \attribute{role : UserRole enum}
     \end{class}
 
-    \begin{class}{Group}{10,0}
+    \begin{class}{Group}{10,5}
       \attribute{id : Integer (\textbf{PK})}
       \attribute{periodId : Integer (\textbf{FK})}
       \attribute{name : String}
@@ -63,14 +66,14 @@
       \attribute{type : GroupListStatus enum}
     \end{class}
   
-    \begin{class}{Period}{10,5}
+    \begin{class}{Period}{10,10}
       \attribute{id : Integer (\textbf{PK})}
       \attribute{name : String}
       \attribute{beginDate : Date}
       \attribute{endDate : Date}
     \end{class}
     
-    \begin{class}{GroupType}{10, -5}
+    \begin{class}{GroupType}{10, 0}
       \attribute{* Study}
       \attribute{* Camp}
     \end{class}
@@ -86,7 +89,7 @@
     	\attribute{state : ApplicationState enum}
     \end{class}
     
-    \begin{class}{ApplicationState}{10, 10}
+    \begin{class}{ApplicationState}{-10, 10}
       \attribute{* WaitingPayment}
       \attribute{* Declined}
       \attribute{* Paid}
@@ -94,13 +97,14 @@
     \end{class}
 
     \association{User}{}{0..*}{GroupList}{}{}
-    \association{User}{}{}{UserRole}{}{}
     \association{User}{}{}{Relationship}{}{}
+    \association{User}{}{}{UserRole}{}{}
     \association{User}{}{}{Applications}{}{}
     
     \association{Relationship}{}{}{RequestState}{}{}
     
     \association{GroupList}{}{}{Group}{}{0..*}
+    \association{GroupList}{}{}{UserRole}{}{}
         
     \association{Period}{}{1}{Group}{}{0..*}
     \association{Period}{}{}{Applications}{}{}
@@ -113,6 +117,13 @@
     \association{Applications}{}{}{ApplicationState}{}{}
   \end{tikzpicture}
 \end{center}
+
+\begin{itemize}
+    \item PK - Primary Key (желательно случайные уникальные символы, чтобы нельзя было просто так итерироваться)
+    \item FK - Foreign Key
+    \item UK - Unique Key
+\end{itemize}
+
 \section{Сущности}
 
 \subsection{Пользователь (User)}
@@ -127,14 +138,15 @@
 	\item \emph{surname}~---~Фамилия пользователя;
 	\item \emph{name}~---~Имя пользователя;
 	\item \emph{patronymic}~---~Отчество пользователя;
-	\item \emph{role}~---~Роль пользователя в системе, является экземпляром перечисления ``Роли пользователей''.
+    \item \emph{role}~---~Роль пользователя в системе, может быть перезаписана непустой ролью в группе.
 \end{itemize}
 
 \subsection{Роли пользователей (UserRole)}
 
-У пользователей сайта могут быть разные роли: возможности и уровень доступа у разных пользователей могут отличаться.
+У пользователей сайта могут быть разные роли: возможности и уровень доступа у разных пользователей могут отличаться для разных групп.
 Текущие роли:
 \begin{itemize}
+    \item None
 	\item Ученик (Student);
 	\item Родитель (Parent);
 	\item Представитель комитета (Committee);
@@ -200,6 +212,7 @@
 	\item \emph{userId}~---~ссылка на пользователя-участника, является FK;
 	\item \emph{groupId}~---~ссылка на группу, является FK;
 	\item \emph{state}~---~состояние заявки на вступление, является экземпляром перечисления ``Состояние заявки в группу''.
+    \item \emph{role}~---~роль участника в группе, непустое значение перезапишет User.role для данной группы
 \end{enumerate}
 
 \subsection{Состояние заявки в группу (GroupListStatus)}
