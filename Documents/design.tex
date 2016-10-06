@@ -80,16 +80,18 @@
     
 	\begin{class}{GroupListStatus}{0, -5}
 		\attribute{* Testing}
+		\attribute{* TestingSucceeded}
+		\attribute{* TestingFailed}
 	\end{class}   
        
-    \begin{class}{Applications}{0, 10}
+    \begin{class}{CampVouchers}{0, 10}
     	\attribute{id : Integer (\textbf{PK})}
     	\attribute{userId : Integer (\textbf{FK})}
     	\attribute{periodId : Integer (\textbf{FK})}
-    	\attribute{state : ApplicationState enum}
+    	\attribute{state : CampVoucherState enum}
     \end{class}
     
-    \begin{class}{ApplicationState}{-10, 10}
+    \begin{class}{CampVoucherState}{-10, 10}
       \attribute{* WaitingPayment}
       \attribute{* Declined}
       \attribute{* Paid}
@@ -99,7 +101,7 @@
     \association{User}{}{0..*}{GroupList}{}{}
     \association{User}{}{}{Relationship}{}{}
     \association{User}{}{}{UserRole}{}{}
-    \association{User}{}{}{Applications}{}{}
+    \association{User}{}{}{CampVouchers}{}{}
     
     \association{Relationship}{}{}{RequestState}{}{}
     
@@ -107,14 +109,14 @@
     \association{GroupList}{}{}{UserRole}{}{}
         
     \association{Period}{}{1}{Group}{}{0..*}
-    \association{Period}{}{}{Applications}{}{}
+    \association{Period}{}{}{CampVouchers}{}{}
     
     \association{Group}{}{}{GroupType}{}{}
     
     \association{GroupListStatus}{}{}{RequestState}{Inheritance}{}
     \association{GroupListStatus}{}{}{GroupList}{}{}
 
-    \association{Applications}{}{}{ApplicationState}{}{}
+    \association{CampVouchers}{}{}{CampVoucherState}{}{}
   \end{tikzpicture}
 \end{center}
 
@@ -204,7 +206,7 @@
 
 \subsection{Список группы (GroupList)}
 
-Список участников групп. Каждая запись указывается принадлежность пользователя к группе.
+Список участников групп. Каждая запись указывается принадлежность пользователя к группе. 
 
 Атрибуты:
 \begin{enumerate}
@@ -215,42 +217,76 @@
     \item \emph{role}~---~роль участника в группе, непустое значение перезапишет User.role для данной группы
 \end{enumerate}
 
+Атрибут \emph{state} также указывает на \textbf{нахождение} пользователя в группу! Подробнее, смотри  ``Состояние заявки в группу''.
+
+\textit{N.B. Может здесь нужно ещё хранить количество попыток тестирования?}
+
 \subsection{Состояние заявки в группу (GroupListStatus)}
 
 Состояние заявки ученика в группу. Включает в себя элементы перечисления ``Состояние заявки'' и добавляет свои состояния.
 
+Основные состояние из ``Состояние заявки'' (RequestState):
+
+\begin{itemize}
+	\item \emph{Waiting}~---~Ученик ожидает тестирования или вхождения в группу;
+	\item \emph{Approved}~---~Заявка принята и ученик находится в группе;
+	\item \emph{Declined}~---~В заявке отказано навсегда, ученик не имеет права падавать заявки в данную группу.
+\end{itemize}
+
 Дополнительные состояния:
 \begin{enumerate}
-	\item \emph{Testing}~---~участник тестируется на вхождению в группу.
+	\item \emph{Testing}~---~участник тестируется на вхождению в группу;
+	\item \emph{TestingSucceeded}~---~участник успешно сдал тест;
+	\item \emph{TestingFailed}~---~участник провалил тестирование, но в возможность участия в группе для него окончательно не отменена и он может сдать тест ещё раз.
 \end{enumerate}
+
+Типичный сценарий изменения состояния заявки ученика:
+
+\begin{enumerate}
+	\item Waiting~---~опциональная задержка на тестирование ученика
+	\item Testing~---~ученик выбрал группу и на данный момент времени проходит тестирование;
+	\item TestingSucceeded~---~тест пройден успешно;
+	\item Approved~---~ученик находится в группе.
+\end{enumerate}
+
+ИЛИ
+
+\begin{enumerate}
+	\item Testing;
+	\item TestingFailed~---~тест провален и ученик пытается ещё раз сделать тестирование;
+	\item ... (опять Testing и так далее)
+	\item Approved или Declined (ученик либо добил тест и попал в группу, либо его окончательно забанили)
+\end{enumerate}
+
+Поиск участников определенной группы: SELECT userId FROM GroupList WHERE groupId = someId AND state = Approved
 
 \subsection{Тип группы (GroupType)}
 
 Группы могут быть двух типов: учебные (Study) и отряды в лагере (Camp).
 
-\subsection{Заявки (Applications)}
+\subsection{Путевки (CampVouchers)}
 
-Заявки учеников на участие в смене ЛКШ.
+Путевки учеников на участие в смене ЛКШ.
 
 Атрибуты:
 \begin{enumerate}
 	\item \emph{id}~---~идентификатор пользователя, является PK; 
 	\item \emph{userId}~---~ссылка на пользователя-участника, является FK;
 	\item \emph{periodId}~---~ссылка на учебный период, к которому относится группа, является FK;
-	\item \emph{state}~---~состояние заявки на участие в смене, является экземпляром перечисления ``Состояние заявки на участие в смене''. 
+	\item \emph{state}~---~состояние путевки на участие в смене, является экземпляром перечисления ``Состояние путевки на участие в смене''. 
 \end{enumerate}
 
-\subsection{Состояние заявки на участие в смене (ApplicationState)}
+\subsection{Состояние путевки на участие в смене (CampVoucherState)}
 
-Состояние заявки на участие в смене.
+Состояние путевки на участие в смене.
 
 Текущие состояния:
 
 \begin{enumerate}
-	\item \emph{WaitingPayment}~---~заявка ожидает оплаты;
-	\item \emph{Declined}~---~заявка отклонена;
-	\item \emph{Paid}~---~заявка оплачена;
-	\item \emph{Approved}~---~заявка одобрена.
+	\item \emph{WaitingPayment}~---~путевка ожидает оплаты;
+	\item \emph{Declined}~---~путевка отклонена;
+	\item \emph{Paid}~---~путевка оплачена;
+	\item \emph{Approved}~---~путевка одобрена.
 \end{enumerate}
 
 \end{document}
