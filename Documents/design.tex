@@ -1,7 +1,7 @@
 \documentclass[14pt]{article}
 
 \usepackage[letterpaper, landscape, margin=1.5cm]{geometry}
-
+*
 \usepackage[T2A]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[english,russian]{babel}
@@ -20,6 +20,7 @@
   \begin{tikzpicture}
     \begin{class}[text width=6cm]{User}{0, 5}
         \attribute{id : Integer (\textbf{PK})}
+        \attribute{password : String}
         \attribute{registration : Date}
         \attribute{surname : String}
         \attribute{name : String}
@@ -62,7 +63,9 @@
       \attribute{id : Integer (\textbf{PK})}
       \attribute{periodId : Integer (\textbf{FK})}
       \attribute{name : String}
+      \attribute{description : String}
       \attribute{isOpen : bool}
+      \attribute{limit: Integer}
       \attribute{type : GroupListStatus enum}
     \end{class}
   
@@ -136,6 +139,7 @@
 
 \begin{itemize}
 	\item \emph{id}~---~идентификатор пользователя, является PK;
+	\item \emph{password}~---~пароль пользователя;
 	\item \emph{registration}~---~дата регистрации на сайте;
 	\item \emph{surname}~---~Фамилия пользователя;
 	\item \emph{name}~---~Имя пользователя;
@@ -200,7 +204,9 @@
 	\item \emph{id}~---~идентификатор пользователя, является PK;
 	\item \emph{periodId}~---~ссылка на учебный период, к которому относится группа, является FK;
 	\item \emph{name}~---~название учебной группы;
+	\item \emph{description}~---~описание группы;
 	\item \emph{isOpen}~---~открыт ли набор в данную группу, \emph{true} в случае, если открыт, в противном~---~\emph{false};
+	\item \emph{limit}~---~максимальное количество возможных участников группы;	
 	\item \emph{type}~---~тип группы, является экземпляром перечисления ``Тип группы''.
 \end{itemize}
 
