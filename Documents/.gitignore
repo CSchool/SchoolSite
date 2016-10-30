@@ -6,3 +6,5 @@
 *.swp
 *.synctex.gz
 *.ps
+*.bbl
+*.blg
