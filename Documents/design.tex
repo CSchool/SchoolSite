@@ -1,15 +1,19 @@
 \documentclass[14pt]{article}
 
 \usepackage[letterpaper, landscape, margin=1.5cm]{geometry}
-*
+
 \usepackage[T2A]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage[english,russian]{babel}
+
+\usepackage{microtype}	
 
 \usepackage[simplified]{pgf-umlcd}
 \usepackage{tikz}
 \usetikzlibrary{shapes.geometric,backgrounds,calc,positioning,arrows,
                 chains,decorations.markings,patterns,fadings,shapes.multipart,trees}
+
+\usepackage[colorinlistoftodos,prependcaption,textsize=medium]{todonotes}
 
 \begin{document}
 
@@ -18,7 +22,7 @@
 \begin{center}
   \ttfamily
   \begin{tikzpicture}
-    \begin{class}[text width=6cm]{User}{0, 5}
+    \begin{class}[text width=4cm]{User}{0, 5}
         \attribute{id : Integer (\textbf{PK})}
         \attribute{password : String}
         \attribute{registration : Date}
@@ -30,7 +34,7 @@
         \attribute{role: UserRole enum}
     \end{class}
     
-    \begin{class}{UserRole}{10, -3}
+    \begin{class}[text width=3cm]{UserRole}{10, 0}
     	\attribute{* Student}
     	\attribute{* Parent}
     	\attribute{* Сommittee}
@@ -45,18 +49,24 @@
        \attribute{state : RequestState enum}
     \end{class}
     
-    \begin{class}{RequestState}{-10, -5}
+    \begin{class}[text width=3cm]{RequestState}{-10, -5}
       \attribute{* Waiting}
       \attribute{* Approved}
       \attribute{* Declined}
     \end{class}
 
-    \begin{class}{GroupList}{0,0}
+    \begin{class}{GroupList}{4, -3}
       \attribute{id : Integer (\textbf{PK})}
       \attribute{userId : Integer (\textbf{FK})}
       \attribute{groupId : Integer (\textbf{FK})}
-      \attribute{state : RequestState}
-      \attribute{role : UserRole enum}
+      \attribute{state : GroupListState enum}
+    \end{class}
+    
+    \begin{class}{GroupRequest}{-3, -1}
+    	\attribute{id : Integer (\textbf{PK})}
+      	\attribute{userId : Integer (\textbf{FK})}
+      	\attribute{groupId : Integer (\textbf{FK})}
+      	\attribute{state : GroupRequestState enum}
     \end{class}
 
     \begin{class}{Group}{10,5}
@@ -66,7 +76,7 @@
       \attribute{description : String}
       \attribute{isOpen : bool}
       \attribute{limit: Integer}
-      \attribute{type : GroupListStatus enum}
+      \attribute{type : GroupType enum}
     \end{class}
   
     \begin{class}{Period}{10,10}
@@ -76,16 +86,23 @@
       \attribute{endDate : Date}
     \end{class}
     
-    \begin{class}{GroupType}{10, 0}
+    \begin{class}[text width=2cm]{GroupType}{5, 7}
       \attribute{* Study}
       \attribute{* Camp}
     \end{class}
     
-	\begin{class}{GroupListStatus}{0, -5}
+	\begin{class}[text width=3.5cm]{GroupRequestState}{-3, -5}
 		\attribute{* Testing}
 		\attribute{* TestingSucceeded}
 		\attribute{* TestingFailed}
-	\end{class}   
+	\end{class} 
+	
+	\begin{class}[text width=3cm]{GroupListState}{10, -5}
+		\attribute{* Studing}
+		\attribute{* Successed}
+		\attribute{* Failed}
+		\attribute{* Disqualified}
+	\end{class}
        
     \begin{class}{CampVouchers}{0, 10}
     	\attribute{id : Integer (\textbf{PK})}
@@ -100,26 +117,45 @@
       \attribute{* Paid}
       \attribute{* Approved}
     \end{class}
+    
+    \begin{class}{School}{-10, 6}
+      \attribute{id : Integer (\textbf{PK})}
+      \attribute{name : String}
+      \attribute{address : String}
+    \end{class}
+    
+    \begin{class}{SchoolEducation}{-10, 3}
+      \attribute{id : Integer (\textbf{PK})}
+      \attribute{userId : Integer (\textbf{FK})}
+      \attribute{schoolId : Integer (\textbf{FK})}
+      \attribute{class : Integer}
+    \end{class}
 
-    \association{User}{}{0..*}{GroupList}{}{}
-    \association{User}{}{}{Relationship}{}{}
+    \association{User}{}{1}{GroupList}{}{0..*}
+    \association{User}{}{0..*}{Relationship}{}{0..*}
     \association{User}{}{}{UserRole}{}{}
-    \association{User}{}{}{CampVouchers}{}{}
+    \association{User}{}{1}{CampVouchers}{}{1}
+    \association{User}{}{1}{SchoolEducation}{}{0..*}
     
     \association{Relationship}{}{}{RequestState}{}{}
     
-    \association{GroupList}{}{}{Group}{}{0..*}
-    \association{GroupList}{}{}{UserRole}{}{}
+	\association{GroupRequest}{}{}{GroupRequestState}{}{} 
+	\association{GroupRequest}{}{0..*}{Group}{}{1} 
+	\association{GroupRequest}{}{0..*}{User}{}{1}   
+    
+    \association{GroupList}{}{0..*}{Group}{}{1}
+    \association{GroupList}{}{}{GroupListState}{}{}
         
     \association{Period}{}{1}{Group}{}{0..*}
-    \association{Period}{}{}{CampVouchers}{}{}
+    \association{Period}{}{1}{CampVouchers}{}{1}
     
     \association{Group}{}{}{GroupType}{}{}
     
-    \association{GroupListStatus}{}{}{RequestState}{Inheritance}{}
-    \association{GroupListStatus}{}{}{GroupList}{}{}
+    \association{GroupRequestState}{}{}{RequestState}{Inheritance}{}
 
     \association{CampVouchers}{}{}{CampVoucherState}{}{}
+    
+    \association{School}{}{1}{SchoolEducation}{}{0..*}
   \end{tikzpicture}
 \end{center}
 
@@ -174,6 +210,8 @@
 	\item \emph{state}~---~состояние заявки на родство между пользователями, является экземпляром перечисления ``Состояние заявки''.
 \end{itemize}
 
+\todo[inline]{N.B! Возможно, необходимо добавить статус родителя? Т.е. указать кто он ребенку~---~папа, мама, брат, сестра, etc.}
+
 \subsection{Состояние заявки (RequestState)}
 
 Состояние заявки.
@@ -196,7 +234,7 @@
 	\item \emph{beginDate}~---~начало периода;
 	\item \emph{endDate}~---~окончание периода.
 \end{itemize}
-
+	
 \subsection{Группа (Group)}
 
 Группы объединяют пользователей. Каждый из них может входить в любое количество групп.
@@ -212,9 +250,9 @@
 	\item \emph{type}~---~тип группы, является экземпляром перечисления ``Тип группы''.
 \end{itemize}
 
-\subsection{Список группы (GroupList)}
+\subsection{Заявка в группу (GroupRequest)}
 
-Список участников групп. Каждая запись указывается принадлежность пользователя к группе. 
+Список заявок участников в группы.
 
 Атрибуты:
 \begin{enumerate}
@@ -222,14 +260,11 @@
 	\item \emph{userId}~---~ссылка на пользователя-участника, является FK;
 	\item \emph{groupId}~---~ссылка на группу, является FK;
 	\item \emph{state}~---~состояние заявки на вступление, является экземпляром перечисления ``Состояние заявки в группу''.
-    \item \emph{role}~---~роль участника в группе, непустое значение перезапишет User.role для данной группы
 \end{enumerate}
 
-Атрибут \emph{state} также указывает на \textbf{нахождение} пользователя в группу! Подробнее, смотри  ``Состояние заявки в группу''.
+\todo[inline]{N.B! Может здесь нужно ещё хранить количество попыток тестирования?}
 
-\textit{N.B. Может здесь нужно ещё хранить количество попыток тестирования?}
-
-\subsection{Состояние заявки в группу (GroupListStatus)}
+\subsection{Состояние заявки в группу (GroupRequestState)}
 
 Состояние заявки ученика в группу. Включает в себя элементы перечисления ``Состояние заявки'' и добавляет свои состояния.
 
@@ -266,7 +301,29 @@
 	\item Approved или Declined (ученик либо добил тест и попал в группу, либо его окончательно забанили)
 \end{enumerate}
 
-Поиск участников определенной группы: SELECT userId FROM GroupList WHERE groupId = someId AND state = Approved
+\subsection{Участники группы (GroupList)}
+
+Список участников группы. Используется как и для учебных групп, так и для отрядов. Сюда заносятся все записи из таблицы \emph{GroupRequest}, у которых поле \emph{state} равно значению <<Approved>>.
+
+Атрибуты:
+\begin{enumerate}
+	\item \emph{id}~---~идентификатор пользователя, является PK; 
+	\item \emph{userId}~---~ссылка на пользователя-участника, является FK;
+	\item \emph{groupId}~---~ссылка на группу, является FK;
+	\item \emph{state}~---~состояние пользователя ``Состояние участия в группе''.
+\end{enumerate}
+
+\subsection{Состояние участия в группе (GroupListState)}
+
+Состояние участия в группе\textbackslash отряде.
+
+Текущие состояния:
+\begin{itemize}
+	\item \emph{Studing}~---~Пользователь работает в группе или находится в отряде; 
+	\item \emph{Successed}~---~Пользователь успешно окончил обучение в группе или закончил пребывание в отряде, потому что смена закончилась;
+	\item \emph{Failed}~---~Ученик закончил обучение, но провалил заключительную проверку;
+	\item \emph{Disqualified}~---~Ученик отчислен из группы или из отряда (выгнали из лагеря?).
+\end{itemize}
 
 \subsection{Тип группы (GroupType)}
 
@@ -295,6 +352,29 @@
 	\item \emph{Declined}~---~путевка отклонена;
 	\item \emph{Paid}~---~путевка оплачена;
 	\item \emph{Approved}~---~путевка одобрена.
+\end{enumerate}
+
+\subsection{School}
+
+Таблица, описывающая школу.
+
+Атрибуты:
+\begin{enumerate}
+	\item \emph{id}~---~идентификатор пользователя, является PK; 
+	\item \emph{name}~---~название школы;
+	\item \emph{address}~---~адрес школы;
+\end{enumerate}
+
+\subsection{SchoolEducation}
+
+Таблица, которая описывает стадию обучения школьника~---~в какой школе и в каком классе он сейчас обучается.
+
+Атрибуты:
+\begin{enumerate}
+	\item \emph{id}~---~идентификатор пользователя, является PK; 
+	\item \emph{userId}~---~ссылка на пользователя-школьника, является FK;
+	\item \emph{schoolId}~---~ссылка на школу, является FK;
+	\item \emph{class}~---~текущий класс школьника;
 \end{enumerate}
 
 \end{document}
