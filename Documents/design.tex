@@ -42,14 +42,14 @@
     	\attribute{* Administrator}
     \end{class}
     
-    \begin{class}{Relationship}{-10, 0}
+    \begin{class}{Relationship}{-10, -1}
        \attribute{id : Integer (\textbf{PK})}
        \attribute{parent : Integer (\textbf{FK})}
        \attribute{child : Integer (\textbf{FK})}
-       \attribute{state : RequestState enum}
+       \attribute{status : RequestStatus enum}
     \end{class}
     
-    \begin{class}[text width=3cm]{RequestState}{-10, -5}
+    \begin{class}[text width=3cm]{RequestStatus}{-10, -5}
       \attribute{* Waiting}
       \attribute{* Approved}
       \attribute{* Declined}
@@ -59,14 +59,14 @@
       \attribute{id : Integer (\textbf{PK})}
       \attribute{userId : Integer (\textbf{FK})}
       \attribute{groupId : Integer (\textbf{FK})}
-      \attribute{state : GroupListState enum}
+      \attribute{status : GroupListStatus enum}
     \end{class}
     
     \begin{class}{GroupRequest}{-3, -1}
     	\attribute{id : Integer (\textbf{PK})}
       	\attribute{userId : Integer (\textbf{FK})}
       	\attribute{groupId : Integer (\textbf{FK})}
-      	\attribute{state : GroupRequestState enum}
+      	\attribute{status : GroupRequestStatus enum}
     \end{class}
 
     \begin{class}{Group}{10,5}
@@ -91,13 +91,13 @@
       \attribute{* Camp}
     \end{class}
     
-	\begin{class}[text width=3.5cm]{GroupRequestState}{-3, -5}
+	\begin{class}[text width=3.5cm]{GroupRequestStatus}{-3, -5}
 		\attribute{* Testing}
 		\attribute{* TestingSucceeded}
 		\attribute{* TestingFailed}
 	\end{class} 
 	
-	\begin{class}[text width=3cm]{GroupListState}{10, -5}
+	\begin{class}[text width=3cm]{GroupListStatus}{10, -5}
 		\attribute{* Studing}
 		\attribute{* Successed}
 		\attribute{* Failed}
@@ -108,10 +108,10 @@
     	\attribute{id : Integer (\textbf{PK})}
     	\attribute{userId : Integer (\textbf{FK})}
     	\attribute{periodId : Integer (\textbf{FK})}
-    	\attribute{state : CampVoucherState enum}
+    	\attribute{status : CampVoucherStatus enum}
     \end{class}
     
-    \begin{class}{CampVoucherState}{-10, 10}
+    \begin{class}{CampVoucherStatus}{-10, 10}
       \attribute{* WaitingPayment}
       \attribute{* Declined}
       \attribute{* Paid}
@@ -129,31 +129,33 @@
       \attribute{userId : Integer (\textbf{FK})}
       \attribute{schoolId : Integer (\textbf{FK})}
       \attribute{class : Integer}
+      \attribute{beginDate : Date}
+      \attribute{endDate : Date}
     \end{class}
 
     \association{User}{}{1}{GroupList}{}{0..*}
     \association{User}{}{0..*}{Relationship}{}{0..*}
     \association{User}{}{}{UserRole}{}{}
-    \association{User}{}{1}{CampVouchers}{}{1}
+    \association{User}{}{1}{CampVouchers}{}{0..*}
     \association{User}{}{1}{SchoolEducation}{}{0..*}
     
-    \association{Relationship}{}{}{RequestState}{}{}
+    \association{Relationship}{}{}{RequestStatus}{}{}
     
-	\association{GroupRequest}{}{}{GroupRequestState}{}{} 
+	\association{GroupRequest}{}{}{GroupRequestStatus}{}{} 
 	\association{GroupRequest}{}{0..*}{Group}{}{1} 
 	\association{GroupRequest}{}{0..*}{User}{}{1}   
     
     \association{GroupList}{}{0..*}{Group}{}{1}
-    \association{GroupList}{}{}{GroupListState}{}{}
+    \association{GroupList}{}{}{GroupListStatus}{}{}
         
     \association{Period}{}{1}{Group}{}{0..*}
-    \association{Period}{}{1}{CampVouchers}{}{1}
+    \association{Period}{}{1}{CampVouchers}{}{1..*}
     
     \association{Group}{}{}{GroupType}{}{}
     
-    \association{GroupRequestState}{}{}{RequestState}{Inheritance}{}
+    \association{GroupRequestStatus}{}{}{RequestStatus}{Inheritance}{}
 
-    \association{CampVouchers}{}{}{CampVoucherState}{}{}
+    \association{CampVouchers}{}{}{CampVoucherStatus}{}{}
     
     \association{School}{}{1}{SchoolEducation}{}{0..*}
   \end{tikzpicture}
@@ -207,12 +209,12 @@
 	\item \emph{id}~---~идентификатор пользователя, является PK;
 	\item \emph{parent}~---~ссылка на id пользователя-родителя, является FK;
 	\item \emph{child}~---~ссылка на id пользователя-ученика (ребенка), является FK;
-	\item \emph{state}~---~состояние заявки на родство между пользователями, является экземпляром перечисления ``Состояние заявки''.
+	\item \emph{status}~---~состояние заявки на родство между пользователями, является экземпляром перечисления ``Состояние заявки''.
 \end{itemize}
 
 \todo[inline]{N.B! Возможно, необходимо добавить статус родителя? Т.е. указать кто он ребенку~---~папа, мама, брат, сестра, etc.}
 
-\subsection{Состояние заявки (RequestState)}
+\subsection{Состояние заявки (RequestStatus)}
 
 Состояние заявки.
 
@@ -259,16 +261,16 @@
 	\item \emph{id}~---~идентификатор пользователя, является PK; 
 	\item \emph{userId}~---~ссылка на пользователя-участника, является FK;
 	\item \emph{groupId}~---~ссылка на группу, является FK;
-	\item \emph{state}~---~состояние заявки на вступление, является экземпляром перечисления ``Состояние заявки в группу''.
+	\item \emph{status}~---~состояние заявки на вступление, является экземпляром перечисления ``Состояние заявки в группу''.
 \end{enumerate}
 
 \todo[inline]{N.B! Может здесь нужно ещё хранить количество попыток тестирования?}
 
-\subsection{Состояние заявки в группу (GroupRequestState)}
+\subsection{Состояние заявки в группу (GroupRequestStatus)}
 
 Состояние заявки ученика в группу. Включает в себя элементы перечисления ``Состояние заявки'' и добавляет свои состояния.
 
-Основные состояние из ``Состояние заявки'' (RequestState):
+Основные состояние из ``Состояние заявки'' (RequestStatus):
 
 \begin{itemize}
 	\item \emph{Waiting}~---~Ученик ожидает тестирования или вхождения в группу;
@@ -303,17 +305,17 @@
 
 \subsection{Участники группы (GroupList)}
 
-Список участников группы. Используется как и для учебных групп, так и для отрядов. Сюда заносятся все записи из таблицы \emph{GroupRequest}, у которых поле \emph{state} равно значению <<Approved>>.
+Список участников группы. Используется как и для учебных групп, так и для отрядов. Сюда заносятся все записи из таблицы \emph{GroupRequest}, у которых поле \emph{status} равно значению <<Approved>>.
 
 Атрибуты:
 \begin{enumerate}
 	\item \emph{id}~---~идентификатор пользователя, является PK; 
 	\item \emph{userId}~---~ссылка на пользователя-участника, является FK;
 	\item \emph{groupId}~---~ссылка на группу, является FK;
-	\item \emph{state}~---~состояние пользователя ``Состояние участия в группе''.
+	\item \emph{status}~---~состояние пользователя ``Состояние участия в группе''.
 \end{enumerate}
 
-\subsection{Состояние участия в группе (GroupListState)}
+\subsection{Состояние участия в группе (GroupListStatus)}
 
 Состояние участия в группе\textbackslash отряде.
 
@@ -338,10 +340,10 @@
 	\item \emph{id}~---~идентификатор пользователя, является PK; 
 	\item \emph{userId}~---~ссылка на пользователя-участника, является FK;
 	\item \emph{periodId}~---~ссылка на учебный период, к которому относится группа, является FK;
-	\item \emph{state}~---~состояние путевки на участие в смене, является экземпляром перечисления ``Состояние путевки на участие в смене''. 
+	\item \emph{status}~---~состояние путевки на участие в смене, является экземпляром перечисления ``Состояние путевки на участие в смене''. 
 \end{enumerate}
 
-\subsection{Состояние путевки на участие в смене (CampVoucherState)}
+\subsection{Состояние путевки на участие в смене (CampVoucherStatus)}
 
 Состояние путевки на участие в смене.
 
@@ -375,6 +377,8 @@
 	\item \emph{userId}~---~ссылка на пользователя-школьника, является FK;
 	\item \emph{schoolId}~---~ссылка на школу, является FK;
 	\item \emph{class}~---~текущий класс школьника;
+	\item \emph{beginDate}~---~начало учебного года;
+	\item \emph{endDate}~---~окончание учебного года.
 \end{enumerate}
 
 \end{document}
