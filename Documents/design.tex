@@ -6,7 +6,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage[english,russian]{babel}
 
-\usepackage{microtype}	
+%\usepackage{microtype}	
 
 \usepackage[simplified]{pgf-umlcd}
 \usepackage{tikz}
@@ -22,7 +22,7 @@
 \begin{center}
   \ttfamily
   \begin{tikzpicture}
-    \begin{class}[text width=4cm]{User}{0, 5}
+    \begin{class}[text width=4cm]{User}{2, 5}
         \attribute{id : Integer (\textbf{PK})}
         \attribute{password : String}
         \attribute{registration : Date}
@@ -30,8 +30,9 @@
         \attribute{name : String}
         \attribute{patronymic : String}
         \attribute{email: String}
+        \attribute{phone: String}
         \attribute{birthday: Date}
-        \attribute{role: UserRole enum}
+        \attribute{isAdmin: Bool}
     \end{class}
     
     \begin{class}[text width=3cm]{UserRole}{10, 0}
@@ -60,6 +61,7 @@
       \attribute{userId : Integer (\textbf{FK})}
       \attribute{groupId : Integer (\textbf{FK})}
       \attribute{status : GroupListStatus enum}
+      \attribute{role: UserRole enum}
     \end{class}
     
     \begin{class}{GroupRequest}{-3, -1}
@@ -105,10 +107,11 @@
 	\end{class}
        
     \begin{class}{CampVouchers}{0, 10}
-    	\attribute{id : Integer (\textbf{PK})}
-    	\attribute{userId : Integer (\textbf{FK})}
-    	\attribute{periodId : Integer (\textbf{FK})}
-    	\attribute{status : CampVoucherStatus enum}
+        \attribute{id : Integer (\textbf{PK})}
+        \attribute{userId : Integer (\textbf{FK})}
+        \attribute{periodId : Integer (\textbf{FK})}
+        \attribute{status : CampVoucherStatus enum}
+        \attribute{officialId : String}
     \end{class}
     
     \begin{class}{CampVoucherStatus}{-10, 10}
@@ -118,7 +121,7 @@
       \attribute{* Approved}
     \end{class}
     
-    \begin{class}{School}{-10, 6}
+    \begin{class}{Organizations}{-10, 7}
       \attribute{id : Integer (\textbf{PK})}
       \attribute{name : String}
       \attribute{address : String}
@@ -133,11 +136,19 @@
       \attribute{endDate : Date}
     \end{class}
 
+    \begin{class}{Jobs}{-4, 5}
+      \attribute{id : Integer (\textbf{PK})}
+      \attribute{userId : Integer (\textbf{FK})}
+      \attribute{workId : Integer (\textbf{FK})}
+      \attribute{beginDate : Date}
+      \attribute{endDate : Date}
+    \end{class}
+
     \association{User}{}{1}{GroupList}{}{0..*}
     \association{User}{}{0..*}{Relationship}{}{0..*}
-    \association{User}{}{}{UserRole}{}{}
     \association{User}{}{1}{CampVouchers}{}{0..*}
     \association{User}{}{1}{SchoolEducation}{}{0..*}
+    \association{User}{}{1}{Jobs}{}{0..*}
     
     \association{Relationship}{}{}{RequestStatus}{}{}
     
@@ -147,6 +158,7 @@
     
     \association{GroupList}{}{0..*}{Group}{}{1}
     \association{GroupList}{}{}{GroupListStatus}{}{}
+    \association{GroupList}{}{}{UserRole}{}{}
         
     \association{Period}{}{1}{Group}{}{0..*}
     \association{Period}{}{1}{CampVouchers}{}{1..*}
@@ -157,7 +169,8 @@
 
     \association{CampVouchers}{}{}{CampVoucherStatus}{}{}
     
-    \association{School}{}{1}{SchoolEducation}{}{0..*}
+    \association{Organizations}{}{1}{SchoolEducation}{}{0..*}
+    \association{Organizations}{}{1}{Jobs}{}{0..*}
   \end{tikzpicture}
 \end{center}
 
@@ -184,7 +197,7 @@
 	\item \emph{patronymic}~---~Отчество пользователя;
 	\item \emph{email}~---~ E-Mail пользователя;
 	\item \emph{birthday}~---~ Дата рождения пользователя;
-    \item \emph{role}~---~Роль пользователя в системе, может быть перезаписана непустой ролью в группе;
+	\item \emph{idAdmin}~---~Является ли пользователь глобальным администратором;
 \end{itemize}
 
 \subsection{Роли пользователей (UserRole)}
@@ -313,6 +326,7 @@
 	\item \emph{userId}~---~ссылка на пользователя-участника, является FK;
 	\item \emph{groupId}~---~ссылка на группу, является FK;
 	\item \emph{status}~---~состояние пользователя ``Состояние участия в группе''.
+    \item \emph{role}~---~Роль пользователя в группе;
 \end{enumerate}
 
 \subsection{Состояние участия в группе (GroupListStatus)}
@@ -356,15 +370,15 @@
 	\item \emph{Approved}~---~путевка одобрена.
 \end{enumerate}
 
-\subsection{School}
+\subsection{Organizations}
 
-Таблица, описывающая школу.
+Таблица, описывающая школы и места работы.
 
 Атрибуты:
 \begin{enumerate}
 	\item \emph{id}~---~идентификатор пользователя, является PK; 
-	\item \emph{name}~---~название школы;
-	\item \emph{address}~---~адрес школы;
+	\item \emph{name}~---~название организации;
+	\item \emph{address}~---~адрес организации;
 \end{enumerate}
 
 \subsection{SchoolEducation}
@@ -379,6 +393,19 @@
 	\item \emph{class}~---~текущий класс школьника;
 	\item \emph{beginDate}~---~начало учебного года;
 	\item \emph{endDate}~---~окончание учебного года.
+\end{enumerate}
+
+\subsection{Jobs}
+
+Таблица, которая описывает где работают пользователи.
+
+Атрибуты:
+\begin{enumerate}
+	\item \emph{id}~---~идентификатор пользователя, является PK; 
+	\item \emph{userId}~---~ссылка на пользователя-родителя, является FK;
+	\item \emph{schoolId}~---~ссылка на организацию, является FK;
+	\item \emph{beginDate}~---~начало работы;
+	\item \emph{endDate}~---~окончание работы.
 \end{enumerate}
 
 \end{document}
