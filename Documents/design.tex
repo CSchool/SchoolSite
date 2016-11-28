@@ -35,8 +35,8 @@
         \attribute{isAdmin: Bool}
     \end{class}
     
-    \begin{class}[text width=3cm]{UserRole}{10, 0}
-    	\attribute{* Student}
+    \begin{class}[text width=3cm]{UserRole}{10, -1}
+    	\attribute{* Student / Competitor}
     	\attribute{* Parent}
     	\attribute{* Сommittee}
     	\attribute{* Teacher}
@@ -50,32 +50,43 @@
        \attribute{status : RequestStatus enum}
     \end{class}
     
-    \begin{class}[text width=3cm]{RequestStatus}{-10, -5}
+    \begin{class}[text width=3cm]{RequestStatus}{-10, -7}
       \attribute{* Waiting}
       \attribute{* Approved}
       \attribute{* Declined}
     \end{class}
 
-    \begin{class}{GroupList}{4, -3}
+    \begin{class}{Team}{-5, -4}
       \attribute{id : Integer (\textbf{PK})}
-      \attribute{userId : Integer (\textbf{FK})}
-      \attribute{groupId : Integer (\textbf{FK})}
-      \attribute{status : GroupListStatus enum}
-      \attribute{role: UserRole enum}
-    \end{class}
-    
-    \begin{class}{GroupRequest}{-3, -1}
-    	\attribute{id : Integer (\textbf{PK})}
-      	\attribute{userId : Integer (\textbf{FK})}
-      	\attribute{groupId : Integer (\textbf{FK})}
-      	\attribute{status : GroupRequestStatus enum}
+      \attribute{name: String}
+      \attribute{createdBy : Integer (\textbf{FK})}
+      \attribute{status}
     \end{class}
 
-    \begin{class}{Group}{10,5}
+    \begin{class}{TeamUsers}{2, -1}
+      \attribute{id : Integer (\textbf{PK})}
+      \attribute{userId : Integer (\textbf{FK}}
+      \attribute{teamId : Integer (\textbf{FK}}
+      \attribute{status}
+    \end{class}
+    
+    \begin{class}{EventList}{4, -4}
+      \attribute{id : Integer (\textbf{PK})}
+      \attribute{teamId : Integer (\textbf{FK})}
+      \attribute{eventId : Integer (\textbf{FK})}
+      \attribute{status : EventListStatus enum}
+      \attribute{role: UserRole enum}
+    \end{class}
+
+    \begin{class}{Event}{10,5}
       \attribute{id : Integer (\textbf{PK})}
       \attribute{periodId : Integer (\textbf{FK})}
       \attribute{name : String}
       \attribute{description : String}
+      \attribute{registrationBegin : Date}
+      \attribute{registrationEnd : Date}
+      \attribute{eventBegin : Date}
+      \attribute{eventEnd : Date}
       \attribute{isOpen : bool}
       \attribute{limit: Integer}
       \attribute{type : GroupType enum}
@@ -86,20 +97,20 @@
       \attribute{name : String}
       \attribute{beginDate : Date}
       \attribute{endDate : Date}
+      \attribute{registrationBegin : Date}
+      \attribute{registrationEnd : Date}
     \end{class}
     
-    \begin{class}[text width=2cm]{GroupType}{5, 7}
-      \attribute{* Study}
-      \attribute{* Camp}
+    \begin{class}[text width=2cm]{EventType}{5, 8}
+      \attribute{* ClassGroup}
+      \attribute{* CampGroup}
+      \attribute{* Olympiade}
     \end{class}
     
-	\begin{class}[text width=3.5cm]{GroupRequestStatus}{-3, -5}
+	\begin{class}[text width=3cm]{EventListStatus}{10, -5}
 		\attribute{* Testing}
 		\attribute{* TestingSucceeded}
 		\attribute{* TestingFailed}
-	\end{class} 
-	
-	\begin{class}[text width=3cm]{GroupListStatus}{10, -5}
 		\attribute{* Studing}
 		\attribute{* Successed}
 		\attribute{* Failed}
@@ -144,28 +155,28 @@
       \attribute{endDate : Date}
     \end{class}
 
-    \association{User}{}{1}{GroupList}{}{0..*}
+    \association{Team}{}{1}{EventList}{}{0..*}
     \association{User}{}{0..*}{Relationship}{}{0..*}
     \association{User}{}{1}{CampVouchers}{}{0..*}
     \association{User}{}{1}{SchoolEducation}{}{0..*}
     \association{User}{}{1}{Jobs}{}{0..*}
+    \association{User}{}{1}{TeamUsers}{}{0..*}
+
+    \association{Team}{}{1}{TeamUsers}{}{1..*}
+    \association{Team}{}{0..*}{User}{}{1}
     
     \association{Relationship}{}{}{RequestStatus}{}{}
     
-	\association{GroupRequest}{}{}{GroupRequestStatus}{}{} 
-	\association{GroupRequest}{}{0..*}{Group}{}{1} 
-	\association{GroupRequest}{}{0..*}{User}{}{1}   
-    
-    \association{GroupList}{}{0..*}{Group}{}{1}
-    \association{GroupList}{}{}{GroupListStatus}{}{}
-    \association{GroupList}{}{}{UserRole}{}{}
-        
-    \association{Period}{}{1}{Group}{}{0..*}
+    \association{EventList}{}{0..*}{Event}{}{1}
+    \association{EventList}{}{}{EventListStatus}{}{}
+    \association{EventList}{}{}{UserRole}{}{}
+
+    \association{Period}{}{1}{Event}{}{0..*}
     \association{Period}{}{1}{CampVouchers}{}{1..*}
     
-    \association{Group}{}{}{GroupType}{}{}
+    \association{Event}{}{}{EventType}{}{}
     
-    \association{GroupRequestStatus}{}{}{RequestStatus}{Inheritance}{}
+    \association{EventListStatus}{}{}{RequestStatus}{Inheritance}{}
 
     \association{CampVouchers}{}{}{CampVoucherStatus}{}{}
     
@@ -248,38 +259,67 @@
 	\item \emph{name}~---~название учебного периода;
 	\item \emph{beginDate}~---~начало периода;
 	\item \emph{endDate}~---~окончание периода.
+	\item \emph{registrationBegin} --- дата начала регистрации на период обучения;
+	\item \emph{registrationEnd} --- дата окончания регистрации на период обучения;
 \end{itemize}
 	
-\subsection{Группа (Group)}
+\subsection{Событие или учебная группа (Event)}
 
-Группы объединяют пользователей. Каждый из них может входить в любое количество групп.
+Группы объединяют пользователей или команды. Каждый из них может входить в любое количество групп.
 
 Атрибуты:
 \begin{itemize}
 	\item \emph{id}~---~идентификатор пользователя, является PK;
 	\item \emph{periodId}~---~ссылка на учебный период, к которому относится группа, является FK;
-	\item \emph{name}~---~название учебной группы;
-	\item \emph{description}~---~описание группы;
-	\item \emph{isOpen}~---~открыт ли набор в данную группу, \emph{true} в случае, если открыт, в противном~---~\emph{false};
-	\item \emph{limit}~---~максимальное количество возможных участников группы;	
-	\item \emph{type}~---~тип группы, является экземпляром перечисления ``Тип группы''.
+	\item \emph{name}~---~название;
+	\item \emph{description}~---~описание;
+	\item \emph{registrationBegin} --- дата начала регистрации на событие;
+	\item \emph{registrationEnd} --- дата окончания регистрации на событие;
+	\item \emph{eventBegin} --- дата начала события;
+	\item \emph{eventEnd} --- дата окончания события;
+	\item \emph{isOpen}~---~открыт ли набор в группу или событие, \emph{true} в случае, если открыт, в противном~---~\emph{false};
+	\item \emph{limit}~---~максимальное количество возможных участников группы/события;	
+	\item \emph{type}~---~тип, является экземпляром перечисления ``Тип события''.
 \end{itemize}
 
-\subsection{Заявка в группу (GroupRequest)}
+\subsection{Команда (Team)}
 
-Список заявок участников в группы.
+Команда, состоящая из одного или нескольких участников.
 
 Атрибуты:
 \begin{enumerate}
-	\item \emph{id}~---~идентификатор пользователя, является PK; 
-	\item \emph{userId}~---~ссылка на пользователя-участника, является FK;
-	\item \emph{groupId}~---~ссылка на группу, является FK;
-	\item \emph{status}~---~состояние заявки на вступление, является экземпляром перечисления ``Состояние заявки в группу''.
+	\item \emph{id}~---~идентификатор, является PK; 
+	\item \emph{createdBy}~---~идентификатор пользователя, создавшего команду; 
+	\item \emph{name}~---~название команды; 
+	\item \emph{status}~---~состояние команды. Укомплектована или нет, могут ли свободные участники подавать заявки в команду.
 \end{enumerate}
 
-\todo[inline]{N.B! Может здесь нужно ещё хранить количество попыток тестирования?}
+\subsection{Члены команд (TeamUsers)}
 
-\subsection{Состояние заявки в группу (GroupRequestStatus)}
+Описывает составы команд.
+
+Атрибуты:
+\begin{enumerate}
+	\item \emph{id}~---~идентификатор, является PK; 
+	\item \emph{userId}~---~идентификатор пользователя;
+	\item \emph{teamId}~---~идентификатор команды;
+	\item \emph{status}~---~состояние записи. Запись может ожидать подтверждения пользователя, если его добавил в команду кто-то другой. Или подтверждения владельца команды, если пользователь хочет добавиться в нее.
+\end{enumerate}
+
+\subsection{Участники группы (EventList)}
+
+Список участников группы. Используется для учебных групп, отрядов, олимпиад.
+
+Атрибуты:
+\begin{enumerate}
+	\item \emph{id}~---~идентификатор, является PK; 
+	\item \emph{teamId}~---~ссылка на команду-участника, является FK;
+	\item \emph{eventId}~---~ссылка на группу/событие, является FK;
+	\item \emph{status}~---~состояние пользователя ``Состояние участия в группе''.
+    \item \emph{role}~---~Роль пользователя (или команды, если в этом есть смысл) в событии/группе;
+\end{enumerate}
+
+\subsection{Состояние участия в группе (EventListStatus)}
 
 Состояние заявки ученика в группу. Включает в себя элементы перечисления ``Состояние заявки'' и добавляет свои состояния.
 
@@ -316,24 +356,7 @@
 	\item Approved или Declined (ученик либо добил тест и попал в группу, либо его окончательно забанили)
 \end{enumerate}
 
-\subsection{Участники группы (GroupList)}
-
-Список участников группы. Используется как и для учебных групп, так и для отрядов. Сюда заносятся все записи из таблицы \emph{GroupRequest}, у которых поле \emph{status} равно значению <<Approved>>.
-
-Атрибуты:
-\begin{enumerate}
-	\item \emph{id}~---~идентификатор пользователя, является PK; 
-	\item \emph{userId}~---~ссылка на пользователя-участника, является FK;
-	\item \emph{groupId}~---~ссылка на группу, является FK;
-	\item \emph{status}~---~состояние пользователя ``Состояние участия в группе''.
-    \item \emph{role}~---~Роль пользователя в группе;
-\end{enumerate}
-
-\subsection{Состояние участия в группе (GroupListStatus)}
-
-Состояние участия в группе\textbackslash отряде.
-
-Текущие состояния:
+Состояние участия в группе/отряде/событии:
 \begin{itemize}
 	\item \emph{Studing}~---~Пользователь работает в группе или находится в отряде; 
 	\item \emph{Successed}~---~Пользователь успешно окончил обучение в группе или закончил пребывание в отряде, потому что смена закончилась;
@@ -341,9 +364,9 @@
 	\item \emph{Disqualified}~---~Ученик отчислен из группы или из отряда (выгнали из лагеря?).
 \end{itemize}
 
-\subsection{Тип группы (GroupType)}
+\subsection{Тип группы (EventType)}
 
-Группы могут быть двух типов: учебные (Study) и отряды в лагере (Camp).
+Группы и события могут быть следующих типов: учебные группы (ClassGroup), отряды в лагере (CampGroup), олимпиады и турниры (Olympidade).
 
 \subsection{Путевки (CampVouchers)}
 
