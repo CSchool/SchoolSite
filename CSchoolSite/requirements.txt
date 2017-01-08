@@ -2,3 +2,4 @@ django
 django-tinymce
 django-bootstrap3
 django-registration
+django-admin-view-permission
