@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.db import models
 
 from news.models import NewsPost
-from django import forms
 from tinymce.widgets import AdminTinyMCE
 
 

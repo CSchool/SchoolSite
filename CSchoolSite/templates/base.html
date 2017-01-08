@@ -51,7 +51,7 @@
                 {% block submit_application_button %}
                 {% if perms.can_submit_application %}
                     <div class="navbar-form navbar-right ">
-                    <a href="#" class="btn btn-success">
+                    <a href="{% url 'applications_choose_period' %}" class="btn btn-success">
                         {% bootstrap_icon 'plus' %}
                         Подать заявку
                     </a>

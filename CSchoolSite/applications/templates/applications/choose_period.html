@@ -2,6 +2,9 @@
 {% block page_title %}Подать заявку{% endblock %}
 {% block submit_application_button %}{% endblock %}
 {% block content %}
+<h3 class="page-header text-center">
+    Подать заявку
+</h3>
 <table class="table">
     <thead>
         <tr>
@@ -20,7 +23,7 @@
                     <td>{{ period.begin|date:"j M Y" }} &ndash; {{ period.end|date:"j M Y" }}</td>
                     <td><b>
                         {% if period.registration_open %}
-                            <a href="#">
+                            <a href="{% url 'applications_choose_group' period.id %}">
                                 Подать заявку
                             </a>
                         {% else %}
