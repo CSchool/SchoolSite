@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 
 from django.contrib.auth.models import Group, Permission
 from django.db import migrations
+from django.utils.translation import ugettext_lazy as _
 
 
 # get Permission object by codename, usually it a '<action>_<modelname>'
@@ -13,7 +14,7 @@ def create_permissions(permissions_list, model_name):
 
 def create_groups(app, schema_editor):
     import logging
-    group, created = Group.objects.get_or_create(name='campVoucherCommittee')
+    group, created = Group.objects.get_or_create(name=_('Комитет образования'))
 
     if created:
         permissions = create_permissions(['add', 'change', 'delete', 'view'], 'campvoucher')
@@ -23,10 +24,14 @@ def create_groups(app, schema_editor):
         logging.error('Cannot create group for admins!')
 
 
+def remove_groups(app, schema_editor):
+    group = Group.objects.filter(name=_('Комитет образования')).delete()
+
+
 class Migration(migrations.Migration):
     dependencies = [
     ]
 
     operations = [
-        migrations.RunPython(create_groups),
+        migrations.RunPython(create_groups, remove_groups),
     ]
