@@ -2,3 +2,8 @@
 ### Vagrant template
 .vagrant/
 Vagrantfile
+*.sqlite3
+.idea
+node_modules
+static
+*.pyc

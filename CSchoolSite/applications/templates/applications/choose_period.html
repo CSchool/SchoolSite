@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block page_title %}Подать заявку{% endblock %}
+{% block submit_application_button %}{% endblock %}
+{% block content %}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Период</th>
+            <th>Окончание регистрации</th>
+            <th>Даты проведения</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for period in periods %}
+            {% if period.registration_started %}
+                <tr class="{% if period.registration_open %}success{% endif %}">
+                    <td>{{ period.name }}</td>
+                    <td>{{ period.registration_end|date:"j M Y H:i" }}</td>
+                    <td>{{ period.begin|date:"j M Y" }} &ndash; {{ period.end|date:"j M Y" }}</td>
+                    <td><b>
+                        {% if period.registration_open %}
+                            <a href="#">
+                                Подать заявку
+                            </a>
+                        {% else %}
+                            {% if period.ongoing %}
+                                Идёт
+                            {% else %}
+                                {% if not period.began %}
+                                    Ещё не начался
+                                {% else %}
+                                    Завершился
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    </b></td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
