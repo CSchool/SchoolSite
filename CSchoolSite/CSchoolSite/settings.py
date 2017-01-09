@@ -34,7 +34,6 @@ else:
 # Application definition
 
 INSTALLED_APPS = [
-    'admin_view_permission',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,7 +46,7 @@ INSTALLED_APPS = [
 
     'main',
     'news',
-    'applications'
+    'applications.apps.ApplicationsConfig',
 ]
 
 STATICFILES_DIRS = [

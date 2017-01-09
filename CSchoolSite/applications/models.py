@@ -7,6 +7,10 @@ class Period(models.Model):
     class Meta:
         verbose_name = 'Период обучения'
         verbose_name_plural = 'Периоды обучения'
+        permissions = (
+            ("view_period", "Возможность просматривать периоды обучения"),
+        )
+
     name = models.CharField(max_length=100, verbose_name='Название')
     begin = models.DateTimeField(verbose_name='Начало обучения')
     end = models.DateTimeField(verbose_name='Окончание обучения')
@@ -51,6 +55,10 @@ class CampVoucher(models.Model):
     class Meta:
         verbose_name = 'Путёвка'
         verbose_name_plural = 'Путёвки'
+        permissions = (
+            ("view_campvoucher", "Возможность просматривать путевки"),
+        )
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Владелец путёвки')
     period = models.ForeignKey('Period', on_delete=models.CASCADE, verbose_name='Смена')
     voucher_id = models.CharField(max_length=30, verbose_name='Номер путёвки')
