@@ -26,7 +26,7 @@ SECRET_KEY = ')1ji)&$y2qxf3!d(_$9vauea=35-6yb=x1(-1h%cx+)(zflku4'
 DEBUG = True
 
 if DEBUG:
-    ALLOWED_HOSTS = ['192.168.33.10'] # need for vagrant
+    ALLOWED_HOSTS = ['192.168.33.10', '127.0.0.1', 'localhost'] # need for vagrant
 else:
     ALLOWED_HOSTS = []
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-09 17:53+0300\n"
+"POT-Creation-Date: 2017-01-09 18:00+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -142,7 +142,7 @@ msgstr "Тип события"
 
 #: applications/models.py:124
 msgid "Event application"
-msgstr "Заявка на событияе"
+msgstr "Заявка на событие"
 
 #: applications/models.py:125
 msgid "Event applications"
