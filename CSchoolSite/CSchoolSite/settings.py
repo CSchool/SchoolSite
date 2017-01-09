@@ -25,7 +25,10 @@ SECRET_KEY = ')1ji)&$y2qxf3!d(_$9vauea=35-6yb=x1(-1h%cx+)(zflku4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+if DEBUG:
+    ALLOWED_HOSTS = ['192.168.33.10'] # need for vagrant
+else:
+    ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -43,7 +46,7 @@ INSTALLED_APPS = [
 
     'main',
     'news',
-    'applications'
+    'applications.apps.ApplicationsConfig',
 ]
 
 STATICFILES_DIRS = [

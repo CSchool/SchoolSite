@@ -8,6 +8,9 @@ class NewsPost(models.Model):
     class Meta:
         verbose_name = _('News post')
         verbose_name_plural = _('News posts')
+        permissions = (
+            ("view_news", _("view news")),
+        )
     title = models.CharField(max_length=250, verbose_name=_('Title'))
     body = models.TextField(verbose_name=_('Body'))
     user = models.ForeignKey(User, editable=False, on_delete=models.CASCADE, verbose_name=_('Submitted user'))

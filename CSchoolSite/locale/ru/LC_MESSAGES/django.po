@@ -2,13 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
-#
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-09 16:15+0300\n"
+"POT-Creation-Date: 2017-01-09 17:53+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,7 +18,15 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: applications/models.py:9 applications/models.py:56 applications/models.py:83
+#: applications/apps.py:10
+msgid "Education committee"
+msgstr "Комитет образования"
+
+#: applications/apps.py:23
+msgid "Applications"
+msgstr "Заявки"
+
+#: applications/models.py:9 applications/models.py:62 applications/models.py:89
 #: applications/templates/applications/choose_period.html:12
 msgid "Period"
 msgstr "Учебный период"
@@ -29,136 +35,144 @@ msgstr "Учебный период"
 msgid "Periods"
 msgstr "Учебные периоды"
 
-#: applications/models.py:11 applications/models.py:82
+#: applications/models.py:12
+msgid "view periods"
+msgstr "Просматривать учебные периоды"
+
+#: applications/models.py:14 applications/models.py:88
 msgid "Name"
 msgstr "Название"
 
-#: applications/models.py:12
+#: applications/models.py:15
 msgid "Period begins"
 msgstr "Начало периода"
 
-#: applications/models.py:13
+#: applications/models.py:16
 msgid "Period ends"
 msgstr "Окончание периода"
 
-#: applications/models.py:14 applications/models.py:88
+#: applications/models.py:17 applications/models.py:94
 msgid "Registration begins"
 msgstr "Начало регистрации"
 
-#: applications/models.py:15 applications/models.py:89
+#: applications/models.py:18 applications/models.py:95
 #: applications/templates/applications/choose_period.html:13
 msgid "Registration ends"
 msgstr "Окончание регистрации"
 
-#: applications/models.py:53
+#: applications/models.py:56
 msgid "Camp voucher"
 msgstr "Путёвка"
 
-#: applications/models.py:54
+#: applications/models.py:57
 msgid "Camp vouchers"
 msgstr "Путёвки"
 
-#: applications/models.py:55
+#: applications/models.py:59
+msgid "view camp vouchers"
+msgstr "Просматривать путёвки"
+
+#: applications/models.py:61
 msgid "Voucher owner"
 msgstr "Владелец путёвки"
 
-#: applications/models.py:57
+#: applications/models.py:63
 msgid "Voucher ID"
 msgstr "Номер путёвки"
 
-#: applications/models.py:66
+#: applications/models.py:72
 msgid "Awaiting payment"
 msgstr "Ожидает оплаты"
 
-#: applications/models.py:67
+#: applications/models.py:73
 msgid "Declined"
 msgstr "Отклонено"
 
-#: applications/models.py:68
+#: applications/models.py:74
 msgid "Paid"
 msgstr "Оплачено"
 
-#: applications/models.py:69
+#: applications/models.py:75
 msgid "Approved"
 msgstr "Одобрено"
 
-#: applications/models.py:80
+#: applications/models.py:86
 msgid "Event"
 msgstr "Событие"
 
-#: applications/models.py:81
+#: applications/models.py:87
 msgid "Events"
 msgstr "События"
 
-#: applications/models.py:85
+#: applications/models.py:91
 msgid "Description"
 msgstr "Описание"
 
-#: applications/models.py:86
+#: applications/models.py:92
 msgid "Event begins"
 msgstr "Начало события"
 
-#: applications/models.py:87
+#: applications/models.py:93
 msgid "Event ends"
 msgstr "Окончание события"
 
-#: applications/models.py:90
+#: applications/models.py:96
 msgid "Registration open"
 msgstr "Регистрация открыта"
 
-#: applications/models.py:91
+#: applications/models.py:97
 msgid "Participants limit"
 msgstr "Максимальное количество участников"
 
-#: applications/models.py:99
+#: applications/models.py:105
 msgid "Class group"
 msgstr "Учебная группа"
 
-#: applications/models.py:100
+#: applications/models.py:106
 msgid "Camp group"
 msgstr "Отряд"
 
-#: applications/models.py:101
+#: applications/models.py:107
 msgid "Tournament"
 msgstr "Турнир"
 
-#: applications/models.py:104
+#: applications/models.py:110
 msgid "Event type"
 msgstr "Тип события"
 
-#: applications/models.py:118
+#: applications/models.py:124
 msgid "Event application"
 msgstr "Заявка на событияе"
 
-#: applications/models.py:119
+#: applications/models.py:125
 msgid "Event applications"
 msgstr "Заявки на события"
 
-#: applications/models.py:132
+#: applications/models.py:138
 msgid "Testing"
 msgstr "Тестируется"
 
-#: applications/models.py:133
+#: applications/models.py:139
 msgid "Testing succeeded"
 msgstr "Тестирование пройдено"
 
-#: applications/models.py:134
+#: applications/models.py:140
 msgid "Studying"
 msgstr "Обучение"
 
-#: applications/models.py:135
+#: applications/models.py:141
 msgid "Successed"
 msgstr "Обучение окончено"
 
-#: applications/models.py:136
+#: applications/models.py:142
 msgid "Failed"
 msgstr "Обучение не окончено"
 
-#: applications/models.py:137
+#: applications/models.py:143
 msgid "Disqualified"
 msgstr "Исключён"
 
-#: applications/models.py:140
+#: applications/models.py:146
 msgid "Application status"
 msgstr "Статус заявки"
 
@@ -191,6 +205,18 @@ msgstr "Не началось"
 msgid "Ended"
 msgstr "Закончилось"
 
+#: main/forms.py:18
+msgid "First name"
+msgstr "Имя"
+
+#: main/forms.py:19
+msgid "Last name"
+msgstr "Фамилия"
+
+#: news/apps.py:6 news/templates/news/posts.html:4
+msgid "News"
+msgstr "Новости"
+
 #: news/models.py:9
 msgid "News post"
 msgstr "Новость"
@@ -199,29 +225,29 @@ msgstr "Новость"
 msgid "News posts"
 msgstr "Новости"
 
-#: news/models.py:11
+#: news/models.py:12
+msgid "view news"
+msgstr "Просматривать новости"
+
+#: news/models.py:14
 msgid "Title"
 msgstr "Название"
 
-#: news/models.py:12
+#: news/models.py:15
 msgid "Body"
 msgstr "Текст"
 
-#: news/models.py:13
+#: news/models.py:16
 msgid "Submitted user"
 msgstr "Отправивший пользователь"
 
-#: news/models.py:14
+#: news/models.py:17
 msgid "Posted at"
 msgstr "Добавлено"
 
-#: news/models.py:15
+#: news/models.py:18
 msgid "Modified at"
 msgstr "Изменено"
-
-#: news/templates/news/posts.html:4
-msgid "News"
-msgstr "Новости"
 
 #: news/templates/news/posts.html:33
 msgid "Read more"
