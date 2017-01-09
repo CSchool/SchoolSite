@@ -1,0 +1,290 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-01-09 16:15+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
+"%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: applications/models.py:9 applications/models.py:56 applications/models.py:83
+#: applications/templates/applications/choose_period.html:12
+msgid "Period"
+msgstr "Учебный период"
+
+#: applications/models.py:10
+msgid "Periods"
+msgstr "Учебные периоды"
+
+#: applications/models.py:11 applications/models.py:82
+msgid "Name"
+msgstr "Название"
+
+#: applications/models.py:12
+msgid "Period begins"
+msgstr "Начало периода"
+
+#: applications/models.py:13
+msgid "Period ends"
+msgstr "Окончание периода"
+
+#: applications/models.py:14 applications/models.py:88
+msgid "Registration begins"
+msgstr "Начало регистрации"
+
+#: applications/models.py:15 applications/models.py:89
+#: applications/templates/applications/choose_period.html:13
+msgid "Registration ends"
+msgstr "Окончание регистрации"
+
+#: applications/models.py:53
+msgid "Camp voucher"
+msgstr "Путёвка"
+
+#: applications/models.py:54
+msgid "Camp vouchers"
+msgstr "Путёвки"
+
+#: applications/models.py:55
+msgid "Voucher owner"
+msgstr "Владелец путёвки"
+
+#: applications/models.py:57
+msgid "Voucher ID"
+msgstr "Номер путёвки"
+
+#: applications/models.py:66
+msgid "Awaiting payment"
+msgstr "Ожидает оплаты"
+
+#: applications/models.py:67
+msgid "Declined"
+msgstr "Отклонено"
+
+#: applications/models.py:68
+msgid "Paid"
+msgstr "Оплачено"
+
+#: applications/models.py:69
+msgid "Approved"
+msgstr "Одобрено"
+
+#: applications/models.py:80
+msgid "Event"
+msgstr "Событие"
+
+#: applications/models.py:81
+msgid "Events"
+msgstr "События"
+
+#: applications/models.py:85
+msgid "Description"
+msgstr "Описание"
+
+#: applications/models.py:86
+msgid "Event begins"
+msgstr "Начало события"
+
+#: applications/models.py:87
+msgid "Event ends"
+msgstr "Окончание события"
+
+#: applications/models.py:90
+msgid "Registration open"
+msgstr "Регистрация открыта"
+
+#: applications/models.py:91
+msgid "Participants limit"
+msgstr "Максимальное количество участников"
+
+#: applications/models.py:99
+msgid "Class group"
+msgstr "Учебная группа"
+
+#: applications/models.py:100
+msgid "Camp group"
+msgstr "Отряд"
+
+#: applications/models.py:101
+msgid "Tournament"
+msgstr "Турнир"
+
+#: applications/models.py:104
+msgid "Event type"
+msgstr "Тип события"
+
+#: applications/models.py:118
+msgid "Event application"
+msgstr "Заявка на событияе"
+
+#: applications/models.py:119
+msgid "Event applications"
+msgstr "Заявки на события"
+
+#: applications/models.py:132
+msgid "Testing"
+msgstr "Тестируется"
+
+#: applications/models.py:133
+msgid "Testing succeeded"
+msgstr "Тестирование пройдено"
+
+#: applications/models.py:134
+msgid "Studying"
+msgstr "Обучение"
+
+#: applications/models.py:135
+msgid "Successed"
+msgstr "Обучение окончено"
+
+#: applications/models.py:136
+msgid "Failed"
+msgstr "Обучение не окончено"
+
+#: applications/models.py:137
+msgid "Disqualified"
+msgstr "Исключён"
+
+#: applications/models.py:140
+msgid "Application status"
+msgstr "Статус заявки"
+
+#: applications/templates/applications/choose_group.html:3
+#: applications/templates/applications/choose_group.html:7
+msgid "Submit application to"
+msgstr "Подать заявку в"
+
+#: applications/templates/applications/choose_group.html:19
+#: applications/templates/applications/choose_period.html:3
+#: applications/templates/applications/choose_period.html:7
+#: applications/templates/applications/choose_period.html:28
+#: templates/base.html:54
+msgid "Submit application"
+msgstr "Подать заявку"
+
+#: applications/templates/applications/choose_period.html:14
+msgid "Period dates"
+msgstr "Даты обучения"
+
+#: applications/templates/applications/choose_period.html:32
+msgid "Ongoing"
+msgstr "Идёт"
+
+#: applications/templates/applications/choose_period.html:35
+msgid "Not yet started"
+msgstr "Не началось"
+
+#: applications/templates/applications/choose_period.html:37
+msgid "Ended"
+msgstr "Закончилось"
+
+#: news/models.py:9
+msgid "News post"
+msgstr "Новость"
+
+#: news/models.py:10
+msgid "News posts"
+msgstr "Новости"
+
+#: news/models.py:11
+msgid "Title"
+msgstr "Название"
+
+#: news/models.py:12
+msgid "Body"
+msgstr "Текст"
+
+#: news/models.py:13
+msgid "Submitted user"
+msgstr "Отправивший пользователь"
+
+#: news/models.py:14
+msgid "Posted at"
+msgstr "Добавлено"
+
+#: news/models.py:15
+msgid "Modified at"
+msgstr "Изменено"
+
+#: news/templates/news/posts.html:4
+msgid "News"
+msgstr "Новости"
+
+#: news/templates/news/posts.html:33
+msgid "Read more"
+msgstr "Показать больше"
+
+#: news/templates/news/posts.html:42
+msgid "Page"
+msgstr "Страница"
+
+#: news/templates/news/posts.html:42
+msgid "out of"
+msgstr "из"
+
+#: news/templates/news/posts.html:45
+msgid "Back"
+msgstr "Назад"
+
+#: news/templates/news/posts.html:48
+msgid "Next"
+msgstr "Вперёд"
+
+#: templates/base.html:8
+msgid "Main page"
+msgstr "Главная страница"
+
+#: templates/base.html:8 templates/base.html:21
+msgid "Computer school"
+msgstr "Компьютерная школа"
+
+#: templates/base.html:32
+msgid "Guest"
+msgstr "Гость"
+
+#: templates/base.html:38
+msgid "Administration"
+msgstr "Администрирование"
+
+#: templates/base.html:40
+msgid "Sign off"
+msgstr "Выйти"
+
+#: templates/base.html:42 templates/registration/login.html:16
+msgid "Sign in"
+msgstr "Войти"
+
+#: templates/base.html:44 templates/registration/registration_form.html:14
+msgid "Sign up"
+msgstr "Зарегистироваться"
+
+#: templates/registration/login.html:4 templates/registration/login.html:7
+msgid "Authorization"
+msgstr "Вход в систему"
+
+#: templates/registration/login.html:13
+msgid "Password recovery"
+msgstr "Восстановление пароля"
+
+#: templates/registration/registration_closed.html:4
+#: templates/registration/registration_closed.html:7
+msgid "Registration is unavailable"
+msgstr "Регистрация отключена"
+
+#: templates/registration/registration_form.html:4
+#: templates/registration/registration_form.html:7
+msgid "Registration"
+msgstr "Регистрация"

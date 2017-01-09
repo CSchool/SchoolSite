@@ -1,17 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.utils.translation import ugettext_lazy as _
 
 
 class Period(models.Model):
     class Meta:
-        verbose_name = 'Период обучения'
-        verbose_name_plural = 'Периоды обучения'
-    name = models.CharField(max_length=100, verbose_name='Название')
-    begin = models.DateTimeField(verbose_name='Начало обучения')
-    end = models.DateTimeField(verbose_name='Окончание обучения')
-    registration_begin = models.DateTimeField(verbose_name='Начало регистрации')
-    registration_end = models.DateTimeField(verbose_name='Окончание регистрации')
+        verbose_name = _('Period')
+        verbose_name_plural = _('Periods')
+    name = models.CharField(max_length=100, verbose_name=_('Name'))
+    begin = models.DateTimeField(verbose_name=_('Period begins'))
+    end = models.DateTimeField(verbose_name=_('Period ends'))
+    registration_begin = models.DateTimeField(verbose_name=_('Registration begins'))
+    registration_end = models.DateTimeField(verbose_name=_('Registration ends'))
 
     def __str__(self):
         return self.name
@@ -49,11 +50,11 @@ class Period(models.Model):
 
 class CampVoucher(models.Model):
     class Meta:
-        verbose_name = 'Путёвка'
-        verbose_name_plural = 'Путёвки'
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Владелец путёвки')
-    period = models.ForeignKey('Period', on_delete=models.CASCADE, verbose_name='Смена')
-    voucher_id = models.CharField(max_length=30, verbose_name='Номер путёвки')
+        verbose_name = _('Camp voucher')
+        verbose_name_plural = _('Camp vouchers')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('Voucher owner'))
+    period = models.ForeignKey('Period', on_delete=models.CASCADE, verbose_name=_('Period'))
+    voucher_id = models.CharField(max_length=30, verbose_name=_('Voucher ID'))
 
     # Voucher status
     AWAITING_PAYMENT = 'WP'
@@ -62,10 +63,10 @@ class CampVoucher(models.Model):
     APPROVED = 'AP'
 
     CAMP_VOUCHER_STATUS_CHOICES = (
-        (AWAITING_PAYMENT, 'Ожидает оплаты'),
-        (DECLINED, 'Отклонено'),
-        (PAID, 'Оплачено'),
-        (APPROVED, 'Подтверждено')
+        (AWAITING_PAYMENT, _('Awaiting payment')),
+        (DECLINED, _('Declined')),
+        (PAID, _('Paid')),
+        (APPROVED, _('Approved'))
     )
 
     status = models.CharField(max_length=2, choices=CAMP_VOUCHER_STATUS_CHOICES, default=AWAITING_PAYMENT, verbose_name='Статус')
@@ -76,18 +77,18 @@ class CampVoucher(models.Model):
 
 class Event(models.Model):
     class Meta:
-        verbose_name = 'Событие'
-        verbose_name_plural = 'События'
-    name = models.CharField(max_length=100, verbose_name='Название')
-    period = models.ForeignKey('Period', on_delete=models.CASCADE, verbose_name='Период')
+        verbose_name = _('Event')
+        verbose_name_plural = _('Events')
+    name = models.CharField(max_length=100, verbose_name=_('Name'))
+    period = models.ForeignKey('Period', on_delete=models.CASCADE, verbose_name=_('Period'))
     users = models.ManyToManyField(User, through='EventApplication')
-    description = models.TextField(verbose_name='Описание')
-    begin = models.DateTimeField(verbose_name='Начало события')
-    end = models.DateTimeField(verbose_name='Окончание события')
-    registration_begin = models.DateTimeField(verbose_name='Начало регистрации')
-    registration_end = models.DateTimeField(verbose_name='Окончание регистрации')
-    is_open = models.BooleanField(verbose_name='Регистрация открыта')
-    limit = models.IntegerField(verbose_name='Максимальное количество участников')
+    description = models.TextField(verbose_name=_('Description'))
+    begin = models.DateTimeField(verbose_name=_('Event begins'))
+    end = models.DateTimeField(verbose_name=_('Event ends'))
+    registration_begin = models.DateTimeField(verbose_name=_('Registration begins'))
+    registration_end = models.DateTimeField(verbose_name=_('Registration ends'))
+    is_open = models.BooleanField(verbose_name=_('Registration open'))
+    limit = models.IntegerField(verbose_name=_('Participants limit'))
 
     # Event type
     CLASS_GROUP = 'CL'
@@ -95,12 +96,12 @@ class Event(models.Model):
     OLYMP = 'OL'
 
     EVENT_TYPE_CHOICES = (
-        (CLASS_GROUP, 'Учебная группа'),
-        (CAMP_GROUP, 'Отряд'),
-        (OLYMP, 'Турнир')
+        (CLASS_GROUP, _('Class group')),
+        (CAMP_GROUP, _('Camp group')),
+        (OLYMP, _('Tournament'))
     )
 
-    type = models.CharField(max_length=2, choices=EVENT_TYPE_CHOICES, default=CLASS_GROUP, verbose_name='Тип события')
+    type = models.CharField(max_length=2, choices=EVENT_TYPE_CHOICES, default=CLASS_GROUP, verbose_name=_('Event type'))
 
     def __str__(self):
         return self.name
@@ -114,8 +115,8 @@ class Event(models.Model):
 
 class EventApplication(models.Model):
     class Meta:
-        verbose_name = "Заявка на событие"
-        verbose_name_plural = "Заявки на события"
+        verbose_name = _('Event application')
+        verbose_name_plural = _('Event applications')
     user = models.ForeignKey(User)
     event = models.ForeignKey(Event)
 
@@ -128,12 +129,12 @@ class EventApplication(models.Model):
     DISQUALIFIED = 'DQ'
 
     EVENT_APPLICATION_STATUS_CHOICES = (
-        (TESTING, "Тестируется"),
-        (TESTING_SUCCEEDED, "Тестирование пройдено"),
-        (STUDYING, "Обучается"),
-        (SUCCESSED, "Успешно окончил(а)"),
-        (FAILED, "Неуспешно окончил(а)"),
-        (DISQUALIFIED, "Исключён(а)")
+        (TESTING, _('Testing')),
+        (TESTING_SUCCEEDED, _('Testing succeeded')),
+        (STUDYING, _('Studying')),
+        (SUCCESSED, _('Successed')),
+        (FAILED, _('Failed')),
+        (DISQUALIFIED, _('Disqualified'))
     )
 
-    status = models.CharField(max_length=2, choices=EVENT_APPLICATION_STATUS_CHOICES, default=TESTING, verbose_name='Статус заявки')
+    status = models.CharField(max_length=2, choices=EVENT_APPLICATION_STATUS_CHOICES, default=TESTING, verbose_name=_('Application status'))

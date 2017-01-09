@@ -1,8 +1,10 @@
+from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from django.shortcuts import render
 from applications.models import Period, Event
 
 
+@login_required()
 def choose_period(req):
     periods = Period.objects.all().order_by("-begin")
     return render(req, "applications/choose_period.html", {
@@ -10,6 +12,7 @@ def choose_period(req):
     })
 
 
+@login_required
 def choose_group(req, period_id):
     try:
         period = Period.objects.get(id=period_id)

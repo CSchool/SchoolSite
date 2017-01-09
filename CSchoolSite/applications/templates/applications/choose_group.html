@@ -1,9 +1,10 @@
 {% extends "base.html" %}
-{% block page_title %}Подать заявку в {{ period.name }}{% endblock %}
+{% load i18n %}
+{% block page_title %}{% trans 'Submit application to' %} {{ period.name }}{% endblock %}
 {% block submit_application_button %}{% endblock %}
 {% block content %}
 <h3 class="page-header text-center">
-    Подать заявку в {{ period.name }}
+    {% trans 'Submit application to' %} {{ period.name }}
 </h3>
 {% for group in groups %}
     <div class="col-xs-12 col-md-4">
@@ -15,7 +16,7 @@
                 {{ group.description|safe }}
                 <br />
                 <a href="#" class="btn btn-block btn-primary">
-                    Подать заявку
+                    {% trans 'Submit application' %}
                 </a>
             </div>
         </div>

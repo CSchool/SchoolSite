@@ -1,9 +1,9 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% load bootstrap3 %}
-{% block page_title %}Регистрация недоступна{% endblock %}
+{% block page_title %}{% trans 'Registration is unavailable' %}{% endblock %}
 {% block content %}
 <div class="alert alert-danger" role="alert">
-    <b>Регистрация недоступна</b><br />
-    В данный момент регистрация на сайте недоступна
+    <b>{% trans 'Registration is unavailable' %}</b>
 </div>
 {% endblock %}

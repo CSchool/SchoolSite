@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
-{% block page_title %}Новости{% endblock %}
+{% load i18n %}
+{% block page_title %}{% trans 'News' %}{% endblock %}
 {% block content %}
     <div class="postlist">
     {% for post in news.object_list %}
@@ -29,7 +30,7 @@
                 {{ post.body|safe|truncatewords_html:"50"|linebreaks }}
 
                 {% ifnotequal post.body|truncatewords_html:"50"|length post.body|truncatewords_html:"51"|length %}
-                    <a href="{% url 'news_post' post.id %}">Подробнее</a>
+                    <a href="{% url 'news_post' post.id %}">{% trans 'Read more' %}</a>
                 {% endifnotequal %}
                 <span class="pull-right">
                     <small>{% bootstrap_icon 'user' %} {{ post.user.get_full_name }}</small>
@@ -38,13 +39,13 @@
         </div>
     {% endfor %}
 
-    <p>Страница {{ current_page }} из {{ total_pages }}</p>
+    <p>{% trans 'Page' %} {{ current_page }} {% trans 'out of' %} {{ total_pages }}</p>
 
     {% if news.has_previous %}
-        <a href="{% url 'news_paged' news.previous_page_number %}">Назад</a>
+        <a href="{% url 'news_paged' news.previous_page_number %}">{% trans 'Back' %}</a>
     {% endif %}
     {% if news.has_next %}
-        <a href="{% url 'news_paged' news.next_page_number %}">Вперёд</a>
+        <a href="{% url 'news_paged' news.next_page_number %}">{% trans 'Next' %}</a>
     {% endif %}
     </div>
 {% endblock %}

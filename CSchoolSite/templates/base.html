@@ -1,10 +1,11 @@
 {% load static %}
 {% load bootstrap3 %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}{% block page_title %}Главная{% endblock %} - Компьютерная школа{% endblock %}</title>
+    <title>{% block title %}{% block page_title %}{% trans 'Main page' %}{% endblock %} - {% trans 'Computer school' %}{% endblock %}</title>
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}" />
 </head>
 <body>
@@ -12,15 +13,12 @@
         <div class="container">
             <div class="navbar-header">
                 <button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar">
-                    <span class="sr-only">
-                        Toggle navigation
-                    </span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
 
-                <a class="navbar-brand" href="{% url 'index' %}">Компьютерная школа</a>
+                <a class="navbar-brand" href="{% url 'index' %}">{% trans 'Computer school' %}</a>
             </div>
 
             <div id="navbar" class="collapse navbar-collapse">
@@ -31,19 +29,19 @@
                         {% if user.is_authenticated %}
                             {{ user.get_full_name }}
                         {% else %}
-                            Гость
+                            {% trans 'Guest' %}
                         {% endif %}
                         <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             {% if user.is_authenticated %}
                                 {% if user.is_staff %}
-                                    <li><a href="/admin">Управление</a></li>
+                                    <li><a href="/admin">{% trans 'Administration' %}</a></li>
                                 {% endif %}
-                                <li><a href="{% url 'auth_logout' %}">Выйти</a></li>
+                                <li><a href="{% url 'auth_logout' %}">{% trans 'Sign off' %}</a></li>
                             {% else %}
-                                <li><a href="{% url 'auth_login' %}">Войти</a></li>
+                                <li><a href="{% url 'auth_login' %}">{% trans 'Sign in' %}</a></li>
                                 <li role="separator" class="divider"></li>
-                                <li><a href="{% url 'registration_register' %}">Зарегистрироваться</a></li>
+                                <li><a href="{% url 'registration_register' %}">{% trans 'Sign up' %}</a></li>
                             {% endif %}
                         </ul>
                     </li>
@@ -53,7 +51,7 @@
                     <div class="navbar-form navbar-right ">
                     <a href="{% url 'applications_choose_period' %}" class="btn btn-success">
                         {% bootstrap_icon 'plus' %}
-                        Подать заявку
+                        {% trans 'Submit application' %}
                     </a>
                     </div>
                 {% endif %}

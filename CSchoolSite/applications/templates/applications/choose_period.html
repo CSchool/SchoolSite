@@ -1,16 +1,17 @@
 {% extends "base.html" %}
-{% block page_title %}Подать заявку{% endblock %}
+{% load i18n %}
+{% block page_title %}{% trans 'Submit application' %}{% endblock %}
 {% block submit_application_button %}{% endblock %}
 {% block content %}
 <h3 class="page-header text-center">
-    Подать заявку
+    {% trans 'Submit application' %}
 </h3>
 <table class="table">
     <thead>
         <tr>
-            <th>Период</th>
-            <th>Окончание регистрации</th>
-            <th>Даты проведения</th>
+            <th>{% trans 'Period' %}</th>
+            <th>{% trans 'Registration ends' %}</th>
+            <th>{% trans 'Period dates' %}</th>
             <th></th>
         </tr>
     </thead>
@@ -24,16 +25,16 @@
                     <td><b>
                         {% if period.registration_open %}
                             <a href="{% url 'applications_choose_group' period.id %}">
-                                Подать заявку
+                                {% trans 'Submit application' %}
                             </a>
                         {% else %}
                             {% if period.ongoing %}
-                                Идёт
+                                {% trans 'Ongoing' %}
                             {% else %}
                                 {% if not period.began %}
-                                    Ещё не начался
+                                    {% trans 'Not yet startedя' %}
                                 {% else %}
-                                    Завершился
+                                    {% trans 'Ended' %}
                                 {% endif %}
                             {% endif %}
                         {% endif %}
