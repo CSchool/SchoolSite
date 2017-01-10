@@ -51,7 +51,7 @@ INSTALLED_APPS = [
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
-]
+ ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -137,3 +137,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# ejudge integration
+EJUDGE_CONTEST_ID = 7
+EJUDGE_USER_LOGIN = 'cschool_site_user'
+EJUDGE_USER_PASSWORD = 'Jo3J7eaLMriNVCDQ'
+EJUDGE_BIN = '/home/ejudge/inst-ejudge/bin'
+EJUDGE_SESSION_TIMEOUT = 43200 # ejudge sets expiry to 24 hours, half that time just in case
+
+EJUDGE_CONTESTS_CMD_PATH = os.path.join(EJUDGE_BIN, 'ejudge-contests-cmd')
