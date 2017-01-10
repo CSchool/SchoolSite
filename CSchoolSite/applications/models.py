@@ -211,19 +211,21 @@ class PracticeExamApplication(models.Model):
                 a_problem.index = slot
                 a_problem.application = exam_application
                 a_problem.save()
-        for rng in range(practice_exam.rand_problems):
-            try:
-                problems = PracticeExamProblem.objects.filter(exam=practice_exam, slot=0).all()
-            except PracticeExamProblem.DoesNotExist:
-                continue
-            if len(problems) > 0:
-                from random import randint
-                problem = problems[randint(0, len(problems) - 1)]
+        try:
+            from random import shuffle
+            problems = PracticeExamProblem.objects.filter(exam=practice_exam, slot=0).all()
+            problems = list(problems)
+            shuffle(problems)
+            idx = practice_exam.slot_problems + 1
+            for problem in problems[:practice_exam.rand_problems]:
                 a_problem = PracticeExamApplicationProblem()
                 a_problem.problem = problem
-                a_problem.index = rng + practice_exam.slot_problems + 1
+                a_problem.index = idx
                 a_problem.application = exam_application
                 a_problem.save()
+                idx += 1
+        except PracticeExamProblem.DoesNotExist:
+            pass
         return exam_application
 
 
