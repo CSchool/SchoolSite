@@ -131,4 +131,25 @@ def submit_run(problem_name, compiler, filename):
     :param filename: filename with source
     :return: int - run id
     """
-    return int(run_contests_cmd('submit-run', problem_name, compiler, filename))
+    res = run_contests_cmd('submit-run', problem_name, compiler, filename)
+    try:
+        return int(res)
+    except ValueError:
+        return None
+
+
+def get_available_compilers():
+    """
+    Get available compilers as dict: short name -> long name
+    :return: dict or None on failure
+    """
+    scsv = run_contests_cmd("dump-languages")
+    if scsv is None:
+        return None
+
+    f = io.StringIO(scsv)
+    reader = csv.reader(f, delimiter=';')
+    res = {}
+    for row in reader:
+        res[row[1]] = row[2]
+    return res

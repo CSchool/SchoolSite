@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
+import ejudge
+
 
 class Period(models.Model):
     class Meta:
@@ -119,12 +121,128 @@ class Event(models.Model):
         return False
 
 
+class PracticeExam(models.Model):
+    class Meta:
+        verbose_name = _('Practice exam')
+        verbose_name_plural = _('Practice exams')
+    rand_problems = models.IntegerField(verbose_name=_('Random problems'))
+    slot_problems = models.IntegerField(verbose_name=_('Slot problems'))
+    min_score = models.IntegerField(verbose_name=_('Minimum total score'))
+    event = models.OneToOneField(Event)
+
+    def __str__(self):
+        return self.event.name
+
+
+class PracticeExamProblem(models.Model):
+    class Meta:
+        verbose_name = _('Practice exam problem')
+        verbose_name_plural = _('Practice exams problems')
+    name = models.CharField(max_length=250, verbose_name=_('Problem name'))
+    ejudge_id = models.CharField(max_length=100, verbose_name=_('Problem id'), unique=True)
+    slot = models.IntegerField(verbose_name=_('Problem slot'))
+    statement_url = models.CharField(max_length=500, verbose_name=_('Statement URL'))
+    score = models.IntegerField(verbose_name=_('Problem score'))
+
+    exam = models.ForeignKey(PracticeExam)
+
+    def __str__(self):
+        return self.name
+
+
+class PracticeExamRun(models.Model):
+    class Meta:
+        verbose_name = _('Practice exam run')
+        verbose_name_plural = ('Practice exams runs')
+    user = models.ForeignKey(User)
+    ejudge_run_id = models.IntegerField(verbose_name=_('Run ID'), unique=True)
+    problem = models.ForeignKey(PracticeExamProblem)
+
+    @property
+    def info(self):
+        return ejudge.get_run_info(self.ejudge_run_id)
+
+    @staticmethod
+    def submit(request, problem_id, lang_id, filename):
+        try:
+            problem = PracticeExamProblem.objects.get(ejudge_id=problem_id)
+        except PracticeExamProblem.DoesNotExist:
+            return None
+        run_id = ejudge.submit_run(problem_id, lang_id, filename)
+        if run_id is None:
+            return None
+        run = PracticeExamRun()
+        run.user = request.user
+        run.ejudge_run_id = run_id
+        run.problem = problem
+        run.save()
+        return run
+
+
+class PracticeExamApplication(models.Model):
+    # TODO: Should it be visible in admin panel?
+    user = models.ForeignKey(User)
+    problems = models.ManyToManyField(PracticeExamProblem, through='PracticeExamApplicationProblem')
+
+    @staticmethod
+    def generate_for_user(user, practice_exam):
+        try:
+            application = EventApplication.objects.get(user=user, event=practice_exam.event)
+        except EventApplication.DoesNotExist:
+            application = EventApplication()
+            application.user = user
+            application.event = practice_exam.event
+        exam_application = PracticeExamApplication()
+        exam_application.user = user
+        exam_application.eventapplication = application
+        exam_application.save()
+        application.practice_exam = exam_application
+        application.save()
+        for slot in range(1, practice_exam.slot_problems + 1):
+            try:
+                problems = PracticeExamProblem.objects.filter(exam=practice_exam, slot=slot).all()
+            except PracticeExamProblem.DoesNotExist:
+                continue
+            if len(problems) > 0:
+                from random import randint
+                problem = problems[randint(0, len(problems) - 1)]
+                a_problem = PracticeExamApplicationProblem()
+                a_problem.problem = problem
+                a_problem.index = slot
+                a_problem.application = exam_application
+                a_problem.save()
+        for rng in range(practice_exam.rand_problems):
+            try:
+                problems = PracticeExamProblem.objects.filter(exam=practice_exam, slot=slot).all()
+            except PracticeExamProblem.DoesNotExist:
+                continue
+            if len(problems) > 0:
+                from random import randint
+                problem = problems[randint(0, len(problems) - 1)]
+                a_problem = PracticeExamApplicationProblem()
+                a_problem.problem = problem
+                a_problem.index = rng + practice_exam.slot_problems + 1
+                a_problem.application = exam_application
+                a_problem.save()
+        return exam_application
+
+
+class PracticeExamApplicationProblem(models.Model):
+    # TODO: Should it be visible in admin panel?
+    class Meta:
+        ordering = ('index',)
+    application = models.ForeignKey(PracticeExamApplication)
+    problem = models.ForeignKey(PracticeExamProblem)
+    index = models.IntegerField()
+
+
 class EventApplication(models.Model):
     class Meta:
         verbose_name = _('Event application')
         verbose_name_plural = _('Event applications')
     user = models.ForeignKey(User)
     event = models.ForeignKey(Event)
+    practice_exam = models.ForeignKey(PracticeExamApplication)
 
     # Registration status
     TESTING = 'TG'
@@ -144,3 +262,4 @@ class EventApplication(models.Model):
     )
 
     status = models.CharField(max_length=2, choices=EVENT_APPLICATION_STATUS_CHOICES, default=TESTING, verbose_name=_('Application status'))
+

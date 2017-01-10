@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.db import models
 from tinymce.widgets import AdminTinyMCE
 
-from applications.models import Period, CampVoucher, Event
+from applications.models import Period, CampVoucher, Event, EventApplication, PracticeExam
+from applications.models import PracticeExamProblem
 
 
 class PeriodAdmin(admin.ModelAdmin):
@@ -20,7 +21,8 @@ class EventAdmin(admin.ModelAdmin):
         models.TextField: {'widget': AdminTinyMCE()},
     }
 
-    def save_model(self, request, obj, form, change):
-        obj.user = request.user
-        obj.save()
 admin.site.register(Event, EventAdmin)
+
+admin.site.register(EventApplication)
+admin.site.register(PracticeExam)
+admin.site.register(PracticeExamProblem)
