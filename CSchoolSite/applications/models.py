@@ -213,7 +213,7 @@ class PracticeExamApplication(models.Model):
                 a_problem.save()
         for rng in range(practice_exam.rand_problems):
             try:
-                problems = PracticeExamProblem.objects.filter(exam=practice_exam, slot=slot).all()
+                problems = PracticeExamProblem.objects.filter(exam=practice_exam, slot=0).all()
             except PracticeExamProblem.DoesNotExist:
                 continue
             if len(problems) > 0:
