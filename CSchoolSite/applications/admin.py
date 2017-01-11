@@ -6,14 +6,8 @@ from applications.models import Period, CampVoucher, Event, EventApplication, Pr
 from applications.models import PracticeExamProblem
 
 
-class PeriodAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(Period, PeriodAdmin)
-
-
-class CampVoucherAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(CampVoucher, CampVoucherAdmin)
+admin.site.register(Period)
+admin.site.register(CampVoucher)
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -23,6 +17,10 @@ class EventAdmin(admin.ModelAdmin):
 
 admin.site.register(Event, EventAdmin)
 
-admin.site.register(EventApplication)
+
+class EventApplicationAdmin(admin.ModelAdmin):
+    exclude = ('practice_exam',)
+
+admin.site.register(EventApplication, EventApplicationAdmin)
 admin.site.register(PracticeExam)
 admin.site.register(PracticeExamProblem)

@@ -112,7 +112,7 @@ class Event(models.Model):
     type = models.CharField(max_length=2, choices=EVENT_TYPE_CHOICES, default=CLASS_GROUP, verbose_name=_('Event type'))
 
     def __str__(self):
-        return self.name
+        return self.name + ' - ' + self.period.name
 
     @property
     def registration_open(self):
@@ -144,7 +144,7 @@ class PracticeExamProblem(models.Model):
     statement_url = models.CharField(max_length=500, verbose_name=_('Statement URL'))
     score = models.IntegerField(verbose_name=_('Problem score'))
 
-    exam = models.ForeignKey(PracticeExam)
+    exam = models.ForeignKey(PracticeExam, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
@@ -154,9 +154,9 @@ class PracticeExamRun(models.Model):
     class Meta:
         verbose_name = _('Practice exam run')
         verbose_name_plural = ('Practice exams runs')
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     ejudge_run_id = models.IntegerField(verbose_name=_('Run ID'), unique=True)
-    problem = models.ForeignKey(PracticeExamProblem)
+    problem = models.ForeignKey(PracticeExamProblem, on_delete=models.CASCADE)
 
     @property
     def info(self):
@@ -181,7 +181,7 @@ class PracticeExamRun(models.Model):
 
 class PracticeExamApplication(models.Model):
     # TODO: Should it be visible in admin panel?
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     problems = models.ManyToManyField(PracticeExamProblem, through='PracticeExamApplicationProblem')
 
     @staticmethod
@@ -233,8 +233,8 @@ class PracticeExamApplicationProblem(models.Model):
     # TODO: Should it be visible in admin panel?
     class Meta:
         ordering = ('index',)
-    application = models.ForeignKey(PracticeExamApplication)
-    problem = models.ForeignKey(PracticeExamProblem)
+    application = models.ForeignKey(PracticeExamApplication, on_delete=models.CASCADE)
+    problem = models.ForeignKey(PracticeExamProblem, on_delete=models.CASCADE)
     index = models.IntegerField()
 
 
@@ -242,9 +242,18 @@ class EventApplication(models.Model):
     class Meta:
         verbose_name = _('Event application')
         verbose_name_plural = _('Event applications')
-    user = models.ForeignKey(User)
-    event = models.ForeignKey(Event)
-    practice_exam = models.ForeignKey(PracticeExamApplication)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    practice_exam = models.ForeignKey(PracticeExamApplication, null=True, on_delete=models.CASCADE)
+
+    # Important fields
+    phone = models.CharField(max_length=20, verbose_name=_('Phone number'),
+             null=True, help_text=_("Phone number like +7 (123) 456 78 90"))
+    grade = models.IntegerField(choices=[(i, i) for i in range(1, 12)],
+            null=True, verbose_name=_('Grade'), help_text=_("Current grade"))
+    address = models.CharField(max_length=100, null=True, verbose_name=_('Home address'))
+    school = models.CharField(max_length=50, null=True,
+              verbose_name=_('School'), help_text=_("e.g. School №42"))
 
     # Registration status
     TESTING = 'TG'
@@ -265,3 +274,12 @@ class EventApplication(models.Model):
 
     status = models.CharField(max_length=2, choices=EVENT_APPLICATION_STATUS_CHOICES, default=TESTING, verbose_name=_('Application status'))
 
+    def __str__(self):
+        return self.user.get_full_name() + " - " + self.event.__str__()
+
+    @property
+    def is_general_filled(self):
+        return self.phone is not None and \
+               self.grade is not None and \
+               self.address is not None and \
+               self.school is not None

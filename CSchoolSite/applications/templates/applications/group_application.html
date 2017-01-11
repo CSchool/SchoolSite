@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block page_title %}{% trans 'Application to' %} &quot;{{ group.name }}&quot;{% endblock %}
+{% block submit_application_button %}{% endblock %}
+{% block content %}
+    <h3 class="page-header text-center">
+        {% trans 'Application to' %} &quot;{{ group.name }}&quot;
+    </h3>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a href="{% url 'applications_group_application_edit_info' group.id %}" class="btn btn-primary pull-right">
+                {% bootstrap_icon 'pencil' %}
+                {% blocktrans %}Tell us about you{% endblocktrans %}
+            </a>
+            <h4>
+                {% trans "About yourself" %}
+                {% if not application.is_general_filled %}
+                    <span class="text-danger">
+                        &nbsp; {% trans 'fill now' %}
+                    </span>
+                {% else %}
+                    <span class="text-success">
+                        &nbsp; {% trans 'filled' %}
+                    </span>
+                {% endif %}
+            </h4>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a href="#" class="btn btn-primary pull-right">
+                {% bootstrap_icon 'ok' %}
+                {% trans 'Solve problems' %}
+            </a>
+            <h4>{% trans "Practice exam" %}</h4>
+        </div>
+    </div>
+{% endblock %}

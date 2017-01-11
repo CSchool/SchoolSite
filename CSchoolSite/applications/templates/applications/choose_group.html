@@ -15,7 +15,7 @@
             <div class="panel-body">
                 {{ group.description|safe }}
                 <br />
-                <a href="#" class="btn btn-block btn-primary">
+                <a href="{% url 'applications_confirm_group' group.id %}" class="btn btn-block btn-primary">
                     {% trans 'Submit application' %}
                 </a>
             </div>
