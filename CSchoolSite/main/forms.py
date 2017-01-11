@@ -17,3 +17,4 @@ class ExtendedRegistrationForm(RegistrationForm):
         ]
     first_name = forms.CharField(widget=forms.TextInput(), label=_('First name'))
     last_name = forms.CharField(widget=forms.TextInput(), label=_('Last name'))
+

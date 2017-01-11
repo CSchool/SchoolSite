@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-11 19:58+0300\n"
+"POT-Creation-Date: 2017-01-11 20:28+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -214,15 +214,19 @@ msgstr "Имя"
 msgid "Last name"
 msgstr "Фамилия"
 
-#: main/models.py:13
+#: main/models.py:12 main/models.py:13
+msgid "UserProfile"
+msgstr "Профиль"
+
+#: main/models.py:17
 msgid "patronymic"
 msgstr "Отчество"
 
-#: main/models.py:14
+#: main/models.py:18
 msgid "birthday"
 msgstr "Дата рождения"
 
-#: main/models.py:15
+#: main/models.py:19
 msgid "phone"
 msgstr "Телефон"
 

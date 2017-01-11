@@ -8,11 +8,18 @@ from django.utils.translation import ugettext_lazy as _
 # Create your models here.
 
 class UserProfile(models.Model):
+    class Meta:
+        verbose_name = _('UserProfile')
+        verbose_name_plural = _('UserProfile')
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     patronymic = models.CharField(_('patronymic'), max_length=30, null=True, blank=True)
     birthday = models.DateField(_('birthday'), null=True, blank=True)
     phone = models.CharField(_('phone'), max_length=16, null=True, blank=True)
+
+    def __str__(self):
+        return self.user.username
 
 
 @receiver(post_save, sender=User)
