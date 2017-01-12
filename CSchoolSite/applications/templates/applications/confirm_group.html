@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block page_title %}{% trans 'Submit application to' %} &quot;{{ group.name }}&quot; - {{ period.name }}{% endblock %}
+{% block submit_application_button %}{% endblock %}
+{% block content %}
+    <h3 class="page-header text-center">
+        {% trans 'Submit application to' %} &quot;{{ group.name }}&quot; &mdash; {{ period.name }}
+    </h3>
+    <div class="alert alert-warning" role="alert">
+        {% bootstrap_icon 'alert' %}
+        <b>{% trans 'Are you sure?' %}</b>
+        {% blocktrans %}
+            If you apply to this group, you won't be able to apply to any other.
+            You will be able to delete your application however and apply to other group.
+        {% endblocktrans %}
+    </div>
+
+    <p>
+        {{ group.description|safe }}
+    </p>
+
+    <a class="btn btn-lg btn-default" href="{% url 'applications_choose_group' period.id %}">
+        {% trans 'Cancel' %}
+    </a>
+    <form style="display: inline;" action="{% url 'applications_create_application' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="group_id" value="{{ group.id }}" />
+        <button class="btn btn-lg btn-primary" type="submit">
+            {% trans 'Continue' %}
+        </button>
+    </form>
+{% endblock %}

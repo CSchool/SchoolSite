@@ -2,17 +2,12 @@ from django.contrib import admin
 from django.db import models
 from tinymce.widgets import AdminTinyMCE
 
-from applications.models import Period, CampVoucher, Event
+from applications.models import Period, CampVoucher, Event, EventApplication, PracticeExam, PracticeExamRun
+from applications.models import PracticeExamProblem
 
 
-class PeriodAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(Period, PeriodAdmin)
-
-
-class CampVoucherAdmin(admin.ModelAdmin):
-    pass
-admin.site.register(CampVoucher, CampVoucherAdmin)
+admin.site.register(Period)
+admin.site.register(CampVoucher)
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -20,7 +15,13 @@ class EventAdmin(admin.ModelAdmin):
         models.TextField: {'widget': AdminTinyMCE()},
     }
 
-    def save_model(self, request, obj, form, change):
-        obj.user = request.user
-        obj.save()
 admin.site.register(Event, EventAdmin)
+
+
+class EventApplicationAdmin(admin.ModelAdmin):
+    exclude = ('practice_exam',)
+
+admin.site.register(EventApplication, EventApplicationAdmin)
+admin.site.register(PracticeExam)
+admin.site.register(PracticeExamProblem)
+admin.site.register(PracticeExamRun)

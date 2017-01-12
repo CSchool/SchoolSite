@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
+import ejudge
+
 
 class Period(models.Model):
     class Meta:
@@ -110,7 +112,7 @@ class Event(models.Model):
     type = models.CharField(max_length=2, choices=EVENT_TYPE_CHOICES, default=CLASS_GROUP, verbose_name=_('Event type'))
 
     def __str__(self):
-        return self.name
+        return self.name + ' - ' + self.period.name
 
     @property
     def registration_open(self):
@@ -119,12 +121,160 @@ class Event(models.Model):
         return False
 
 
+class PracticeExam(models.Model):
+    class Meta:
+        verbose_name = _('Practice exam')
+        verbose_name_plural = _('Practice exams')
+    rand_problems = models.IntegerField(verbose_name=_('Random problems'))
+    slot_problems = models.IntegerField(verbose_name=_('Slot problems'))
+    min_score = models.IntegerField(verbose_name=_('Minimum total score'))
+    event = models.OneToOneField(Event)
+
+    def __str__(self):
+        return self.event.name
+
+
+class PracticeExamProblem(models.Model):
+    class Meta:
+        verbose_name = _('Practice exam problem')
+        verbose_name_plural = _('Practice exams problems')
+    name = models.CharField(max_length=250, verbose_name=_('Problem name'))
+    ejudge_id = models.CharField(max_length=100, verbose_name=_('Problem id'), unique=True)
+    slot = models.IntegerField(verbose_name=_('Problem slot'))
+    statement_url = models.CharField(max_length=500, verbose_name=_('Statement URL'))
+    score = models.IntegerField(verbose_name=_('Problem score'))
+
+    exam = models.ForeignKey(PracticeExam, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def available_compilers(self):
+        return ejudge.get_available_compilers()
+
+
+class PracticeExamRun(models.Model):
+    class Meta:
+        verbose_name = _('Practice exam run')
+        verbose_name_plural = _('Practice exams runs')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    ejudge_run_id = models.IntegerField(verbose_name=_('Run ID'), unique=True)
+    problem = models.ForeignKey(PracticeExamProblem, on_delete=models.CASCADE)
+    submitted = models.DateTimeField(auto_now_add=True, verbose_name=_('Submitted at'))
+
+    def __str__(self):
+        return self.user.get_full_name() + " - " + self.problem.name
+
+    @property
+    def info(self):
+        return ejudge.get_run_info(self.ejudge_run_id)
+
+    @staticmethod
+    def submit(request, problem_id, lang_id, filename):
+        try:
+            problem = PracticeExamProblem.objects.get(ejudge_id=problem_id)
+        except PracticeExamProblem.DoesNotExist:
+            return None
+        run_id = ejudge.submit_run(problem_id, lang_id, filename)
+        if run_id is None:
+            return None
+        run = PracticeExamRun()
+        run.user = request.user
+        run.ejudge_run_id = run_id
+        run.problem = problem
+        run.save()
+        return run
+
+
+class PracticeExamApplication(models.Model):
+    # TODO: Should it be visible in admin panel?
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    problems = models.ManyToManyField(PracticeExamProblem, through='PracticeExamApplicationProblem')
+
+    @staticmethod
+    def generate_for_user(user, practice_exam):
+        try:
+            application = EventApplication.objects.get(user=user, event=practice_exam.event)
+        except EventApplication.DoesNotExist:
+            application = EventApplication()
+            application.user = user
+            application.event = practice_exam.event
+        exam_application = PracticeExamApplication()
+        exam_application.user = user
+        exam_application.eventapplication = application
+        exam_application.save()
+        application.practice_exam = exam_application
+        application.save()
+        for slot in range(1, practice_exam.slot_problems + 1):
+            try:
+                problems = PracticeExamProblem.objects.filter(exam=practice_exam, slot=slot).all()
+            except PracticeExamProblem.DoesNotExist:
+                continue
+            if len(problems) > 0:
+                from random import randint
+                problem = problems[randint(0, len(problems) - 1)]
+                a_problem = PracticeExamApplicationProblem()
+                a_problem.problem = problem
+                a_problem.index = slot
+                a_problem.application = exam_application
+                a_problem.save()
+        try:
+            from random import shuffle
+            problems = PracticeExamProblem.objects.filter(exam=practice_exam, slot=0).all()
+            problems = list(problems)
+            shuffle(problems)
+            idx = practice_exam.slot_problems + 1
+            for problem in problems[:practice_exam.rand_problems]:
+                a_problem = PracticeExamApplicationProblem()
+                a_problem.problem = problem
+                a_problem.index = idx
+                a_problem.application = exam_application
+                a_problem.save()
+                idx += 1
+        except PracticeExamProblem.DoesNotExist:
+            pass
+        return exam_application
+
+    def get_solved_problems(self, user):
+        runs = PracticeExamRun.objects.filter(user=user, problem__practiceexamapplication=self).all()
+        solved = {}
+        for run in runs:
+            info = run.info
+            if info['verdict'] == 'OK':
+                solved[info['problem']] = True
+        return len(solved)
+
+    @property
+    def total_problems(self):
+        return self.problems.all().count()
+
+
+class PracticeExamApplicationProblem(models.Model):
+    # TODO: Should it be visible in admin panel?
+    class Meta:
+        ordering = ('index',)
+    application = models.ForeignKey(PracticeExamApplication, on_delete=models.CASCADE)
+    problem = models.ForeignKey(PracticeExamProblem, on_delete=models.CASCADE)
+    index = models.IntegerField()
+
+
 class EventApplication(models.Model):
     class Meta:
         verbose_name = _('Event application')
         verbose_name_plural = _('Event applications')
-    user = models.ForeignKey(User)
-    event = models.ForeignKey(Event)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    practice_exam = models.ForeignKey(PracticeExamApplication, null=True, on_delete=models.CASCADE)
+
+    # Important fields
+    phone = models.CharField(max_length=20, verbose_name=_('Phone number'),
+             null=True, help_text=_("Phone number like +7 (123) 456 78 90"))
+    grade = models.IntegerField(choices=[(i, i) for i in range(1, 12)],
+            null=True, verbose_name=_('Grade'), help_text=_("Current grade"))
+    address = models.CharField(max_length=100, null=True, verbose_name=_('Home address'))
+    school = models.CharField(max_length=50, null=True,
+              verbose_name=_('School'), help_text=_("e.g. School №42"))
 
     # Registration status
     TESTING = 'TG'
@@ -144,3 +294,13 @@ class EventApplication(models.Model):
     )
 
     status = models.CharField(max_length=2, choices=EVENT_APPLICATION_STATUS_CHOICES, default=TESTING, verbose_name=_('Application status'))
+
+    def __str__(self):
+        return self.user.get_full_name() + " - " + self.event.__str__()
+
+    @property
+    def is_general_filled(self):
+        return self.phone is not None and \
+               self.grade is not None and \
+               self.address is not None and \
+               self.school is not None
