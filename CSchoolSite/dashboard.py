@@ -42,7 +42,7 @@ class CustomIndexDashboard(Dashboard):
 
         # append an app list module for "Applications"
         self.children.append(modules.AppList(
-            _('Applications'),
+            _('Actions_admin'),
             exclude=('django.contrib.*', 'user_profile.models.User'),
         ))
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-13 00:41+0300\n"
+"POT-Creation-Date: 2017-01-13 01:01+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Education committee"
 msgstr "Комитет образования"
 
-#: applications/apps.py:23 dashboard.py:45 menu.py:25
+#: applications/apps.py:23
 msgid "Applications"
 msgstr "Заявки"
 
@@ -208,49 +208,51 @@ msgstr "Закончилось"
 
 #: dashboard.py:30
 msgid "Quick links"
-msgstr ""
+msgstr "Быстрые ссылки"
 
 #: dashboard.py:36
 msgid "Return to site"
-msgstr ""
+msgstr "Вернуться на сайт"
 
 #: dashboard.py:37
 msgid "Change password"
-msgstr ""
+msgstr "Изменить пароль"
 
 #: dashboard.py:39
 msgid "Log out"
-msgstr ""
+msgstr "Выйти"
+
+#: dashboard.py:45 menu.py:25
+msgid "Actions_admin"
+msgstr "Действия"
 
 #: dashboard.py:51 menu.py:29 templates/base.html:38
 msgid "Administration"
 msgstr "Администрирование"
 
 #: dashboard.py:56 dashboard.py:103
-#, fuzzy
-#| msgid "Event applications"
 msgid "Recent Actions"
-msgstr "Заявки на события"
+msgstr "Последние события"
 
 #: dashboard.py:60
 msgid "Latest Django News"
-msgstr ""
+msgstr "Новости от Django"
 
 #: dashboard.py:67
 msgid "Support"
-msgstr ""
+msgstr "Поддержка"
 
 #: dashboard.py:70
 msgid "Django documentation"
-msgstr ""
+msgstr "Документация Django"
 
 #: dashboard.py:75
 msgid "Django \"django-users\" mailing list"
-msgstr ""
+msgstr "Гугл-группа \"django-users\""
 
 #: dashboard.py:80
 msgid "Django irc channel"
-msgstr ""
+msgstr "IRC канал Django"
 
 #: main/forms.py:18
 msgid "First name"
@@ -262,7 +264,7 @@ msgstr "Фамилия"
 
 #: menu.py:22
 msgid "Dashboard"
-msgstr ""
+msgstr "Панель управления"
 
 #: news/apps.py:7 news/templates/news/posts.html:4
 msgid "News"
