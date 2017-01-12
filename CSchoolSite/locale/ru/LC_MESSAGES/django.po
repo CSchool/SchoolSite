@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-11 20:44+0300\n"
+"POT-Creation-Date: 2017-01-11 22:43+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -142,6 +142,7 @@ msgid "Event type"
 msgstr "Тип события"
 
 #: applications/models.py:126
+#: applications/templates/applications/group_application.html:37
 msgid "Practice exam"
 msgstr "Практический экзамен"
 
@@ -210,42 +211,54 @@ msgid "Phone number"
 msgstr "Телефон"
 
 #: applications/models.py:251
+msgid "Phone number like +7 (123) 456 78 90"
+msgstr "Номер телефона в формате +7 (123) 456 78 90"
+
+#: applications/models.py:253
 msgid "Grade"
 msgstr "Класс"
 
-#: applications/models.py:252
+#: applications/models.py:253
+msgid "Current grade"
+msgstr "Класс в этом учебном году"
+
+#: applications/models.py:254
 msgid "Home address"
 msgstr "Домашний адрес"
 
-#: applications/models.py:253
+#: applications/models.py:256
 msgid "School"
 msgstr "Школа"
 
-#: applications/models.py:264
+#: applications/models.py:256
+msgid "e.g. School №42"
+msgstr "Например &quot;Школа №42&quot;"
+
+#: applications/models.py:267
 msgid "Testing"
 msgstr "Тестируется"
 
-#: applications/models.py:265
+#: applications/models.py:268
 msgid "Testing succeeded"
 msgstr "Тестирование пройдено"
 
-#: applications/models.py:266
+#: applications/models.py:269
 msgid "Studying"
 msgstr "Обучение"
 
-#: applications/models.py:267
+#: applications/models.py:270
 msgid "Successed"
 msgstr "Обучение окончено"
 
-#: applications/models.py:268
+#: applications/models.py:271
 msgid "Failed"
 msgstr "Обучение не окончено"
 
-#: applications/models.py:269
+#: applications/models.py:272
 msgid "Disqualified"
 msgstr "Исключён"
 
-#: applications/models.py:272
+#: applications/models.py:275
 msgid "Application status"
 msgstr "Статус заявки"
 
@@ -305,10 +318,36 @@ msgstr "Отмена"
 msgid "Continue"
 msgstr "Продолжить"
 
-#: applications/templates/applications/group_application.html:3
-#: applications/templates/applications/group_application.html:7
+#: applications/templates/applications/group_application.html:4
+#: applications/templates/applications/group_application.html:8
+#: applications/templates/applications/group_application_edit_info.html:4
+#: applications/templates/applications/group_application_edit_info.html:8
 msgid "Application to"
 msgstr "Заявка в"
+
+#: applications/templates/applications/group_application.html:14
+msgid "Tell us about you"
+msgstr "Расскажите о себе"
+
+#: applications/templates/applications/group_application.html:17
+msgid "About yourself"
+msgstr "О себе"
+
+#: applications/templates/applications/group_application.html:20
+msgid "fill now"
+msgstr "заполните сейчас"
+
+#: applications/templates/applications/group_application.html:24
+msgid "filled"
+msgstr "заполнено"
+
+#: applications/templates/applications/group_application.html:35
+msgid "Solve problems"
+msgstr "Решать задачи"
+
+#: applications/templates/applications/group_application_edit_info.html:15
+msgid "Submit"
+msgstr "Отправить"
 
 #: main/forms.py:18
 msgid "First name"

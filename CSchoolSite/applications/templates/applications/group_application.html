@@ -30,11 +30,23 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <a href="#" class="btn btn-primary pull-right">
+            <a href="{% url 'applications_group_application_practice_exam' group.id %}" class="btn btn-primary pull-right">
                 {% bootstrap_icon 'ok' %}
                 {% trans 'Solve problems' %}
             </a>
-            <h4>{% trans "Practice exam" %}</h4>
+            <h4>
+                {% trans "Practice exam" %}
+                &nbsp;
+                {% if solved_practice < total_practice %}
+                    <span class="text-danger">
+                        {{ solved_practice }} {% trans 'out of' %} {{ total_practice }}
+                    </span>
+                {% else %}
+                    <span class="text-success">
+                        {{ solved_practice }} {% trans 'out of' %} {{ total_practice }}
+                    </span>
+                {% endif %}
+            </h4>
         </div>
     </div>
 {% endblock %}

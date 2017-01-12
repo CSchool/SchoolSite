@@ -65,6 +65,7 @@ def get_run_info(run_id):
         verbose_verdict - full English verdict name
         score_info - scoring info, usually failed test
         problem - problem name
+        id - run id
 
     :param run_id: int or str - run id
     :return: dict with info or None on failure
@@ -92,7 +93,8 @@ def get_run_info(run_id):
                 "compiler": compiler,
                 "verdict": verdict,
                 "verbose_verdict": verbose_verdict,
-                "score": score
+                "score": score,
+                "id": int(run_id)
             }
     return None
 

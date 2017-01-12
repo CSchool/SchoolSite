@@ -149,6 +149,10 @@ class PracticeExamProblem(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def available_compilers(self):
+        return ejudge.get_available_compilers()
+
 
 class PracticeExamRun(models.Model):
     class Meta:
@@ -157,6 +161,10 @@ class PracticeExamRun(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     ejudge_run_id = models.IntegerField(verbose_name=_('Run ID'), unique=True)
     problem = models.ForeignKey(PracticeExamProblem, on_delete=models.CASCADE)
+    submitted = models.DateTimeField(auto_now_add=True, verbose_name=_('Submitted at'))
+
+    def __str__(self):
+        return self.user.get_full_name() + " - " + self.problem.name
 
     @property
     def info(self):
@@ -227,6 +235,19 @@ class PracticeExamApplication(models.Model):
         except PracticeExamProblem.DoesNotExist:
             pass
         return exam_application
+
+    def get_solved_problems(self, user):
+        runs = PracticeExamRun.objects.filter(user=user, problem__practiceexamapplication=self).all()
+        solved = {}
+        for run in runs:
+            info = run.info
+            if info['verdict'] == 'OK':
+                solved[info['problem']] = True
+        return len(solved)
+
+    @property
+    def total_problems(self):
+        return self.problems.all().count()
 
 
 class PracticeExamApplicationProblem(models.Model):
