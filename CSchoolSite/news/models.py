@@ -1,7 +1,8 @@
-from django.utils import timezone
 from django.db import models
-from django.contrib.auth.models import User
+from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+
+from CSchoolSite import settings
 
 
 class NewsPost(models.Model):
@@ -13,7 +14,7 @@ class NewsPost(models.Model):
         )
     title = models.CharField(max_length=250, verbose_name=_('Title'))
     body = models.TextField(verbose_name=_('Body'))
-    user = models.ForeignKey(User, editable=False, on_delete=models.CASCADE, verbose_name=_('Submitted user'))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, editable=False, on_delete=models.CASCADE, verbose_name=_('Submitted user'))
     created = models.DateTimeField(editable=False, verbose_name=_('Posted at'))
     modified = models.DateTimeField(verbose_name=_('Modified at'))
 

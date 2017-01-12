@@ -1,7 +1,8 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+
+from CSchoolSite import settings
 
 
 class Period(models.Model):
@@ -58,7 +59,7 @@ class CampVoucher(models.Model):
         permissions = (
             ("view_campvoucher", _("view camp vouchers")),
         )
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name=_('Voucher owner'))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_('Voucher owner'))
     period = models.ForeignKey('Period', on_delete=models.CASCADE, verbose_name=_('Period'))
     voucher_id = models.CharField(max_length=30, verbose_name=_('Voucher ID'))
 
@@ -87,7 +88,7 @@ class Event(models.Model):
         verbose_name_plural = _('Events')
     name = models.CharField(max_length=100, verbose_name=_('Name'))
     period = models.ForeignKey('Period', on_delete=models.CASCADE, verbose_name=_('Period'))
-    users = models.ManyToManyField(User, through='EventApplication')
+    users = models.ManyToManyField(settings.AUTH_USER_MODEL, through='EventApplication')
     description = models.TextField(verbose_name=_('Description'))
     begin = models.DateTimeField(verbose_name=_('Event begins'))
     end = models.DateTimeField(verbose_name=_('Event ends'))
@@ -123,7 +124,7 @@ class EventApplication(models.Model):
     class Meta:
         verbose_name = _('Event application')
         verbose_name_plural = _('Event applications')
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL)
     event = models.ForeignKey(Event)
 
     # Registration status

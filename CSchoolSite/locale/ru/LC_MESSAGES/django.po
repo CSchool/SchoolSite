@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-11 20:28+0300\n"
+"POT-Creation-Date: 2017-01-13 00:41+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,158 +22,158 @@ msgstr ""
 msgid "Education committee"
 msgstr "Комитет образования"
 
-#: applications/apps.py:23
+#: applications/apps.py:23 dashboard.py:45 menu.py:25
 msgid "Applications"
 msgstr "Заявки"
 
-#: applications/models.py:9 applications/models.py:62
-#: applications/models.py:89
+#: applications/models.py:10 applications/models.py:63
+#: applications/models.py:90
 #: applications/templates/applications/choose_period.html:12
 msgid "Period"
 msgstr "Учебный период"
 
-#: applications/models.py:10
+#: applications/models.py:11
 msgid "Periods"
 msgstr "Учебные периоды"
 
-#: applications/models.py:12
+#: applications/models.py:13
 msgid "view periods"
 msgstr "Просматривать учебные периоды"
 
-#: applications/models.py:14 applications/models.py:88
+#: applications/models.py:15 applications/models.py:89
 msgid "Name"
 msgstr "Название"
 
-#: applications/models.py:15
+#: applications/models.py:16
 msgid "Period begins"
 msgstr "Начало периода"
 
-#: applications/models.py:16
+#: applications/models.py:17
 msgid "Period ends"
 msgstr "Окончание периода"
 
-#: applications/models.py:17 applications/models.py:94
+#: applications/models.py:18 applications/models.py:95
 msgid "Registration begins"
 msgstr "Начало регистрации"
 
-#: applications/models.py:18 applications/models.py:95
+#: applications/models.py:19 applications/models.py:96
 #: applications/templates/applications/choose_period.html:13
 msgid "Registration ends"
 msgstr "Окончание регистрации"
 
-#: applications/models.py:56
+#: applications/models.py:57
 msgid "Camp voucher"
 msgstr "Путёвка"
 
-#: applications/models.py:57
+#: applications/models.py:58
 msgid "Camp vouchers"
 msgstr "Путёвки"
 
-#: applications/models.py:59
+#: applications/models.py:60
 msgid "view camp vouchers"
 msgstr "Просматривать путёвки"
 
-#: applications/models.py:61
+#: applications/models.py:62
 msgid "Voucher owner"
 msgstr "Владелец путёвки"
 
-#: applications/models.py:63
+#: applications/models.py:64
 msgid "Voucher ID"
 msgstr "Номер путёвки"
 
-#: applications/models.py:72
+#: applications/models.py:73
 msgid "Awaiting payment"
 msgstr "Ожидает оплаты"
 
-#: applications/models.py:73
+#: applications/models.py:74
 msgid "Declined"
 msgstr "Отклонено"
 
-#: applications/models.py:74
+#: applications/models.py:75
 msgid "Paid"
 msgstr "Оплачено"
 
-#: applications/models.py:75
+#: applications/models.py:76
 msgid "Approved"
 msgstr "Одобрено"
 
-#: applications/models.py:86
+#: applications/models.py:87
 msgid "Event"
 msgstr "Событие"
 
-#: applications/models.py:87
+#: applications/models.py:88
 msgid "Events"
 msgstr "События"
 
-#: applications/models.py:91
+#: applications/models.py:92
 msgid "Description"
 msgstr "Описание"
 
-#: applications/models.py:92
+#: applications/models.py:93
 msgid "Event begins"
 msgstr "Начало события"
 
-#: applications/models.py:93
+#: applications/models.py:94
 msgid "Event ends"
 msgstr "Окончание события"
 
-#: applications/models.py:96
+#: applications/models.py:97
 msgid "Registration open"
 msgstr "Регистрация открыта"
 
-#: applications/models.py:97
+#: applications/models.py:98
 msgid "Participants limit"
 msgstr "Максимальное количество участников"
 
-#: applications/models.py:105
+#: applications/models.py:106
 msgid "Class group"
 msgstr "Учебная группа"
 
-#: applications/models.py:106
+#: applications/models.py:107
 msgid "Camp group"
 msgstr "Отряд"
 
-#: applications/models.py:107
+#: applications/models.py:108
 msgid "Tournament"
 msgstr "Турнир"
 
-#: applications/models.py:110
+#: applications/models.py:111
 msgid "Event type"
 msgstr "Тип события"
 
-#: applications/models.py:124
+#: applications/models.py:125
 msgid "Event application"
 msgstr "Заявка на событие"
 
-#: applications/models.py:125
+#: applications/models.py:126
 msgid "Event applications"
 msgstr "Заявки на события"
 
-#: applications/models.py:138
+#: applications/models.py:139
 msgid "Testing"
 msgstr "Тестируется"
 
-#: applications/models.py:139
+#: applications/models.py:140
 msgid "Testing succeeded"
 msgstr "Тестирование пройдено"
 
-#: applications/models.py:140
+#: applications/models.py:141
 msgid "Studying"
 msgstr "Обучение"
 
-#: applications/models.py:141
+#: applications/models.py:142
 msgid "Successed"
 msgstr "Обучение окончено"
 
-#: applications/models.py:142
+#: applications/models.py:143
 msgid "Failed"
 msgstr "Обучение не окончено"
 
-#: applications/models.py:143
+#: applications/models.py:144
 msgid "Disqualified"
 msgstr "Исключён"
 
-#: applications/models.py:146
+#: applications/models.py:147
 msgid "Application status"
 msgstr "Статус заявки"
 
@@ -206,6 +206,52 @@ msgstr "Не началось"
 msgid "Ended"
 msgstr "Закончилось"
 
+#: dashboard.py:30
+msgid "Quick links"
+msgstr ""
+
+#: dashboard.py:36
+msgid "Return to site"
+msgstr ""
+
+#: dashboard.py:37
+msgid "Change password"
+msgstr ""
+
+#: dashboard.py:39
+msgid "Log out"
+msgstr ""
+
+#: dashboard.py:51 menu.py:29 templates/base.html:38
+msgid "Administration"
+msgstr "Администрирование"
+
+#: dashboard.py:56 dashboard.py:103
+#, fuzzy
+#| msgid "Event applications"
+msgid "Recent Actions"
+msgstr "Заявки на события"
+
+#: dashboard.py:60
+msgid "Latest Django News"
+msgstr ""
+
+#: dashboard.py:67
+msgid "Support"
+msgstr ""
+
+#: dashboard.py:70
+msgid "Django documentation"
+msgstr ""
+
+#: dashboard.py:75
+msgid "Django \"django-users\" mailing list"
+msgstr ""
+
+#: dashboard.py:80
+msgid "Django irc channel"
+msgstr ""
+
 #: main/forms.py:18
 msgid "First name"
 msgstr "Имя"
@@ -214,55 +260,43 @@ msgstr "Имя"
 msgid "Last name"
 msgstr "Фамилия"
 
-#: main/models.py:12 main/models.py:13
-msgid "UserProfile"
-msgstr "Профиль"
+#: menu.py:22
+msgid "Dashboard"
+msgstr ""
 
-#: main/models.py:17
-msgid "patronymic"
-msgstr "Отчество"
-
-#: main/models.py:18
-msgid "birthday"
-msgstr "Дата рождения"
-
-#: main/models.py:19
-msgid "phone"
-msgstr "Телефон"
-
-#: news/apps.py:6 news/templates/news/posts.html:4
+#: news/apps.py:7 news/templates/news/posts.html:4
 msgid "News"
 msgstr "Новости"
 
-#: news/models.py:9
+#: news/models.py:10
 msgid "News post"
 msgstr "Новость"
 
-#: news/models.py:10
+#: news/models.py:11
 msgid "News posts"
 msgstr "Новости"
 
-#: news/models.py:12
+#: news/models.py:13
 msgid "view news"
 msgstr "Просматривать новости"
 
-#: news/models.py:14
+#: news/models.py:15
 msgid "Title"
 msgstr "Название"
 
-#: news/models.py:15
+#: news/models.py:16
 msgid "Body"
 msgstr "Текст"
 
-#: news/models.py:16
+#: news/models.py:17
 msgid "Submitted user"
 msgstr "Отправивший пользователь"
 
-#: news/models.py:17
+#: news/models.py:18
 msgid "Posted at"
 msgstr "Добавлено"
 
-#: news/models.py:18
+#: news/models.py:19
 msgid "Modified at"
 msgstr "Изменено"
 
@@ -298,10 +332,6 @@ msgstr "Компьютерная школа"
 msgid "Guest"
 msgstr "Гость"
 
-#: templates/base.html:38
-msgid "Administration"
-msgstr "Администрирование"
-
 #: templates/base.html:40
 msgid "Sign off"
 msgstr "Выйти"
@@ -331,3 +361,31 @@ msgstr "Регистрация отключена"
 #: templates/registration/registration_form.html:7
 msgid "Registration"
 msgstr "Регистрация"
+
+#: user_profile/admin.py:17
+msgid "Personal info"
+msgstr "Персональная информация"
+
+#: user_profile/admin.py:25
+msgid "Permissions"
+msgstr "Разрешения"
+
+#: user_profile/admin.py:27
+msgid "Important dates"
+msgstr "Важные даты"
+
+#: user_profile/apps.py:7
+msgid "Profiles_and_groups"
+msgstr "Пользователи и группы"
+
+#: user_profile/models.py:9
+msgid "patronymic"
+msgstr "Отчество"
+
+#: user_profile/models.py:10
+msgid "birthday"
+msgstr "Дата рождения"
+
+#: user_profile/models.py:11
+msgid "phone"
+msgstr "Номер телефона"
