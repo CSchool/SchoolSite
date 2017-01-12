@@ -157,7 +157,7 @@ class PracticeExamProblem(models.Model):
 class PracticeExamRun(models.Model):
     class Meta:
         verbose_name = _('Practice exam run')
-        verbose_name_plural = ('Practice exams runs')
+        verbose_name_plural = _('Practice exams runs')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     ejudge_run_id = models.IntegerField(verbose_name=_('Run ID'), unique=True)
     problem = models.ForeignKey(PracticeExamProblem, on_delete=models.CASCADE)
