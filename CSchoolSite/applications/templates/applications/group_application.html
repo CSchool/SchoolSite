@@ -75,4 +75,16 @@
         </div>
     </div>
     {% endif %}
+
+    <div class="container">
+        <div class="col-md-4 col-md-offset-4">
+            <form action="{% url 'applications_delete' application.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-block btn-lg btn-danger">
+                    {% bootstrap_icon 'trash' %}
+                    {% trans 'Delete application' %}
+                </button>
+            </form>
+        </div>
+    </div>
 {% endblock %}

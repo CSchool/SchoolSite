@@ -175,6 +175,17 @@ def group_application_submit_run(req, group_id):
 
 
 @login_required
+@require_POST
+def group_application_delete(req, application_id):
+    try:
+        application = EventApplication.objects.get(id=application_id, user=req.user)
+    except EventApplication.DoesNotExist:
+        raise Http404
+    application.delete()
+    return redirect(reverse('index'))
+
+
+@login_required
 def download_run(req, run_id):
     try:
         run = PracticeExamRun.objects.get(id=run_id, user=req.user)
