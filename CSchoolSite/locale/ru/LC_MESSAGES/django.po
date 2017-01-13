@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-13 01:01+0300\n"
+"POT-Creation-Date: 2017-01-13 17:33+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -391,3 +391,8 @@ msgstr "Дата рождения"
 #: user_profile/models.py:11
 msgid "phone"
 msgstr "Номер телефона"
+
+#: user_profile/templates/user_profile/profile.html:3
+#, python-format
+msgid "Profile of user \"%(username)s\""
+msgstr "Профиль пользователя \"%(username)s\""

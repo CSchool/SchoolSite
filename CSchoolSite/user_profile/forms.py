@@ -1,3 +1,5 @@
+from django.forms import ModelForm
+
 from .models import User
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
@@ -23,3 +25,9 @@ class AdminUserChangeForm(UserChangeForm):
     class Meta:
         model = User
         fields = '__all__'
+
+
+class UserForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'patronymic', 'birthday', 'email', 'phone']
