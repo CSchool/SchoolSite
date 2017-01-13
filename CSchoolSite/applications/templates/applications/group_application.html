@@ -28,6 +28,31 @@
         </div>
     </div>
 
+    {% if application.theory_exam %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a href="#" class="btn btn-primary pull-right">
+                {% bootstrap_icon 'ok' %}
+                {% trans 'Answer questions' %}
+            </a>
+            <h4>
+                {% trans "Theory exam" %}
+                &nbsp;
+                {% if answered_theory < total_theory %}
+                    <span class="text-danger">
+                        {{ answered_theory }} {% trans 'out of' %} {{ total_theory }}
+                    </span>
+                {% else %}
+                    <span class="text-success">
+                        {{ answered_theory }} {% trans 'out of' %} {{ total_theory }}
+                    </span>
+                {% endif %}
+            </h4>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if application.practice_exam %}
     <div class="panel panel-default">
         <div class="panel-heading">
             <a href="{% url 'applications_group_application_practice_exam' group.id %}" class="btn btn-primary pull-right">
@@ -49,4 +74,5 @@
             </h4>
         </div>
     </div>
+    {% endif %}
 {% endblock %}

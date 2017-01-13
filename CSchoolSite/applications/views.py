@@ -7,7 +7,8 @@ from django.shortcuts import render, redirect, reverse
 from django.views.decorators.http import require_POST
 
 from applications.forms import CreateApplicationForm, EventApplicationGenericForm
-from applications.models import Period, Event, PracticeExamApplication, EventApplication, PracticeExamRun
+from applications.models import Period, Event, PracticeExamApplication, EventApplication, PracticeExamRun, \
+    TheoryExamApplication
 from applications.decorators import study_group_application
 import ejudge
 
@@ -61,8 +62,10 @@ def create_application(req):
         except EventApplication.DoesNotExist:
             ea = EventApplication.objects.create(user=req.user, event=group)
             ea.save()
-        if group.practiceexam:
+        if hasattr(group, 'practiceexam'):
             PracticeExamApplication.generate_for_user(req.user, group.practiceexam).save()
+        if hasattr(group, 'theoryexam'):
+            TheoryExamApplication.generate_for_user(req.user, group.theoryexam).save()
         return redirect(reverse('applications_group_application', args=[group.id]))
     raise PermissionDenied
 
@@ -73,17 +76,31 @@ def group_application(req, group_id):
         group = Event.objects.get(id=group_id, type=Event.CLASS_GROUP, eventapplication__user=req.user)
         application = group.eventapplication_set.get(user=req.user)
         practice_exam = application.practice_exam
-        if practice_exam is None:
-            raise Http404
+        theory_exam = application.theory_exam
     except:
         raise Http404
-    solved = practice_exam.get_solved_problems(req.user)
-    total = practice_exam.total_problems
+
+    if practice_exam is None:
+        practice_solved = None
+        practice_total = None
+    else:
+        practice_solved = practice_exam.solved_problems
+        practice_total = practice_exam.total_problems
+
+    if theory_exam is None:
+        theory_answered = None
+        theory_total = None
+    else:
+        theory_answered = theory_exam.answered_questions
+        theory_total = theory_exam.total_questions
+
     return render(req, "applications/group_application.html", {
         "group": group,
         "application": application,
-        "solved_practice": solved,
-        "total_practice": total
+        "solved_practice": practice_solved,
+        "total_practice": practice_total,
+        "answered_theory": theory_answered,
+        "total_theory": theory_total
     })
 
 
