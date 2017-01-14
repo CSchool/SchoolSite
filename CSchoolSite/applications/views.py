@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST
 
 from applications.forms import CreateApplicationForm, EventApplicationGenericForm
 from applications.models import Period, Event, PracticeExamApplication, EventApplication, PracticeExamRun, \
-    TheoryExamApplication
+    TheoryExamApplication, TheoryExamApplicationQuestion
 from applications.decorators import study_group_application
 import ejudge
 
@@ -136,6 +136,8 @@ def group_application_practice_exam(req, group_id):
         raise Http404
     except EventApplication.DoesNotExist:
         raise Http404
+    if application.practice_exam is None:
+        raise Http404
     problems = []
     all_runs = PracticeExamRun.objects.filter(problem__in=application.practice_exam.problems.all(), user=req.user) \
         .order_by('-submitted').all()
@@ -148,6 +150,26 @@ def group_application_practice_exam(req, group_id):
         "group": group,
         "application": application,
         "problems": problems
+    })
+
+
+@login_required
+def group_application_theory_exam(req, group_id):
+    try:
+        group = Event.objects.get(id=group_id, type=Event.CLASS_GROUP, eventapplication__user=req.user)
+        application = group.eventapplication_set.get(user=req.user)
+    except Event.DoesNotExist:
+        raise Http404
+    except EventApplication.DoesNotExist:
+        raise Http404
+    if application.theory_exam is None:
+        raise Http404
+    questions = list(TheoryExamApplicationQuestion.objects.filter(application=application.theory_exam).all())
+
+    return render(req, "applications/group_application_theory_exam.html", {
+        "group": group,
+        "application": application,
+        "questions": questions
     })
 
 

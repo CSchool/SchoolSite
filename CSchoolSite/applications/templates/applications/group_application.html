@@ -41,7 +41,8 @@
     {% if application.theory_exam %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <a href="#" class="btn btn-primary pull-right{% if not application.is_general_filled %} disabled{% endif %}">
+            <a href="{% url 'applications_group_application_theory_exam' group.id %}"
+               class="btn btn-primary pull-right{% if not application.is_general_filled %} disabled{% endif %}">
                 {% bootstrap_icon 'ok' %}
                 {% trans 'Answer questions' %}
             </a>

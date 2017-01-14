@@ -4,6 +4,8 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from django.utils.text import Truncator
 from django import forms
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 import ejudge
 
@@ -197,6 +199,7 @@ class PracticeExamApplication(models.Model):
     # TODO: Should it be visible in admin panel?
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     problems = models.ManyToManyField(PracticeExamProblem, through='PracticeExamApplicationProblem')
+    application = models.OneToOneField('EventApplication', related_name='practice_exam')
 
     @staticmethod
     def generate_for_user(user, practice_exam):
@@ -208,7 +211,7 @@ class PracticeExamApplication(models.Model):
             application.event = practice_exam.event
         exam_application = PracticeExamApplication()
         exam_application.user = user
-        exam_application.eventapplication = application
+        exam_application.application = application
         exam_application.save()
         application.practice_exam = exam_application
         application.save()
@@ -283,6 +286,7 @@ class TheoryExamQuestion(models.Model):
     class Meta:
         verbose_name = _('Theory exam question')
         verbose_name_plural = _('Theory exams questions')
+    title = models.CharField(max_length=100, verbose_name=_('Name'))
     question = models.CharField(max_length=500, verbose_name=_('Question'))
     answer = models.CharField(max_length=100, verbose_name=_('Answer'))
     trim_answer = models.BooleanField(default=True, verbose_name=_('Remove extra spaces from answer'))
@@ -308,7 +312,7 @@ class TheoryExamQuestion(models.Model):
                              default=TEXT, verbose_name=_('Answer type'))
 
     def __str__(self):
-        return Truncator(self.question).chars(50)
+        return self.title
 
     @property
     def django_form(self):
@@ -319,11 +323,11 @@ class TheoryExamQuestion(models.Model):
             class DynForm(forms.Form):
                 answer = forms.CharField(label=_('Answer'), required=True)
         if self.qtype == TheoryExamQuestion.CHOICE:
-            choices = [(x.short, x.question) for x in self.theoryexamquestionoption_set.all()]
+            choices = [(x.short, x.option) for x in self.theoryexamquestionoption_set.all()]
             class DynForm(forms.Form):
-                answer = forms.ChoiceField(choices=choices, required=True, label=_('Answer'))
+                answer = forms.ChoiceField(choices=choices, required=True, label=_('Answer'), widget=forms.RadioSelect())
         if self.qtype == TheoryExamQuestion.MULTICHOICE:
-            choices = [(x.short, x.question) for x in self.theoryexamquestionoption_set.all()]
+            choices = [(x.short, x.option) for x in self.theoryexamquestionoption_set.all()]
             class DynForm(forms.Form):
                 answer = forms.MultipleChoiceField(choices=choices, required=True, label=_('Answer'))
         return DynForm
@@ -352,11 +356,20 @@ class TheoryExamApplicationQuestion(models.Model):
     index = models.IntegerField()
     answer = models.CharField(max_length=100, null=True, blank=True)
 
+    @property
+    def django_form(self):
+        DynForm = self.question.django_form
+        form = DynForm(dict(answer=self.answer))
+        if not form.is_valid():
+            return DynForm
+        return form
+
 
 class TheoryExamApplication(models.Model):
     # TODO: Should it be visible in admin panel?
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     questions = models.ManyToManyField(TheoryExamQuestion, through='TheoryExamApplicationQuestion')
+    application = models.OneToOneField('EventApplication', related_name='theory_exam')
 
     @staticmethod
     def generate_for_user(user, theory_exam):
@@ -368,7 +381,7 @@ class TheoryExamApplication(models.Model):
             application.event = theory_exam.event
         exam_application = TheoryExamApplication()
         exam_application.user = user
-        exam_application.eventapplication = application
+        exam_application.application = application
         exam_application.save()
         application.theory_exam = exam_application
         application.save()
@@ -418,8 +431,6 @@ class EventApplication(models.Model):
         verbose_name_plural = _('Event applications')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
-    practice_exam = models.ForeignKey(PracticeExamApplication, null=True, on_delete=models.CASCADE)
-    theory_exam = models.ForeignKey(TheoryExamApplication, null=True, on_delete=models.CASCADE)
 
     # Important fields
     phone = models.CharField(max_length=20, verbose_name=_('Phone number'),

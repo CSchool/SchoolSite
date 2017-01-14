@@ -7,4 +7,25 @@
     <h3 class="page-header text-center">
         {% trans 'Application to' %} &quot;{{ group.name }}&quot;
     </h3>
+    <p>
+        {% blocktrans %}You need to answer following questions{% endblocktrans %}
+<ul>
+<li>{% blocktrans %}Your answers will be checked automatically after submitting application{% endblocktrans %}</li>
+<li>{% blocktrans %}Make sure all answers comply with format{% endblocktrans %}</li>
+</ul>
+    </p>
+    {% for question in questions %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4>
+                    {{ forloop.counter }}. {{ question.question.title }}
+                </h4>
+            </div>
+            <div class="panel-body">
+                {{ question.question.question }}
+                <hr />
+                {% bootstrap_form question.django_form %}
+            </div>
+        </div>
+    {% endfor %}
 {% endblock %}
