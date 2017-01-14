@@ -15,6 +15,8 @@ urlpatterns = [
         views.group_application_submit_run, name='applications_group_application_submit_run'),
     url(r'^run/(?P<run_id>[0-9]+)/source',
         views.download_run, name='applications_download_run'),
+    url(r'^run/(?P<run_id>[0-9]+)/log',
+        views.run_log, name='applications_run_log'),
     url(r'^delete/(?P<application_id>[0-9]+)',
         views.group_application_delete, name='applications_delete'),
 ]

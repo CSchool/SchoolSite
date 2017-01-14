@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block page_title %}{% trans 'Application to' %} &quot;{{ group.name }}&quot;{% endblock %}
+{% block submit_application_button %}{% endblock %}
+{% block content %}
+    <h3 class="page-header text-center">
+        {% trans 'Application to' %} &quot;{{ group.name }}&quot;
+    </h3>
+{% endblock %}

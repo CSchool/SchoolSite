@@ -193,3 +193,15 @@ def download_run(req, run_id):
         raise Http404
     res = HttpResponse(ejudge.get_run_source(run.ejudge_run_id), content_type="text/plain")
     return res
+
+
+@login_required
+def run_log(req, run_id):
+    try:
+        run = PracticeExamRun.objects.get(id=run_id, user=req.user)
+    except PracticeExamRun.DoesNotExist:
+        raise Http404
+    res = run.compile_log
+    if res is None:
+        raise Http404
+    return HttpResponse(res, content_type='text/plain')

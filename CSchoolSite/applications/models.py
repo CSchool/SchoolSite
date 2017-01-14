@@ -172,6 +172,10 @@ class PracticeExamRun(models.Model):
     def info(self):
         return ejudge.get_run_info(self.ejudge_run_id)
 
+    @property
+    def compile_log(self):
+        return ejudge.get_compiler_log(self.ejudge_run_id)
+
     @staticmethod
     def submit(request, problem_id, lang_id, filename):
         try:
