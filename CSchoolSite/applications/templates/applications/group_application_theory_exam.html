@@ -5,7 +5,7 @@
 {% block submit_application_button %}{% endblock %}
 {% block content %}
     <h3 class="page-header text-center">
-        {% trans 'Application to' %} &quot;{{ group.name }}&quot;
+        <a href="{% url 'applications_group_application' group.id %}">{% trans 'Application to' %} &quot;{{ group.name }}&quot;</a>
     </h3>
     <p>
         {% blocktrans %}You need to answer following questions{% endblocktrans %}
