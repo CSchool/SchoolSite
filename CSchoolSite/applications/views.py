@@ -8,7 +8,7 @@ from django.views.decorators.http import require_POST
 
 from applications.forms import CreateApplicationForm, EventApplicationGenericForm
 from applications.models import Period, Event, PracticeExamApplication, EventApplication, PracticeExamRun, \
-    TheoryExamApplication, TheoryExamApplicationQuestion
+    TheoryExamApplication, TheoryExamApplicationQuestion, TheoryExamQuestion
 from applications.decorators import study_group_application
 import ejudge
 
@@ -165,11 +165,36 @@ def group_application_theory_exam(req, group_id):
     if application.theory_exam is None:
         raise Http404
     questions = list(TheoryExamApplicationQuestion.objects.filter(application=application.theory_exam).all())
+    qs = []
+    qsbm = {}
+    for question in questions:
+        qs.append({
+            "question": question,
+            "form": question.django_form
+        })
+        qsbm[question.question.id] = len(qs) - 1
+    if req.POST.get('qsubmit'):
+        try:
+            question = TheoryExamApplicationQuestion.objects.get(id=int(req.POST['question_id']))
+            form = question.question.django_form(req.POST)
+            if form.is_valid():
+                picked = form.cleaned_data.get('answer')
+                if question.question.qtype == TheoryExamQuestion.MULTICHOICE:
+                    question.answer = ','.join(sorted(picked))
+                else:
+                    question.answer = picked
+                question.save()
+                return redirect(reverse('applications_group_application_theory_exam', args=[group_id]) + "#q" + str(
+                    question.question.id))
+            else:
+                qs[qsbm[question.question.id]]['form'] = form
+        except:
+            raise PermissionDenied
 
     return render(req, "applications/group_application_theory_exam.html", {
         "group": group,
         "application": application,
-        "questions": questions
+        "questions": qs
     })
 
 

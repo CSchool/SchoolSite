@@ -318,18 +318,22 @@ class TheoryExamQuestion(models.Model):
     def django_form(self):
         if self.qtype == TheoryExamQuestion.NUMBER:
             class DynForm(forms.Form):
-                answer = forms.IntegerField(label=_('Answer'), required=True)
+                answer = forms.IntegerField(label=_('Answer'), required=True,
+                                            widget=forms.TextInput(attrs={'autocomplete': 'off'}))
         if self.qtype == TheoryExamQuestion.TEXT:
             class DynForm(forms.Form):
-                answer = forms.CharField(label=_('Answer'), required=True)
+                answer = forms.CharField(label=_('Answer'), required=True,
+                                         widget=forms.TextInput(attrs={'autocomplete': 'off'}))
         if self.qtype == TheoryExamQuestion.CHOICE:
             choices = [(x.short, x.option) for x in self.theoryexamquestionoption_set.all()]
             class DynForm(forms.Form):
-                answer = forms.ChoiceField(choices=choices, required=True, label=_('Answer'), widget=forms.RadioSelect())
+                answer = forms.ChoiceField(choices=choices, required=True, label=_('Answer'),
+                                           widget=forms.RadioSelect(attrs={'autocomplete': 'off'}))
         if self.qtype == TheoryExamQuestion.MULTICHOICE:
             choices = [(x.short, x.option) for x in self.theoryexamquestionoption_set.all()]
             class DynForm(forms.Form):
-                answer = forms.MultipleChoiceField(choices=choices, required=True, label=_('Answer'))
+                answer = forms.MultipleChoiceField(choices=choices, required=True, label=_('Answer'),
+                                                   widget=forms.CheckboxSelectMultiple(attrs={'autocomplete': 'off'}))
         return DynForm
 
 
@@ -359,7 +363,11 @@ class TheoryExamApplicationQuestion(models.Model):
     @property
     def django_form(self):
         DynForm = self.question.django_form
-        form = DynForm(dict(answer=self.answer))
+        ans = self.answer
+        if self.answer is not None:
+            if self.question.qtype == TheoryExamQuestion.MULTICHOICE:
+                ans = self.answer.split(',')
+        form = DynForm(dict(answer=ans))
         if not form.is_valid():
             return DynForm
         return form
