@@ -115,7 +115,10 @@ def get_compiler_log(run_id):
     :param run_id: int or str - run id
     :return: if compilation error occurred, log as str; None otherwise
     """
-    xml = "\n".join(run_contests_cmd("dump-report", run_id).split("\n")[2:])
+    sxml = run_contests_cmd("dump-report", run_id)
+    if sxml is None:
+        return None
+    xml = "\n".join(sxml.split("\n")[2:])
     f = io.StringIO(xml)
     tree = ElementTree.parse(f)
     if tree.getroot().get('compile-error', 'no') == "yes":

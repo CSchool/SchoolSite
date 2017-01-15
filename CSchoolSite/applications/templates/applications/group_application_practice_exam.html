@@ -7,6 +7,15 @@
     <h3 class="page-header text-center">
         {% trans 'Application to' %} &quot;{{ group.name }}&quot;
     </h3>
+    <p>
+        {% blocktrans %}You need to write programs to solve these problems{% endblocktrans %}
+<ul>
+<li>{% blocktrans %}Your program should be time- and memory-efficient{% endblocktrans %}</li>
+<li>{% blocktrans %}Your program will be checked automatically{% endblocktrans %}</li>
+<li>{% blocktrans %}"OK" verdict means you solved the problem{% endblocktrans %}</li>
+</ul>
+    </p>
+    <br />
     {% for problem in problems %}
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -65,6 +74,9 @@
                                             {{ run.info.score }}
                                         {% endif %}
                                     </b>
+                                    {% if run.compile_log %}
+                                        (<a href="{% url 'applications_run_log' run.id %}">{% trans 'Log' %}</a>)
+                                    {% endif %}
                                 </td>
                             </tr>
                         {% endfor %}

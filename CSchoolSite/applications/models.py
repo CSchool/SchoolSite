@@ -2,6 +2,10 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+from django.utils.text import Truncator
+from django import forms
+from django.db.models.signals import post_delete
+from django.dispatch import receiver
 
 import ejudge
 
@@ -131,7 +135,7 @@ class PracticeExam(models.Model):
     event = models.OneToOneField(Event)
 
     def __str__(self):
-        return self.event.name
+        return self.event.__str__()
 
 
 class PracticeExamProblem(models.Model):
@@ -170,6 +174,10 @@ class PracticeExamRun(models.Model):
     def info(self):
         return ejudge.get_run_info(self.ejudge_run_id)
 
+    @property
+    def compile_log(self):
+        return ejudge.get_compiler_log(self.ejudge_run_id)
+
     @staticmethod
     def submit(request, problem_id, lang_id, filename):
         try:
@@ -191,6 +199,7 @@ class PracticeExamApplication(models.Model):
     # TODO: Should it be visible in admin panel?
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     problems = models.ManyToManyField(PracticeExamProblem, through='PracticeExamApplicationProblem')
+    application = models.OneToOneField('EventApplication', related_name='practice_exam')
 
     @staticmethod
     def generate_for_user(user, practice_exam):
@@ -202,7 +211,7 @@ class PracticeExamApplication(models.Model):
             application.event = practice_exam.event
         exam_application = PracticeExamApplication()
         exam_application.user = user
-        exam_application.eventapplication = application
+        exam_application.application = application
         exam_application.save()
         application.practice_exam = exam_application
         application.save()
@@ -236,8 +245,9 @@ class PracticeExamApplication(models.Model):
             pass
         return exam_application
 
-    def get_solved_problems(self, user):
-        runs = PracticeExamRun.objects.filter(user=user, problem__practiceexamapplication=self).all()
+    @property
+    def solved_problems(self):
+        runs = PracticeExamRun.objects.filter(user=self.user, problem__practiceexamapplication=self).all()
         solved = {}
         for run in runs:
             info = run.info
@@ -259,13 +269,176 @@ class PracticeExamApplicationProblem(models.Model):
     index = models.IntegerField()
 
 
+class TheoryExam(models.Model):
+    class Meta:
+        verbose_name = _('Theory exam')
+        verbose_name_plural = _('Theory exams')
+    rand_questions = models.IntegerField(verbose_name=_('Random questions'))
+    slot_questions = models.IntegerField(verbose_name=_('Slot questions'))
+    min_score = models.IntegerField(verbose_name=_('Minimum total score'))
+    event = models.OneToOneField(Event)
+
+    def __str__(self):
+        return self.event.__str__()
+
+
+class TheoryExamQuestion(models.Model):
+    class Meta:
+        verbose_name = _('Theory exam question')
+        verbose_name_plural = _('Theory exams questions')
+    title = models.CharField(max_length=100, verbose_name=_('Name'))
+    question = models.CharField(max_length=500, verbose_name=_('Question'))
+    answer = models.CharField(max_length=100, verbose_name=_('Answer'))
+    trim_answer = models.BooleanField(default=True, verbose_name=_('Remove extra spaces from answer'))
+    case_sensitive_answer = models.BooleanField(default=False, verbose_name=_('Answer is case-sensitive'))
+    exam = models.ForeignKey(TheoryExam, on_delete=models.CASCADE)
+    slot = models.IntegerField(verbose_name=_('Question slot'))
+    score = models.IntegerField(verbose_name=_('Score'), default=0)
+
+    # Question type
+    NUMBER = 'NB'
+    TEXT = 'TX'
+    CHOICE = 'CH'
+    MULTICHOICE = 'MC'
+
+    THEORY_EXAM_QUESTION_TYPE_CHOICES = (
+        (NUMBER, _('Integer number as an answer')),
+        (TEXT, _('String as an answer')),
+        (CHOICE, _('One option as an answer')),
+        (MULTICHOICE, _('Several options as an answer')),
+    )
+
+    qtype = models.CharField(max_length=2, choices=THEORY_EXAM_QUESTION_TYPE_CHOICES,
+                             default=TEXT, verbose_name=_('Answer type'))
+
+    def __str__(self):
+        return self.title
+
+    @property
+    def django_form(self):
+        if self.qtype == TheoryExamQuestion.NUMBER:
+            class DynForm(forms.Form):
+                answer = forms.IntegerField(label=_('Answer'), required=True,
+                                            widget=forms.TextInput(attrs={'autocomplete': 'off'}))
+        if self.qtype == TheoryExamQuestion.TEXT:
+            class DynForm(forms.Form):
+                answer = forms.CharField(label=_('Answer'), required=True,
+                                         widget=forms.TextInput(attrs={'autocomplete': 'off'}))
+        if self.qtype == TheoryExamQuestion.CHOICE:
+            choices = [(x.short, x.option) for x in self.theoryexamquestionoption_set.all()]
+            class DynForm(forms.Form):
+                answer = forms.ChoiceField(choices=choices, required=True, label=_('Answer'),
+                                           widget=forms.RadioSelect(attrs={'autocomplete': 'off'}))
+        if self.qtype == TheoryExamQuestion.MULTICHOICE:
+            choices = [(x.short, x.option) for x in self.theoryexamquestionoption_set.all()]
+            class DynForm(forms.Form):
+                answer = forms.MultipleChoiceField(choices=choices, required=True, label=_('Answer'),
+                                                   widget=forms.CheckboxSelectMultiple(attrs={'autocomplete': 'off'}))
+        return DynForm
+
+
+class TheoryExamQuestionOption(models.Model):
+    class Meta:
+        verbose_name = _('Possible answer')
+        verbose_name_plural = _('Possible answers')
+        ordering = ('short',)
+    question = models.ForeignKey(TheoryExamQuestion, on_delete=models.CASCADE)
+    option = models.CharField(max_length=100, verbose_name=_('Possible answer'))
+    short = models.CharField(max_length=15, verbose_name=_('Short ID'))
+    correct = models.BooleanField(verbose_name=_('This answer is correct'))
+
+    def __str__(self):
+        return Truncator(self.option).chars(50)
+
+
+class TheoryExamApplicationQuestion(models.Model):
+    # TODO: Should it be visible in admin panel?
+    class Meta:
+        ordering = ('index',)
+    application = models.ForeignKey('TheoryExamApplication', on_delete=models.CASCADE)
+    question = models.ForeignKey('TheoryExamQuestion', on_delete=models.CASCADE)
+    index = models.IntegerField()
+    answer = models.CharField(max_length=100, null=True, blank=True)
+
+    @property
+    def django_form(self):
+        DynForm = self.question.django_form
+        ans = self.answer
+        if self.answer is not None:
+            if self.question.qtype == TheoryExamQuestion.MULTICHOICE:
+                ans = self.answer.split(',')
+        form = DynForm(dict(answer=ans))
+        if not form.is_valid():
+            return DynForm
+        return form
+
+
+class TheoryExamApplication(models.Model):
+    # TODO: Should it be visible in admin panel?
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    questions = models.ManyToManyField(TheoryExamQuestion, through='TheoryExamApplicationQuestion')
+    application = models.OneToOneField('EventApplication', related_name='theory_exam')
+
+    @staticmethod
+    def generate_for_user(user, theory_exam):
+        try:
+            application = EventApplication.objects.get(user=user, event=theory_exam.event)
+        except EventApplication.DoesNotExist:
+            application = EventApplication()
+            application.user = user
+            application.event = theory_exam.event
+        exam_application = TheoryExamApplication()
+        exam_application.user = user
+        exam_application.application = application
+        exam_application.save()
+        application.theory_exam = exam_application
+        application.save()
+        for slot in range(1, theory_exam.slot_questions + 1):
+            try:
+                questions = TheoryExamQuestion.objects.filter(exam=theory_exam, slot=slot).all()
+            except TheoryExamQuestion.DoesNotExist:
+                continue
+            if len(questions) > 0:
+                from random import randint
+                question = questions[randint(0, len(questions) - 1)]
+                a_question = TheoryExamApplicationQuestion()
+                a_question.question = question
+                a_question.index = slot
+                a_question.application = exam_application
+                a_question.save()
+        try:
+            from random import shuffle
+            questions = TheoryExamQuestion.objects.filter(exam=theory_exam, slot=0).all()
+            questions = list(questions)
+            shuffle(questions)
+            idx = theory_exam.slot_questions + 1
+            for question in questions[:theory_exam.rand_questions]:
+                a_question = TheoryExamApplicationQuestion()
+                a_question.question = question
+                a_question.index = slot
+                a_question.application = exam_application
+                a_question.save()
+                idx += 1
+        except TheoryExamQuestion.DoesNotExist:
+            pass
+        return exam_application
+
+    @property
+    def answered_questions(self):
+        return TheoryExamApplicationQuestion.objects.filter(application=self) \
+            .exclude(answer='').exclude(answer__isnull=True).count()
+
+    @property
+    def total_questions(self):
+        return self.questions.all().count()
+
+
 class EventApplication(models.Model):
     class Meta:
         verbose_name = _('Event application')
         verbose_name_plural = _('Event applications')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
-    practice_exam = models.ForeignKey(PracticeExamApplication, null=True, on_delete=models.CASCADE)
 
     # Important fields
     phone = models.CharField(max_length=20, verbose_name=_('Phone number'),
@@ -293,7 +466,8 @@ class EventApplication(models.Model):
         (DISQUALIFIED, _('Disqualified'))
     )
 
-    status = models.CharField(max_length=2, choices=EVENT_APPLICATION_STATUS_CHOICES, default=TESTING, verbose_name=_('Application status'))
+    status = models.CharField(max_length=2, choices=EVENT_APPLICATION_STATUS_CHOICES,
+                              default=TESTING, verbose_name=_('Application status'))
 
     def __str__(self):
         return self.user.get_full_name() + " - " + self.event.__str__()

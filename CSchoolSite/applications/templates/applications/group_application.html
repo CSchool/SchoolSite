@@ -28,9 +28,46 @@
         </div>
     </div>
 
+    {% if application.theory_exam or application.practice_exam %}
+    <hr />
+        {% if not application.is_general_filled %}
+            <div class="alert alert-warning">
+                <b>{% blocktrans %}Some actions are disabled{% endblocktrans %}.</b><br />
+                {% blocktrans %}Fill out information about yourself to continue{% endblocktrans %}.
+            </div>
+        {% endif %}
+    {% endif %}
+
+    {% if application.theory_exam %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            <a href="{% url 'applications_group_application_practice_exam' group.id %}" class="btn btn-primary pull-right">
+            <a href="{% url 'applications_group_application_theory_exam' group.id %}"
+               class="btn btn-primary pull-right{% if not application.is_general_filled %} disabled{% endif %}">
+                {% bootstrap_icon 'ok' %}
+                {% trans 'Answer questions' %}
+            </a>
+            <h4>
+                {% trans "Theory exam" %}
+                &nbsp;
+                {% if answered_theory < total_theory %}
+                    <span class="text-danger">
+                        {{ answered_theory }} {% trans 'out of' %} {{ total_theory }}
+                    </span>
+                {% else %}
+                    <span class="text-success">
+                        {{ answered_theory }} {% trans 'out of' %} {{ total_theory }}
+                    </span>
+                {% endif %}
+            </h4>
+        </div>
+    </div>
+    {% endif %}
+
+    {% if application.practice_exam %}
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a href="{% url 'applications_group_application_practice_exam' group.id %}"
+               class="btn btn-primary pull-right{% if not application.is_general_filled %} disabled{% endif %}">
                 {% bootstrap_icon 'ok' %}
                 {% trans 'Solve problems' %}
             </a>
@@ -48,5 +85,27 @@
                 {% endif %}
             </h4>
         </div>
+    </div>
+    {% endif %}
+
+    <hr />
+
+    <div class="col-md-4">
+        <form action="{% url 'applications_delete' application.id %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-block btn-lg btn-danger">
+                {% bootstrap_icon 'trash' %}
+                {% trans 'Delete application' %}
+            </button>
+        </form>
+    </div>
+    <div class="col-md-4 col-md-offset-4">
+        <form action="#" method="POST">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-block btn-lg btn-success{% if not application.is_general_filled %} disabled{% endif %}">
+                {% bootstrap_icon 'ok' %}
+                {% trans 'Submit application' %}
+            </button>
+        </form>
     </div>
 {% endblock %}
