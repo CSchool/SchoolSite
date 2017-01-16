@@ -24,6 +24,9 @@ class EventApplicationAdmin(admin.ModelAdmin):
     form = EventApplicationAdminForm
     readonly_fields = ('user', 'event')
 
+    def has_add_permission(self, request):
+        return False
+
 admin.site.register(EventApplication, EventApplicationAdmin)
 admin.site.register(PracticeExam)
 admin.site.register(PracticeExamProblem)
