@@ -259,6 +259,23 @@ class PracticeExamApplication(models.Model):
     def total_problems(self):
         return self.problems.all().count()
 
+    @property
+    def cur_score(self):
+        runs = PracticeExamRun.objects.filter(user=self.user, problem__practiceexamapplication=self).all()
+        solved = {}
+        score = 0
+        for run in runs:
+            info = run.info
+            if info['verdict'] == 'OK':
+                if info['problem'] not in solved:
+                    score += run.problem.score
+                solved[info['problem']] = True
+        return score
+
+    @property
+    def max_score(self):
+        return self.problems.aggregate(models.Sum('score'))['score__sum']
+
 
 class PracticeExamApplicationProblem(models.Model):
     # TODO: Should it be visible in admin panel?
@@ -431,6 +448,25 @@ class TheoryExamApplication(models.Model):
     @property
     def total_questions(self):
         return self.questions.all().count()
+
+    @property
+    def cur_score(self):
+        score = 0
+        for question in TheoryExamApplicationQuestion.objects.filter(application=self).all():
+            if question.question.qtype == TheoryExamQuestion.MULTICHOICE:
+                ans = question.answer.split(',')
+                total = question.question.theoryexamquestionoption_set.count()
+                ok = question.question.theoryexamquestionoption_set.filter(correct=True, short__in=ans).count() \
+                   + question.question.theoryexamquestionoption_set.filter(correct=False).exclude(short__in=ans).count()
+                score += ok * question.question.score // total
+            else:
+                if question.question.answer == question.answer:
+                    score += question.question.score
+        return score
+
+    @property
+    def max_score(self):
+        return self.questions.aggregate(models.Sum('score'))['score__sum']
 
 
 class EventApplication(models.Model):

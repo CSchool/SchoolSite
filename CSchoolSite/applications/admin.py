@@ -2,9 +2,10 @@ from django.contrib import admin
 from django.db import models
 from tinymce.widgets import AdminTinyMCE
 
-from applications.models import Period, CampVoucher, Event, EventApplication, PracticeExam, PracticeExamRun
+from applications.models import Period, CampVoucher, Event, EventApplication, PracticeExam, PracticeExamApplication
 from applications.models import PracticeExamProblem
 from applications.models import TheoryExam, TheoryExamQuestion, TheoryExamQuestionOption
+from applications.forms import EventApplicationAdminForm
 
 
 admin.site.register(Period)
@@ -20,12 +21,12 @@ admin.site.register(Event, EventAdmin)
 
 
 class EventApplicationAdmin(admin.ModelAdmin):
-    exclude = ('practice_exam',)
+    form = EventApplicationAdminForm
+    readonly_fields = ('user', 'event')
 
 admin.site.register(EventApplication, EventApplicationAdmin)
 admin.site.register(PracticeExam)
 admin.site.register(PracticeExamProblem)
-admin.site.register(PracticeExamRun)
 
 
 class TheoryExamQuestionOptionInline(admin.TabularInline):
