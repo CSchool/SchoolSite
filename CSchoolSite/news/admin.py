@@ -9,7 +9,7 @@ class NewsPostAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': AdminTinyMCE()},
     }
-    list_display = ('title', 'body', 'user')
+    list_display = ('title', 'user', 'created')
     readonly_fields = ('user', 'modified')
 
     def save_model(self, request, obj, form, change):

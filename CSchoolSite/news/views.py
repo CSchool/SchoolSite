@@ -15,9 +15,7 @@ def index(req, page="1"):
         raise Http404
     cur_page = paginator.page(page_id)
     return render(req, 'news/posts.html', {
-        "news": cur_page,
-        "total_pages": paginator.num_pages,
-        "current_page": page_id
+        "news": cur_page
     })
 
 
