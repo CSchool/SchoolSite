@@ -15,7 +15,6 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
@@ -26,10 +25,9 @@ SECRET_KEY = ')1ji)&$y2qxf3!d(_$9vauea=35-6yb=x1(-1h%cx+)(zflku4'
 DEBUG = True
 
 if DEBUG:
-    ALLOWED_HOSTS = ['192.168.33.10', '127.0.0.1', 'localhost'] # need for vagrant
+    ALLOWED_HOSTS = ['192.168.33.10', '127.0.0.1', 'localhost']  # need for vagrant
 else:
     ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -95,7 +93,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'CSchoolSite.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
@@ -105,7 +102,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
@@ -145,7 +141,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/

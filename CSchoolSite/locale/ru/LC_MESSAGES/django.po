@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-13 17:33+0300\n"
+"POT-Creation-Date: 2017-01-13 21:33+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -392,7 +392,44 @@ msgstr "Дата рождения"
 msgid "phone"
 msgstr "Номер телефона"
 
-#: user_profile/templates/user_profile/profile.html:3
+#: user_profile/templates/user_profile/profile.html:6
+#, fuzzy, python-format
+#| msgid "Profile of user \"%(username)s\""
+msgid ""
+"\n"
+"        Profile of user \"%(username)s\"\n"
+"    "
+msgstr "Профиль пользователя \"%(username)s\""
+
+#: user_profile/templates/user_profile/profile.html:13
 #, python-format
 msgid "Profile of user \"%(username)s\""
 msgstr "Профиль пользователя \"%(username)s\""
+
+#: user_profile/templates/user_profile/profile.html:15
+msgid "user_profile_first_name"
+msgstr "Имя"
+
+#: user_profile/templates/user_profile/profile.html:16
+msgid "user_profile_last_name"
+msgstr "Фамилия"
+
+#: user_profile/templates/user_profile/profile.html:17
+msgid "user_profile_patronymic"
+msgstr "Отчество"
+
+#: user_profile/templates/user_profile/profile.html:18
+msgid "user_profile_birthday"
+msgstr "Дата рождения"
+
+#: user_profile/templates/user_profile/profile.html:19
+msgid "user_profile_email"
+msgstr "E-mail"
+
+#: user_profile/templates/user_profile/profile.html:20
+msgid "user_profile_phone"
+msgstr "Телефон"
+
+#: user_profile/templates/user_profile/profile.html:24
+msgid "user_profile_edit_profile"
+msgstr "Изменить профиль"
