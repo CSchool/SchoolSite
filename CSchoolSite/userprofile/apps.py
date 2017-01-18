@@ -1,4 +1,5 @@
 from django.apps import AppConfig
+from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
 
 
@@ -20,7 +21,11 @@ def create_permissions_list(permissions_list, model_name=None):
 
 
 def create_groups(sender, **kwargs):
-    from django.contrib.auth.models import Group, Permission
+    from django.contrib.auth.models import Group
+    from django.conf import settings
+    from django.utils import translation
+
+    translation.activate(settings.LANGUAGE_CODE)
 
     groups = [
         {'name': _('Education committee'),
@@ -35,6 +40,19 @@ def create_groups(sender, **kwargs):
             if permission not in group.permissions.all():
                 group.permissions.add(permission)
 
+    translation.deactivate()
+
+
+def set_default_group(sender, **kwargs):
+    from django.contrib.auth.models import Group
+
+    user = kwargs["instance"]
+    if kwargs["created"] and not user.is_staff:
+        import logging
+        logging.error(Group.objects.all())
+        group = Group.objects.get(name=_('Students'))
+        user.groups.add(group)
+
 
 class UserProfileConfig(AppConfig):
     name = 'userprofile'
@@ -42,4 +60,13 @@ class UserProfileConfig(AppConfig):
 
     def ready(self):
         from django.db.models.signals import post_migrate
+        from userprofile.models import User
+        from django.apps import apps
+
         post_migrate.connect(create_groups, sender=self)
+        post_save.connect(set_default_group, sender=User)
+
+        apps.get_app_config('registration').verbose_name = _("Registration")
+
+
+

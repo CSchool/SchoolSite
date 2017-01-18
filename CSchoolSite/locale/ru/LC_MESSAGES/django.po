@@ -858,6 +858,10 @@ msgstr "Профиль пользователя \"%(username)s\""
 msgid "Edit profile"
 msgstr "Редактировать профиль"
 
+# attempt to add russian translation
+msgid "Registration"
+msgstr "Ваше приложение этикетке"
+
 #~ msgid "Phone number like +7 (123) 456-78-90"
 #~ msgstr "Номер телефона в формате +7 (123) 456-78-90"
 
