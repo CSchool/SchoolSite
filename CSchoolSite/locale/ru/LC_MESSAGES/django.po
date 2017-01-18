@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-13 21:33+0300\n"
+"POT-Creation-Date: 2017-01-18 12:09+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -186,7 +186,7 @@ msgstr "Подать заявку в"
 #: applications/templates/applications/choose_period.html:3
 #: applications/templates/applications/choose_period.html:7
 #: applications/templates/applications/choose_period.html:28
-#: templates/base.html:54
+#: templates/base.html:60
 msgid "Submit application"
 msgstr "Подать заявку"
 
@@ -226,7 +226,7 @@ msgstr "Выйти"
 msgid "Actions_admin"
 msgstr "Действия"
 
-#: dashboard.py:51 menu.py:29 templates/base.html:38
+#: dashboard.py:51 menu.py:29 templates/base.html:42
 msgid "Administration"
 msgstr "Администрирование"
 
@@ -253,14 +253,6 @@ msgstr "Гугл-группа \"django-users\""
 #: dashboard.py:80
 msgid "Django irc channel"
 msgstr "IRC канал Django"
-
-#: main/forms.py:18
-msgid "First name"
-msgstr "Имя"
-
-#: main/forms.py:19
-msgid "Last name"
-msgstr "Фамилия"
 
 #: menu.py:22
 msgid "Dashboard"
@@ -326,23 +318,27 @@ msgstr "Вперёд"
 msgid "Main page"
 msgstr "Главная страница"
 
-#: templates/base.html:8 templates/base.html:21
+#: templates/base.html:8 templates/base.html:25
 msgid "Computer school"
 msgstr "Компьютерная школа"
 
-#: templates/base.html:32
+#: templates/base.html:36
 msgid "Guest"
 msgstr "Гость"
 
-#: templates/base.html:40
+#: templates/base.html:44
+msgid "Profile"
+msgstr "Профиль"
+
+#: templates/base.html:46
 msgid "Sign off"
 msgstr "Выйти"
 
-#: templates/base.html:42 templates/registration/login.html:16
+#: templates/base.html:48 templates/registration/login.html:16
 msgid "Sign in"
 msgstr "Войти"
 
-#: templates/base.html:44 templates/registration/registration_form.html:14
+#: templates/base.html:50 templates/registration/registration_form.html:14
 msgid "Sign up"
 msgstr "Зарегистироваться"
 
@@ -380,6 +376,14 @@ msgstr "Важные даты"
 msgid "Profiles_and_groups"
 msgstr "Пользователи и группы"
 
+#: user_profile/forms.py:43
+msgid "First name"
+msgstr "Имя"
+
+#: user_profile/forms.py:44
+msgid "Last name"
+msgstr "Фамилия"
+
 #: user_profile/models.py:9
 msgid "patronymic"
 msgstr "Отчество"
@@ -392,44 +396,54 @@ msgstr "Дата рождения"
 msgid "phone"
 msgstr "Номер телефона"
 
-#: user_profile/templates/user_profile/profile.html:6
-#, fuzzy, python-format
-#| msgid "Profile of user \"%(username)s\""
-msgid ""
-"\n"
-"        Profile of user \"%(username)s\"\n"
-"    "
-msgstr "Профиль пользователя \"%(username)s\""
-
-#: user_profile/templates/user_profile/profile.html:13
+#: user_profile/templates/user_profile/user_profile.html:5
+#: user_profile/templates/user_profile/user_profile.html:9
 #, python-format
 msgid "Profile of user \"%(username)s\""
 msgstr "Профиль пользователя \"%(username)s\""
 
-#: user_profile/templates/user_profile/profile.html:15
+#: user_profile/templates/user_profile/user_profile.html:11
 msgid "user_profile_first_name"
 msgstr "Имя"
 
-#: user_profile/templates/user_profile/profile.html:16
+#: user_profile/templates/user_profile/user_profile.html:12
 msgid "user_profile_last_name"
 msgstr "Фамилия"
 
-#: user_profile/templates/user_profile/profile.html:17
+#: user_profile/templates/user_profile/user_profile.html:13
 msgid "user_profile_patronymic"
 msgstr "Отчество"
 
-#: user_profile/templates/user_profile/profile.html:18
+#: user_profile/templates/user_profile/user_profile.html:14
 msgid "user_profile_birthday"
 msgstr "Дата рождения"
 
-#: user_profile/templates/user_profile/profile.html:19
+#: user_profile/templates/user_profile/user_profile.html:15
 msgid "user_profile_email"
 msgstr "E-mail"
 
-#: user_profile/templates/user_profile/profile.html:20
+#: user_profile/templates/user_profile/user_profile.html:16
 msgid "user_profile_phone"
 msgstr "Телефон"
 
-#: user_profile/templates/user_profile/profile.html:24
+#: user_profile/templates/user_profile/user_profile.html:20
 msgid "user_profile_edit_profile"
 msgstr "Изменить профиль"
+
+#: user_profile/templates/user_profile/user_profile_edit.html:6
+#, fuzzy, python-format
+#| msgid "Profile of user \"%(username)s\""
+msgid "Editing profile of \"%(username)s\""
+msgstr "Профиль пользователя \"%(username)s\""
+
+#: user_profile/templates/user_profile/user_profile_edit.html:15
+msgid "Edit profile"
+msgstr "Редактировать профиль"
+
+#, fuzzy
+#~| msgid "Profile of user \"%(username)s\""
+#~ msgid ""
+#~ "\n"
+#~ "        Profile of user \"%(username)s\"\n"
+#~ "    "
+#~ msgstr "Профиль пользователя \"%(username)s\""

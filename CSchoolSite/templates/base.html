@@ -41,6 +41,8 @@
                                 {% if user.is_staff %}
                                     <li><a href="/admin">{% trans 'Administration' %}</a></li>
                                 {% endif %}
+                                <li><a href="{% url 'user_profile' %}">{% trans 'Profile' %}</a></li>
+                                <li role="separator" class="divider"></li>
                                 <li><a href="{% url 'auth_logout' %}">{% trans 'Sign off' %}</a></li>
                             {% else %}
                                 <li><a href="{% url 'auth_login' %}">{% trans 'Sign in' %}</a></li>
