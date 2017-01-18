@@ -11,7 +11,6 @@ from CSchoolSite import settings
 import ejudge
 
 
-
 class Period(models.Model):
     class Meta:
         verbose_name = _('Period')
@@ -19,6 +18,7 @@ class Period(models.Model):
         permissions = (
             ("view_period", _("view periods")),
         )
+
     name = models.CharField(max_length=100, verbose_name=_('Name'))
     begin = models.DateTimeField(verbose_name=_('Period begins'))
     end = models.DateTimeField(verbose_name=_('Period ends'))
@@ -66,6 +66,7 @@ class CampVoucher(models.Model):
         permissions = (
             ("view_campvoucher", _("view camp vouchers")),
         )
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_('Voucher owner'))
     period = models.ForeignKey('Period', on_delete=models.CASCADE, verbose_name=_('Period'))
     voucher_id = models.CharField(max_length=30, verbose_name=_('Voucher ID'))
@@ -83,7 +84,8 @@ class CampVoucher(models.Model):
         (APPROVED, _('Approved'))
     )
 
-    status = models.CharField(max_length=2, choices=CAMP_VOUCHER_STATUS_CHOICES, default=AWAITING_PAYMENT, verbose_name='Статус')
+    status = models.CharField(max_length=2, choices=CAMP_VOUCHER_STATUS_CHOICES, default=AWAITING_PAYMENT,
+                              verbose_name='Статус')
 
     def __str__(self):
         return self.voucher_id
@@ -93,6 +95,7 @@ class Event(models.Model):
     class Meta:
         verbose_name = _('Event')
         verbose_name_plural = _('Events')
+
     name = models.CharField(max_length=100, verbose_name=_('Name'))
     period = models.ForeignKey('Period', on_delete=models.CASCADE, verbose_name=_('Period'))
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, through='EventApplication')
@@ -131,6 +134,7 @@ class PracticeExam(models.Model):
     class Meta:
         verbose_name = _('Practice exam')
         verbose_name_plural = _('Practice exams')
+
     rand_problems = models.IntegerField(verbose_name=_('Random problems'))
     slot_problems = models.IntegerField(verbose_name=_('Slot problems'))
     min_score = models.IntegerField(verbose_name=_('Minimum total score'))
@@ -144,6 +148,7 @@ class PracticeExamProblem(models.Model):
     class Meta:
         verbose_name = _('Practice exam problem')
         verbose_name_plural = _('Practice exams problems')
+
     name = models.CharField(max_length=250, verbose_name=_('Problem name'))
     ejudge_id = models.CharField(max_length=100, verbose_name=_('Problem id'), unique=True)
     slot = models.IntegerField(verbose_name=_('Problem slot'))
@@ -164,6 +169,7 @@ class PracticeExamRun(models.Model):
     class Meta:
         verbose_name = _('Practice exam run')
         verbose_name_plural = _('Practice exams runs')
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     ejudge_run_id = models.IntegerField(verbose_name=_('Run ID'), unique=True)
     problem = models.ForeignKey(PracticeExamProblem, on_delete=models.CASCADE)
@@ -283,6 +289,7 @@ class PracticeExamApplicationProblem(models.Model):
     # TODO: Should it be visible in admin panel?
     class Meta:
         ordering = ('index',)
+
     application = models.ForeignKey(PracticeExamApplication, on_delete=models.CASCADE)
     problem = models.ForeignKey(PracticeExamProblem, on_delete=models.CASCADE)
     index = models.IntegerField()
@@ -292,6 +299,7 @@ class TheoryExam(models.Model):
     class Meta:
         verbose_name = _('Theory exam')
         verbose_name_plural = _('Theory exams')
+
     rand_questions = models.IntegerField(verbose_name=_('Random questions'))
     slot_questions = models.IntegerField(verbose_name=_('Slot questions'))
     min_score = models.IntegerField(verbose_name=_('Minimum total score'))
@@ -305,6 +313,7 @@ class TheoryExamQuestion(models.Model):
     class Meta:
         verbose_name = _('Theory exam question')
         verbose_name_plural = _('Theory exams questions')
+
     title = models.CharField(max_length=100, verbose_name=_('Name'))
     question = models.CharField(max_length=500, verbose_name=_('Question'))
     answer = models.CharField(max_length=100, verbose_name=_('Answer'))
@@ -345,11 +354,13 @@ class TheoryExamQuestion(models.Model):
                                          widget=forms.TextInput(attrs={'autocomplete': 'off'}))
         if self.qtype == TheoryExamQuestion.CHOICE:
             choices = [(x.short, x.option) for x in self.theoryexamquestionoption_set.all()]
+
             class DynForm(forms.Form):
                 answer = forms.ChoiceField(choices=choices, required=True, label=_('Answer'),
                                            widget=forms.RadioSelect(attrs={'autocomplete': 'off'}))
         if self.qtype == TheoryExamQuestion.MULTICHOICE:
             choices = [(x.short, x.option) for x in self.theoryexamquestionoption_set.all()]
+
             class DynForm(forms.Form):
                 answer = forms.MultipleChoiceField(choices=choices, required=True, label=_('Answer'),
                                                    widget=forms.CheckboxSelectMultiple(attrs={'autocomplete': 'off'}))
@@ -361,6 +372,7 @@ class TheoryExamQuestionOption(models.Model):
         verbose_name = _('Possible answer')
         verbose_name_plural = _('Possible answers')
         ordering = ('short',)
+
     question = models.ForeignKey(TheoryExamQuestion, on_delete=models.CASCADE)
     option = models.CharField(max_length=100, verbose_name=_('Possible answer'))
     short = models.CharField(max_length=15, verbose_name=_('Short ID'))
@@ -374,6 +386,7 @@ class TheoryExamApplicationQuestion(models.Model):
     # TODO: Should it be visible in admin panel?
     class Meta:
         ordering = ('index',)
+
     application = models.ForeignKey('TheoryExamApplication', on_delete=models.CASCADE)
     question = models.ForeignKey('TheoryExamQuestion', on_delete=models.CASCADE)
     index = models.IntegerField()
@@ -459,7 +472,8 @@ class TheoryExamApplication(models.Model):
                 ans = question.answer.split(',')
                 total = question.question.theoryexamquestionoption_set.count()
                 ok = question.question.theoryexamquestionoption_set.filter(correct=True, short__in=ans).count() \
-                   + question.question.theoryexamquestionoption_set.filter(correct=False).exclude(short__in=ans).count()
+                     + question.question.theoryexamquestionoption_set.filter(correct=False).exclude(
+                    short__in=ans).count()
                 score += ok * question.question.score // total
             else:
                 if question.question.answer == question.answer:
@@ -475,17 +489,18 @@ class EventApplication(models.Model):
     class Meta:
         verbose_name = _('Event application')
         verbose_name_plural = _('Event applications')
+
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
     # Important fields
     phone = models.CharField(max_length=20, verbose_name=_('Phone number'),
-            null=True, help_text=_("Phone number like +7 (123) 456 78 90"))
+                             null=True, help_text=_("Phone number like +7 (123) 456 78 90"))
     grade = models.IntegerField(choices=[(i, i) for i in range(1, 12)],
-            null=True, verbose_name=_('Grade'), help_text=_("Current grade"))
+                                null=True, verbose_name=_('Grade'), help_text=_("Current grade"))
     address = models.CharField(max_length=100, null=True, verbose_name=_('Home address'))
     school = models.CharField(max_length=50, null=True,
-            verbose_name=_('School'), help_text=_("e.g. School №42"))
+                              verbose_name=_('School'), help_text=_("e.g. School №42"))
 
     # Registration status
     TESTING = 'TG'
@@ -506,3 +521,13 @@ class EventApplication(models.Model):
 
     status = models.CharField(max_length=2, choices=EVENT_APPLICATION_STATUS_CHOICES,
                               default=TESTING, verbose_name=_('Application status'))
+
+    def __str__(self):
+        return self.user.get_full_name() + " - " + self.event.__str__()
+
+    @property
+    def is_general_filled(self):
+        return self.phone is not None and \
+               self.grade is not None and \
+               self.address is not None and \
+               self.school is not None
