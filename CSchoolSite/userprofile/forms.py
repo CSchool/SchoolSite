@@ -1,4 +1,4 @@
-from django.forms import ModelForm, DateInput
+from django.forms import ModelForm, DateInput, models
 from registration.forms import RegistrationForm
 
 from .models import User
