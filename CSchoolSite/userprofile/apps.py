@@ -3,5 +3,5 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class UserProfileConfig(AppConfig):
-    name = 'user_profile'
+    name = 'userprofile'
     verbose_name = _('Profiles_and_groups')

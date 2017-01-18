@@ -23,11 +23,11 @@ class CustomMenu(Menu):
             items.Bookmarks(),
             items.AppList(
                 _('Actions_admin'),
-                exclude=('django.contrib.*', 'user_profile.models.User'),
+                exclude=('django.contrib.*', 'userprofile.models.User'),
             ),
             items.ModelList(
                 _('Administration'),
-                models=('django.contrib.auth.models.Group', 'user_profile.models.User'),
+                models=('django.contrib.auth.models.Group', 'userprofile.models.User'),
             )
         ]
 

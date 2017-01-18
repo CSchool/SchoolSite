@@ -1,7 +1,7 @@
 from django.conf.urls import include, url
 from registration.backends.simple.views import RegistrationView
-from user_profile.forms import ExtendedRegistrationForm
-from user_profile import views
+from userprofile.forms import ExtendedRegistrationForm
+from userprofile import views
 
 
 class ExtendedRegistrationView(RegistrationView):

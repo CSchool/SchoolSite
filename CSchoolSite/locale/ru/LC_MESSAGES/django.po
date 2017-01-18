@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-18 12:43+0300\n"
+"POT-Creation-Date: 2017-01-18 14:25+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -702,85 +702,86 @@ msgstr "Регистрация отключена"
 msgid "Registration"
 msgstr "Регистрация"
 
-#: user_profile/admin.py:17
+#: userprofile/admin.py:17
 msgid "Personal info"
 msgstr "Персональная информация"
 
-#: user_profile/admin.py:25
+#: userprofile/admin.py:25
 msgid "Permissions"
 msgstr "Разрешения"
 
-#: user_profile/admin.py:27
+#: userprofile/admin.py:27
 msgid "Important dates"
 msgstr "Важные даты"
 
-#: user_profile/apps.py:7
+#: userprofile/apps.py:7
 msgid "Profiles_and_groups"
 msgstr "Пользователи и группы"
 
-#: user_profile/forms.py:43
+#: userprofile/forms.py:44
 msgid "First name"
 msgstr "Имя"
 
-#: user_profile/forms.py:44
+#: userprofile/forms.py:45
 msgid "Last name"
 msgstr "Фамилия"
 
-#: user_profile/models.py:9
+#: userprofile/models.py:9
 msgid "patronymic"
 msgstr "Отчество"
 
-#: user_profile/models.py:10
+#: userprofile/models.py:10
 msgid "birthday"
 msgstr "Дата рождения"
 
-#: user_profile/models.py:11
+#: userprofile/models.py:11
 msgid "phone"
 msgstr "Номер телефона"
 
-#: user_profile/templates/user_profile/user_profile.html:5
-#: user_profile/templates/user_profile/user_profile.html:9
+#: userprofile/templates/userprofile/user_profile.html:5
+#: userprofile/templates/userprofile/user_profile.html:9
 #, python-format
 msgid "Profile of user \"%(username)s\""
 msgstr "Профиль пользователя \"%(username)s\""
 
-#: user_profile/templates/user_profile/user_profile.html:11
-msgid "user_profile_first_name"
-msgstr "Имя"
+#: userprofile/templates/userprofile/user_profile.html:14
+msgid "Initials"
+msgstr "ФИО"
 
-#: user_profile/templates/user_profile/user_profile.html:12
-msgid "user_profile_last_name"
-msgstr "Фамилия"
-
-#: user_profile/templates/user_profile/user_profile.html:13
-msgid "user_profile_patronymic"
-msgstr "Отчество"
-
-#: user_profile/templates/user_profile/user_profile.html:14
+#: userprofile/templates/userprofile/user_profile.html:18
 msgid "user_profile_birthday"
 msgstr "Дата рождения"
 
-#: user_profile/templates/user_profile/user_profile.html:15
+#: userprofile/templates/userprofile/user_profile.html:22
 msgid "user_profile_email"
 msgstr "E-mail"
 
-#: user_profile/templates/user_profile/user_profile.html:16
+#: userprofile/templates/userprofile/user_profile.html:26
 msgid "user_profile_phone"
 msgstr "Телефон"
 
-#: user_profile/templates/user_profile/user_profile.html:20
+#: userprofile/templates/userprofile/user_profile.html:34
 msgid "user_profile_edit_profile"
 msgstr "Изменить профиль"
 
-#: user_profile/templates/user_profile/user_profile_edit.html:6
+#: userprofile/templates/userprofile/user_profile_edit.html:6
 #, fuzzy, python-format
 #| msgid "Profile of user \"%(username)s\""
 msgid "Editing profile of \"%(username)s\""
 msgstr "Профиль пользователя \"%(username)s\""
 
-#: user_profile/templates/user_profile/user_profile_edit.html:15
+#: userprofile/templates/userprofile/user_profile_edit.html:15
 msgid "Edit profile"
 msgstr "Редактировать профиль"
+
+#~ msgid "user_profile_first_name"
+#~ msgstr "Имя"
+
+#~ msgid "user_profile_last_name"
+#~ msgstr "Фамилия"
+
+#~ msgid "user_profile_patronymic"
+#~ msgstr "Отчество"
 
 #~ msgid "Page"
 #~ msgstr "Страница"

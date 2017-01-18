@@ -24,6 +24,6 @@ urlpatterns = [
     url(r'^$', news_views.index, name='index'),
     url(r'^news/', include('news.urls')),
     url(r'^applications/', include('applications.urls')),
-    url(r'^accounts/', include('user_profile.urls')),
+    url(r'^accounts/', include('userprofile.urls')),
 
 ]
