@@ -50,7 +50,7 @@ INSTALLED_APPS = [
 
     'main',
     'news',
-    'applications.apps.ApplicationsConfig',
+    'applications',
     'userprofile'
 ]
 

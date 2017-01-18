@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-18 17:19+0300\n"
+"POT-Creation-Date: 2017-01-18 23:20+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,7 @@ msgstr ""
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: applications/apps.py:10
-msgid "Education committee"
-msgstr "Комитет образования"
-
-#: applications/apps.py:23
+#: applications/apps.py:7
 msgid "Applications"
 msgstr "Заявки"
 
@@ -38,335 +34,335 @@ msgstr "Теоретический экзамен"
 msgid "Practice score"
 msgstr "Практический экзамен"
 
-#: applications/models.py:16 applications/models.py:71
-#: applications/models.py:100
+#: applications/models.py:14 applications/models.py:69
+#: applications/models.py:98
 #: applications/templates/applications/choose_period.html:12
 msgid "Period"
 msgstr "Учебный период"
 
-#: applications/models.py:17
+#: applications/models.py:15
 msgid "Periods"
 msgstr "Учебные периоды"
 
-#: applications/models.py:19
+#: applications/models.py:17
 msgid "view periods"
 msgstr "Просматривать учебные периоды"
 
-#: applications/models.py:22 applications/models.py:99
-#: applications/models.py:317
+#: applications/models.py:20 applications/models.py:97
+#: applications/models.py:315
 msgid "Name"
 msgstr "Название"
 
-#: applications/models.py:23
+#: applications/models.py:21
 msgid "Period begins"
 msgstr "Начало периода"
 
-#: applications/models.py:24
+#: applications/models.py:22
 msgid "Period ends"
 msgstr "Окончание периода"
 
-#: applications/models.py:25 applications/models.py:105
+#: applications/models.py:23 applications/models.py:103
 msgid "Registration begins"
 msgstr "Начало регистрации"
 
-#: applications/models.py:26 applications/models.py:106
+#: applications/models.py:24 applications/models.py:104
 #: applications/templates/applications/choose_period.html:13
 msgid "Registration ends"
 msgstr "Окончание регистрации"
 
-#: applications/models.py:64
+#: applications/models.py:62
 msgid "Camp voucher"
 msgstr "Путёвка"
 
-#: applications/models.py:65
+#: applications/models.py:63
 msgid "Camp vouchers"
 msgstr "Путёвки"
 
-#: applications/models.py:67
+#: applications/models.py:65
 msgid "view camp vouchers"
 msgstr "Просматривать путёвки"
 
-#: applications/models.py:70
+#: applications/models.py:68
 msgid "Voucher owner"
 msgstr "Владелец путёвки"
 
-#: applications/models.py:72
+#: applications/models.py:70
 msgid "Voucher ID"
 msgstr "Номер путёвки"
 
-#: applications/models.py:81
+#: applications/models.py:79
 msgid "Awaiting payment"
 msgstr "Ожидает оплаты"
 
-#: applications/models.py:82
+#: applications/models.py:80
 msgid "Declined"
 msgstr "Отклонено"
 
-#: applications/models.py:83
+#: applications/models.py:81
 msgid "Paid"
 msgstr "Оплачено"
 
-#: applications/models.py:84
+#: applications/models.py:82
 msgid "Approved"
 msgstr "Одобрено"
 
-#: applications/models.py:96
+#: applications/models.py:94
 msgid "Event"
 msgstr "Событие"
 
-#: applications/models.py:97
+#: applications/models.py:95
 msgid "Events"
 msgstr "События"
 
-#: applications/models.py:102
+#: applications/models.py:100
 msgid "Description"
 msgstr "Описание"
 
-#: applications/models.py:103
+#: applications/models.py:101
 msgid "Event begins"
 msgstr "Начало события"
 
-#: applications/models.py:104
+#: applications/models.py:102
 msgid "Event ends"
 msgstr "Окончание события"
 
-#: applications/models.py:107
+#: applications/models.py:105
 msgid "Registration open"
 msgstr "Регистрация открыта"
 
-#: applications/models.py:108
+#: applications/models.py:106
 msgid "Participants limit"
 msgstr "Максимальное количество участников"
 
-#: applications/models.py:116
+#: applications/models.py:114
 msgid "Class group"
 msgstr "Учебная группа"
 
-#: applications/models.py:117
+#: applications/models.py:115
 msgid "Camp group"
 msgstr "Отряд"
 
-#: applications/models.py:118
+#: applications/models.py:116
 msgid "Tournament"
 msgstr "Турнир"
 
-#: applications/models.py:121
+#: applications/models.py:119
 msgid "Event type"
 msgstr "Тип события"
 
-#: applications/models.py:135
+#: applications/models.py:133
 #: applications/templates/applications/group_application.html:75
 msgid "Practice exam"
 msgstr "Практический экзамен"
 
-#: applications/models.py:136
+#: applications/models.py:134
 msgid "Practice exams"
 msgstr "Практические экзамены"
 
-#: applications/models.py:138
+#: applications/models.py:136
 msgid "Random problems"
 msgstr "Случайные задачи"
 
-#: applications/models.py:139
+#: applications/models.py:137
 msgid "Slot problems"
 msgstr "Вариантные задачи"
 
-#: applications/models.py:140 applications/models.py:305
+#: applications/models.py:138 applications/models.py:303
 msgid "Minimum total score"
 msgstr "Минимальный балл"
 
-#: applications/models.py:149
+#: applications/models.py:147
 msgid "Practice exam problem"
 msgstr "Задача практического экзамена"
 
-#: applications/models.py:150
+#: applications/models.py:148
 msgid "Practice exams problems"
 msgstr "Задачи практических экзаменов"
 
-#: applications/models.py:152
+#: applications/models.py:150
 msgid "Problem name"
 msgstr "Название задачи"
 
-#: applications/models.py:153
+#: applications/models.py:151
 msgid "Problem id"
 msgstr "ID задачи"
 
-#: applications/models.py:154
+#: applications/models.py:152
 msgid "Problem slot"
 msgstr "Вариант задачи"
 
-#: applications/models.py:155
+#: applications/models.py:153
 msgid "Statement URL"
 msgstr "URL условия"
 
-#: applications/models.py:156
+#: applications/models.py:154
 msgid "Problem score"
 msgstr "Очки за решение"
 
-#: applications/models.py:170
+#: applications/models.py:168
 msgid "Practice exam run"
 msgstr "Посылка на практическом экзамене"
 
-#: applications/models.py:171
+#: applications/models.py:169
 msgid "Practice exams runs"
 msgstr "Посылки на практических экзаменах"
 
-#: applications/models.py:174
+#: applications/models.py:172
 msgid "Run ID"
 msgstr "ID посылки"
 
-#: applications/models.py:176
+#: applications/models.py:174
 msgid "Submitted at"
 msgstr "Дата отправки"
 
-#: applications/models.py:300
+#: applications/models.py:298
 #: applications/templates/applications/group_application.html:50
 msgid "Theory exam"
 msgstr "Теоретический экзамен"
 
-#: applications/models.py:301
+#: applications/models.py:299
 msgid "Theory exams"
 msgstr "Теоретические экзамены"
 
-#: applications/models.py:303
+#: applications/models.py:301
 msgid "Random questions"
 msgstr "Случайные вопросы"
 
-#: applications/models.py:304
+#: applications/models.py:302
 msgid "Slot questions"
 msgstr "Вариантные вопросы"
 
-#: applications/models.py:314
+#: applications/models.py:312
 msgid "Theory exam question"
 msgstr "Вопрос на теоретическом экзамене"
 
-#: applications/models.py:315
+#: applications/models.py:313
 msgid "Theory exams questions"
 msgstr "Вопросы на теоретических экзаменах"
 
-#: applications/models.py:318
+#: applications/models.py:316
 msgid "Question"
 msgstr "Вопрос"
 
-#: applications/models.py:319 applications/models.py:349
-#: applications/models.py:353 applications/models.py:359
-#: applications/models.py:365
+#: applications/models.py:317 applications/models.py:347
+#: applications/models.py:351 applications/models.py:357
+#: applications/models.py:363
 msgid "Answer"
 msgstr "Ответ"
 
-#: applications/models.py:320
+#: applications/models.py:318
 msgid "Remove extra spaces from answer"
 msgstr "Удалять ненужные пробелы"
 
-#: applications/models.py:321
+#: applications/models.py:319
 msgid "Answer is case-sensitive"
 msgstr "Регистр букв имеет значение"
 
-#: applications/models.py:323
+#: applications/models.py:321
 msgid "Question slot"
 msgstr "Вариант вопроса"
 
-#: applications/models.py:324
+#: applications/models.py:322
 msgid "Score"
 msgstr "Балл"
 
-#: applications/models.py:333
+#: applications/models.py:331
 msgid "Integer number as an answer"
 msgstr "Целое число как ответ"
 
-#: applications/models.py:334
+#: applications/models.py:332
 msgid "String as an answer"
 msgstr "Строка как ответ"
 
-#: applications/models.py:335
+#: applications/models.py:333
 msgid "One option as an answer"
 msgstr "Один из перечисленных вариантов"
 
-#: applications/models.py:336
+#: applications/models.py:334
 msgid "Several options as an answer"
 msgstr "Несколько из перечисленных вариантов"
 
-#: applications/models.py:340
+#: applications/models.py:338
 msgid "Answer type"
 msgstr "Тип ответа"
 
-#: applications/models.py:372 applications/models.py:377
+#: applications/models.py:370 applications/models.py:375
 msgid "Possible answer"
 msgstr "Вариант ответа"
 
-#: applications/models.py:373
+#: applications/models.py:371
 msgid "Possible answers"
 msgstr "Варианты ответов"
 
-#: applications/models.py:378
+#: applications/models.py:376
 msgid "Short ID"
 msgstr "Короткий ID"
 
-#: applications/models.py:379
+#: applications/models.py:377
 msgid "This answer is correct"
 msgstr "Правильный ответ"
 
-#: applications/models.py:490
+#: applications/models.py:488
 msgid "Event application"
 msgstr "Заявка на событие"
 
-#: applications/models.py:491
+#: applications/models.py:489
 msgid "Event applications"
 msgstr "Заявки на события"
 
-#: applications/models.py:497
+#: applications/models.py:490
+msgid "Can submit applications to the study period"
+msgstr "Может отправить заявку на смену"
+
+#: applications/models.py:496
 msgid "Phone number"
 msgstr "Телефон"
 
-#: applications/models.py:498
-msgid "Phone number like +7 (123) 456-78-90"
-msgstr "Номер телефона в формате +7 (123) 456-78-90"
-
-#: applications/models.py:500
+#: applications/models.py:499
 msgid "Grade"
 msgstr "Класс"
 
-#: applications/models.py:500
+#: applications/models.py:499
 msgid "Current grade"
 msgstr "Класс в этом учебном году"
 
-#: applications/models.py:501
+#: applications/models.py:500
 msgid "Home address"
 msgstr "Домашний адрес"
 
-#: applications/models.py:503
+#: applications/models.py:502
 msgid "School"
 msgstr "Школа"
 
-#: applications/models.py:503
+#: applications/models.py:502
 msgid "e.g. School №42"
 msgstr "Например &quot;Школа №42&quot;"
 
-#: applications/models.py:514
+#: applications/models.py:513
 msgid "Testing"
 msgstr "Тестируется"
 
-#: applications/models.py:515
+#: applications/models.py:514
 msgid "Testing succeeded"
 msgstr "Тестирование пройдено"
 
-#: applications/models.py:516
+#: applications/models.py:515
 msgid "Studying"
 msgstr "Обучение"
 
-#: applications/models.py:517
+#: applications/models.py:516
 msgid "Successed"
 msgstr "Обучение окончено"
 
-#: applications/models.py:518
+#: applications/models.py:517
 msgid "Failed"
 msgstr "Обучение не окончено"
 
-#: applications/models.py:519
+#: applications/models.py:518
 msgid "Disqualified"
 msgstr "Исключён"
 
-#: applications/models.py:523
+#: applications/models.py:522
 msgid "Application status"
 msgstr "Статус заявки"
 
@@ -572,7 +568,10 @@ msgstr "Быстрые ссылки"
 msgid "Return to site"
 msgstr "Вернуться на сайт"
 
-#: dashboard.py:37
+#: dashboard.py:37 templates/registration/password_change_form.html:5
+#: templates/registration/password_change_form.html:8
+#: templates/registration/password_change_form.html:15
+#: userprofile/templates/userprofile/user_profile.html:40
 msgid "Change password"
 msgstr "Изменить пароль"
 
@@ -612,7 +611,7 @@ msgstr "Гугл-группа \"django-users\""
 msgid "Django irc channel"
 msgstr "IRC канал Django"
 
-#: main/validators.py:8
+#: main/validators.py:7
 msgid "The format of phone numbers is +7 (123) 456-78-90"
 msgstr "Формат номера телефона: +7 (123) 456-78-90"
 
@@ -693,8 +692,77 @@ msgid "Authorization"
 msgstr "Вход в систему"
 
 #: templates/registration/login.html:13
+#: templates/registration/password_reset_form.html:5
+#: templates/registration/password_reset_form.html:8
 msgid "Password recovery"
 msgstr "Восстановление пароля"
+
+#: templates/registration/password_change_done.html:5
+#: templates/registration/password_change_done.html:9
+#: templates/registration/password_reset_done.html:5
+#: templates/registration/password_reset_done.html:9
+#, fuzzy
+#| msgid "Successed"
+msgid "Success"
+msgstr "Обучение окончено"
+
+#: templates/registration/password_change_done.html:12
+msgid "Your password was changed."
+msgstr ""
+
+#: templates/registration/password_change_form.html:9
+msgid ""
+"Please enter your old password, for security's sake, and then enter your new "
+"password twice so we can verify you typed it in correctly."
+msgstr ""
+
+#: templates/registration/password_reset_done.html:10
+msgid ""
+"We've emailed you instructions for setting your password, if an account "
+"exists with the email you entered. You should receive them shortly."
+msgstr ""
+
+#: templates/registration/password_reset_done.html:12
+msgid ""
+"If you don't receive an email, please make sure you've entered the address "
+"you registered with, and check your spam folder."
+msgstr ""
+
+#: templates/registration/password_reset_email.txt:2
+#, python-format
+msgid ""
+"You're receiving this email because you requested a password reset for your "
+"user account at %(site_name)s."
+msgstr ""
+
+#: templates/registration/password_reset_email.txt:4
+msgid "Please go to the following page and choose a new password:"
+msgstr ""
+
+#: templates/registration/password_reset_email.txt:8
+msgid "Your username, in case you've forgotten:"
+msgstr ""
+
+#: templates/registration/password_reset_email.txt:10
+msgid "Thanks for using our site!"
+msgstr ""
+
+#: templates/registration/password_reset_email.txt:12
+#, python-format
+msgid "The %(site_name)s team"
+msgstr ""
+
+#: templates/registration/password_reset_form.html:11
+msgid "You can reset your password here"
+msgstr ""
+
+#: templates/registration/password_reset_form.html:22
+msgid "E-Mail address"
+msgstr "E-mail"
+
+#: templates/registration/password_reset_form.html:26
+msgid "Send My Password"
+msgstr ""
 
 #: templates/registration/registration_closed.html:4
 #: templates/registration/registration_closed.html:7
@@ -718,7 +786,19 @@ msgstr "Разрешения"
 msgid "Important dates"
 msgstr "Важные даты"
 
-#: userprofile/apps.py:7
+#: userprofile/apps.py:25
+msgid "Education committee"
+msgstr "Комитет образования"
+
+#: userprofile/apps.py:26
+msgid "Students"
+msgstr "Студенты"
+
+#: userprofile/apps.py:27
+msgid "Parents"
+msgstr "Родители"
+
+#: userprofile/apps.py:42
 msgid "Profiles_and_groups"
 msgstr "Пользователи и группы"
 
@@ -730,15 +810,15 @@ msgstr "Имя"
 msgid "Last name"
 msgstr "Фамилия"
 
-#: userprofile/models.py:9
+#: userprofile/models.py:10
 msgid "patronymic"
 msgstr "Отчество"
 
-#: userprofile/models.py:10
+#: userprofile/models.py:11
 msgid "birthday"
 msgstr "Дата рождения"
 
-#: userprofile/models.py:11
+#: userprofile/models.py:12
 msgid "phone"
 msgstr "Номер телефона"
 
@@ -764,7 +844,7 @@ msgstr "E-mail"
 msgid "user_profile_phone"
 msgstr "Телефон"
 
-#: userprofile/templates/userprofile/user_profile.html:40
+#: userprofile/templates/userprofile/user_profile.html:41
 msgid "user_profile_edit_profile"
 msgstr "Изменить профиль"
 
@@ -777,6 +857,9 @@ msgstr "Профиль пользователя \"%(username)s\""
 #: userprofile/templates/userprofile/user_profile_edit.html:15
 msgid "Edit profile"
 msgstr "Редактировать профиль"
+
+#~ msgid "Phone number like +7 (123) 456-78-90"
+#~ msgstr "Номер телефона в формате +7 (123) 456-78-90"
 
 #~ msgid "user_profile_first_name"
 #~ msgstr "Имя"
