@@ -11,4 +11,11 @@ gulp.task('vendor', function() {
         .pipe(gulp.dest('./static/fonts'));
     gulp.src('./node_modules/jquery/dist/jquery*.js')
         .pipe(gulp.dest('./static/js'));
+    gulp.src('./node_modules/jquery-ui-dist/*.css')
+        .pipe(gulp.dest('./static/css'));
+    gulp.src('./node_modules/jquery-ui-dist/*.js')
+        .pipe(gulp.dest('./static/js'));
+    gulp.src('./node_modules/jquery-ui-dist/images/*')
+        .pipe(gulp.dest('./static/css/images'));
+
 })

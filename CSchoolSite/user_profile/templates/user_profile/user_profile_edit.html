@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+{% load static %}
+{% load i18n %}
+
+{% block page_title %}{% blocktrans with username=user.username %}Editing profile of "{{ username }}"{% endblocktrans %}{% endblock %}
+
+{% block content %}
+
+    <div class="col-md-6 col-md-offset-3">
+        <form method="POST" class="form" role="form">
+            {% csrf_token %}
+            {% bootstrap_form form %}
+            {% buttons %}
+                <button type="submit" class="btn btn-lg btn-primary btn-block">{% trans 'Edit profile' %}</button>
+            {% endbuttons %}
+        </form>
+    </div>
+
+{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+    <link rel='stylesheet' type='text/css' href='{% static 'css/jquery-ui.min.css' %}' />
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type='text/javascript' src='{% static 'js/jquery-ui.min.js' %}'></script>
+
+    <script type='text/javascript'>
+        $( ".datepicker" ).datepicker({
+            dateFormat: 'dd.mm.yy'
+        });
+    </script>
+{% endblock %}
