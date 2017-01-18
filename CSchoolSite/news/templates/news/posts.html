@@ -38,14 +38,6 @@
             </div>
         </div>
     {% endfor %}
-
-    <p>{% trans 'Page' %} {{ current_page }} {% trans 'out of' %} {{ total_pages }}</p>
-
-    {% if news.has_previous %}
-        <a href="{% url 'news_paged' news.previous_page_number %}">{% trans 'Back' %}</a>
-    {% endif %}
-    {% if news.has_next %}
-        <a href="{% url 'news_paged' news.next_page_number %}">{% trans 'Next' %}</a>
-    {% endif %}
+    {% bootstrap_pagination news %}
     </div>
 {% endblock %}

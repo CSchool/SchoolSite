@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block page_title %}{% trans 'Application to' %} &quot;{{ group.name }}&quot;{% endblock %}
+{% block submit_application_button %}{% endblock %}
+{% block content %}
+    <h3 class="page-header text-center">
+        <a href="{% url 'applications_group_application' group.id %}">{% trans 'Application to' %} &quot;{{ group.name }}&quot;</a>
+    </h3>
+    <p>
+        {% blocktrans %}You need to write programs to solve these problems{% endblocktrans %}
+<ul>
+<li>{% blocktrans %}Your program should be time- and memory-efficient{% endblocktrans %}</li>
+<li>{% blocktrans %}Your program will be checked automatically{% endblocktrans %}</li>
+<li>{% blocktrans %}"OK" verdict means you solved the problem{% endblocktrans %}</li>
+</ul>
+    </p>
+    <br />
+    {% for problem in problems %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4>
+                    {{ forloop.counter }}. {{ problem.problem.name }}
+                    <a href="{{ problem.problem.statement_url }}" target="_blank" class="pull-right">
+                        {% trans 'Statement' %}
+                    </a>
+                </h4>
+            </div>
+            <div class="panel-body">
+                <h4>{% trans 'Submit run' %}</h4>
+                <form method="POST" action="{% url 'applications_group_application_submit_run' group.id %}"
+                    enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <input type="hidden" name="problem_id" value="{{ problem.problem.ejudge_id }}" />
+                    <label for="lang">{% trans 'Language' %}</label>
+                    <select name="lang" class="form-control compiler-select" required="required">
+                        <option selected="selected" value=""> --- {% trans 'Choose compiler' %} --- </option>
+                        {% for shortc, longc in problem.problem.available_compilers.items %}
+                            <option value="{{ shortc }}">{{ longc }}</option>
+                        {% endfor %}
+                    </select>
+                    <br />
+                    <label for="source">{% trans 'Source code' %}</label>
+                    <input name="source" type="file" required="required" />
+                    <br />
+                    <button type="submit" class="btn btn-primary">
+                        {% bootstrap_icon 'send' %}
+                        {% trans 'Submit' %}
+                    </button>
+                </form>
+                <br />
+                <h4>{% trans 'Previous attempts' %}</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>{% trans 'Time' %}</th>
+                            <th>{% trans 'Language' %}</th>
+                            <th>{% trans 'Size' %}</th>
+                            <th>{% trans 'Source code' %}</th>
+                            <th>{% trans 'Report' %}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for run in problem.runs %}
+                            <tr>
+                                <td>{{ run.submitted|date:"j M Y H:i" }}</td>
+                                <td>{{ run.info.compiler }}</td>
+                                <td>{{ run.info.size }}</td>
+                                <td><a href="{% url 'applications_download_run' run.id %}">{% trans 'Download' %}</a></td>
+                                <td>
+                                    <b class="text-{% if run.info.verdict == 'OK' %}success{% else %}danger{% endif %}">
+                                        {{ run.info.verbose_verdict }}
+                                        {% if run.info.score %}
+                                            {{ run.info.score }}
+                                        {% endif %}
+                                    </b>
+                                    {% if run.compile_log %}
+                                        (<a href="{% url 'applications_run_log' run.id %}">{% trans 'Log' %}</a>)
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+{% block scripts %}
+    <script type="text/javascript">
+        var $lang = jQuery('.compiler-select').on('change', function() {
+            window.localStorage['CSchoolSite_DEFAULT_COMPILER'] = this.value
+        });
+        if (window.localStorage['CSchoolSite_DEFAULT_COMPILER'])
+            $lang.val(window.localStorage['CSchoolSite_DEFAULT_COMPILER']);
+    </script>
+{% endblock %}
