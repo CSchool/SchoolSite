@@ -22,7 +22,7 @@
                     </tr>
                     <tr>
                         <td>{% trans "user_profile_birthday" %}:</td>
-                        <td>{{ user.birthday }}</td>
+                        <td>{{ user.birthday|default_if_none:"" }}</td>
                     </tr>
                     <tr>
                         <td>{% trans "user_profile_email" %}:</td>
