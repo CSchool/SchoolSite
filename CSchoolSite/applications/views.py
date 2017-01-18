@@ -75,8 +75,15 @@ def group_application(req, group_id):
     try:
         group = Event.objects.get(id=group_id, type=Event.CLASS_GROUP, eventapplication__user=req.user)
         application = group.eventapplication_set.get(user=req.user)
-        practice_exam = application.practice_exam
-        theory_exam = application.theory_exam
+        try:
+            practice_exam = application.practice_exam
+        except PracticeExamApplication.DoesNotExist:
+            practice_exam = None
+
+        try:
+            theory_exam = application.theory_exam
+        except TheoryExamApplication.DoesNotExist:
+            theory_exam = None
     except:
         raise Http404
 
