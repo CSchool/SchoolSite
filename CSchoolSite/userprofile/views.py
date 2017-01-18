@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from user_profile.forms import UserForm
+from userprofile.forms import UserForm
 
 
 # Create your views here.
@@ -11,7 +11,7 @@ from user_profile.forms import UserForm
 
 @login_required
 def profile(request):
-    return render(request, 'user_profile/user_profile.html', {"user": request.user})
+    return render(request, 'userprofile/user_profile.html', {"user": request.user})
 
 
 def logout(req):
@@ -28,4 +28,4 @@ def edit_profile(request):
             form.save()
             return HttpResponseRedirect(reverse('user_profile'))
 
-    return render(request, 'user_profile/user_profile_edit.html', {"form": form})
+    return render(request, 'userprofile/user_profile_edit.html', {"form": form})

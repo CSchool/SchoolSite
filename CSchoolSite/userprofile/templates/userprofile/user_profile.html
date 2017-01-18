@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+{% load bootstrap3 %}
+{% load i18n %}
+
+{% block page_title %}{% blocktrans with username=user.username %}Profile of user "{{ username }}"{% endblocktrans %}{% endblock %}
+
+{% block css %}
+    {{ block.super }}
+        <link rel="stylesheet" type="text/css" href="{% static 'css/user_profile.css' %}" />
+{% endblock %}
+
+{% block content %}
+    <div class="panel panel-info">
+        <div class="panel-heading">{% blocktrans with username=user.username %}Profile of user "{{ username }}"{% endblocktrans %}</div>
+        <div class="panel-body">
+            <table class="table user_profile_table">
+                <tbody>
+                    <tr>
+                        <td>{% trans "Initials" %}:</td>
+                        <td>{{ user.get_initials }}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans "user_profile_birthday" %}:</td>
+                        <td>{{ user.birthday }}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans "user_profile_email" %}:</td>
+                        <td>{{ user.email }}</td>
+                    </tr>
+                    <tr>
+                        <td>{% trans "user_profile_phone" %}:</td>
+                        <td>{{ user.phone }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="panel-footer clearfix">
+            <div class="pull-right ">
+                <a href="{% url 'user_profile_edit' %}" class="btn btn-success">{% bootstrap_icon 'edit' %} {% trans 'user_profile_edit_profile' %}</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

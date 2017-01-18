@@ -5,6 +5,6 @@ Vagrantfile
 *.sqlite3
 .idea
 node_modules
-static
+CSchoolSite/static
 *.pyc
 *.mo

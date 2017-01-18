@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     'main',
     'news',
     'applications.apps.ApplicationsConfig',
-    'user_profile'
+    'userprofile'
 ]
 
 STATICFILES_DIRS = [
@@ -125,7 +125,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = 'user_profile.User'
+AUTH_USER_MODEL = 'userprofile.User'
 ADMIN_TOOLS_MENU = 'menu.CustomMenu'
 ADMIN_TOOLS_INDEX_DASHBOARD = 'dashboard.CustomIndexDashboard'
 

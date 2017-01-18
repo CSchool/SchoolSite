@@ -48,5 +48,5 @@ class ExtendedRegistrationForm(RegistrationForm):
 class UserForm(ModelForm):
     class Meta:
         model = User
-        fields = ['patronymic', 'birthday', 'email', 'phone']
+        fields = ['first_name', 'last_name', 'patronymic', 'birthday', 'email', 'phone']
         widgets = {'birthday': DateInput(attrs={'class': 'datepicker'})}
