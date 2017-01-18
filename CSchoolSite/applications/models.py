@@ -1,14 +1,12 @@
-from django.db import models
-from django.contrib.auth.models import User
-from django.utils import timezone
-from django.utils.translation import ugettext_lazy as _
-from django.utils.text import Truncator
-from django import forms
-from django.db.models.signals import post_delete
-from django.dispatch import receiver
-from CSchoolSite import settings
-
 import ejudge
+from django import forms
+from django.db import models
+from django.utils import timezone
+from django.utils.text import Truncator
+from django.utils.translation import ugettext_lazy as _
+from main.validators import PhoneValidator
+
+from CSchoolSite import settings
 
 
 class Period(models.Model):
@@ -494,8 +492,8 @@ class EventApplication(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
     # Important fields
-    phone = models.CharField(max_length=20, verbose_name=_('Phone number'),
-                             null=True, help_text=_("Phone number like +7 (123) 456 78 90"))
+    phone = models.CharField(max_length=18, verbose_name=_('Phone number'),
+                             null=True, validators=[PhoneValidator()])
     grade = models.IntegerField(choices=[(i, i) for i in range(1, 12)],
                                 null=True, verbose_name=_('Grade'), help_text=_("Current grade"))
     address = models.CharField(max_length=100, null=True, verbose_name=_('Home address'))
