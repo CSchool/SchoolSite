@@ -164,7 +164,7 @@ class PracticeExamRun(models.Model):
     class Meta:
         verbose_name = _('Practice exam run')
         verbose_name_plural = _('Practice exams runs')
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     ejudge_run_id = models.IntegerField(verbose_name=_('Run ID'), unique=True)
     problem = models.ForeignKey(PracticeExamProblem, on_delete=models.CASCADE)
     submitted = models.DateTimeField(auto_now_add=True, verbose_name=_('Submitted at'))
@@ -199,7 +199,7 @@ class PracticeExamRun(models.Model):
 
 class PracticeExamApplication(models.Model):
     # TODO: Should it be visible in admin panel?
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     problems = models.ManyToManyField(PracticeExamProblem, through='PracticeExamApplicationProblem')
     application = models.OneToOneField('EventApplication', related_name='practice_exam')
 
@@ -394,7 +394,7 @@ class TheoryExamApplicationQuestion(models.Model):
 
 class TheoryExamApplication(models.Model):
     # TODO: Should it be visible in admin panel?
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     questions = models.ManyToManyField(TheoryExamQuestion, through='TheoryExamApplicationQuestion')
     application = models.OneToOneField('EventApplication', related_name='theory_exam')
 

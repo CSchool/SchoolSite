@@ -31,6 +31,7 @@ class AdminUserChangeForm(UserChangeForm):
 
 class ExtendedRegistrationForm(RegistrationForm):
     class Meta(UserCreationForm.Meta):
+        model = User
         fields = [
             User.USERNAME_FIELD,
             'first_name',
