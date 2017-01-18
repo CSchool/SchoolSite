@@ -25,5 +25,4 @@ urlpatterns = [
     url(r'^news/', include('news.urls')),
     url(r'^applications/', include('applications.urls')),
     url(r'^accounts/', include('userprofile.urls')),
-
 ]

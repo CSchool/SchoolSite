@@ -1,7 +1,10 @@
 from django.conf.urls import include, url
+from django.conf.urls.static import static
 from registration.backends.simple.views import RegistrationView
 from userprofile.forms import ExtendedRegistrationForm
 from userprofile import views
+
+from CSchoolSite import settings
 
 
 class ExtendedRegistrationView(RegistrationView):
