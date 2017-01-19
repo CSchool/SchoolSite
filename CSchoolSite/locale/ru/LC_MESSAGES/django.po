@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-18 17:19+0300\n"
+"POT-Creation-Date: 2017-01-19 20:02+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -33,335 +33,331 @@ msgstr "Балл за теорию"
 msgid "Practice score"
 msgstr "Балл за практику"
 
-#: applications/models.py:16 applications/models.py:71
-#: applications/models.py:100
+#: applications/models.py:14 applications/models.py:69
+#: applications/models.py:98
 #: applications/templates/applications/choose_period.html:12
 msgid "Period"
 msgstr "Учебный период"
 
-#: applications/models.py:17
+#: applications/models.py:15
 msgid "Periods"
 msgstr "Учебные периоды"
 
-#: applications/models.py:19
+#: applications/models.py:17
 msgid "view periods"
 msgstr "Просматривать учебные периоды"
 
-#: applications/models.py:22 applications/models.py:99
-#: applications/models.py:317
+#: applications/models.py:20 applications/models.py:97
+#: applications/models.py:315
 msgid "Name"
 msgstr "Название"
 
-#: applications/models.py:23
+#: applications/models.py:21
 msgid "Period begins"
 msgstr "Начало периода"
 
-#: applications/models.py:24
+#: applications/models.py:22
 msgid "Period ends"
 msgstr "Окончание периода"
 
-#: applications/models.py:25 applications/models.py:105
+#: applications/models.py:23 applications/models.py:103
 msgid "Registration begins"
 msgstr "Начало регистрации"
 
-#: applications/models.py:26 applications/models.py:106
+#: applications/models.py:24 applications/models.py:104
 #: applications/templates/applications/choose_period.html:13
 msgid "Registration ends"
 msgstr "Окончание регистрации"
 
-#: applications/models.py:64
+#: applications/models.py:62
 msgid "Camp voucher"
 msgstr "Путёвка"
 
-#: applications/models.py:65
+#: applications/models.py:63
 msgid "Camp vouchers"
 msgstr "Путёвки"
 
-#: applications/models.py:67
+#: applications/models.py:65
 msgid "view camp vouchers"
 msgstr "Просматривать путёвки"
 
-#: applications/models.py:70
+#: applications/models.py:68
 msgid "Voucher owner"
 msgstr "Владелец путёвки"
 
-#: applications/models.py:72
+#: applications/models.py:70
 msgid "Voucher ID"
 msgstr "Номер путёвки"
 
-#: applications/models.py:81
+#: applications/models.py:79
 msgid "Awaiting payment"
 msgstr "Ожидает оплаты"
 
-#: applications/models.py:82
+#: applications/models.py:80
 msgid "Declined"
 msgstr "Отклонено"
 
-#: applications/models.py:83
+#: applications/models.py:81
 msgid "Paid"
 msgstr "Оплачено"
 
-#: applications/models.py:84
+#: applications/models.py:82
 msgid "Approved"
 msgstr "Одобрено"
 
-#: applications/models.py:96
+#: applications/models.py:94
 msgid "Event"
 msgstr "Событие"
 
-#: applications/models.py:97
+#: applications/models.py:95
 msgid "Events"
 msgstr "События"
 
-#: applications/models.py:102
+#: applications/models.py:100
 msgid "Description"
 msgstr "Описание"
 
-#: applications/models.py:103
+#: applications/models.py:101
 msgid "Event begins"
 msgstr "Начало события"
 
-#: applications/models.py:104
+#: applications/models.py:102
 msgid "Event ends"
 msgstr "Окончание события"
 
-#: applications/models.py:107
+#: applications/models.py:105
 msgid "Registration open"
 msgstr "Регистрация открыта"
 
-#: applications/models.py:108
+#: applications/models.py:106
 msgid "Participants limit"
 msgstr "Максимальное количество участников"
 
-#: applications/models.py:116
+#: applications/models.py:114
 msgid "Class group"
 msgstr "Учебная группа"
 
-#: applications/models.py:117
+#: applications/models.py:115
 msgid "Camp group"
 msgstr "Отряд"
 
-#: applications/models.py:118
+#: applications/models.py:116
 msgid "Tournament"
 msgstr "Турнир"
 
-#: applications/models.py:121
+#: applications/models.py:119
 msgid "Event type"
 msgstr "Тип события"
 
-#: applications/models.py:135
+#: applications/models.py:133
 #: applications/templates/applications/group_application.html:75
 msgid "Practice exam"
 msgstr "Практический экзамен"
 
-#: applications/models.py:136
+#: applications/models.py:134
 msgid "Practice exams"
 msgstr "Практические экзамены"
 
-#: applications/models.py:138
+#: applications/models.py:136
 msgid "Random problems"
 msgstr "Случайные задачи"
 
-#: applications/models.py:139
+#: applications/models.py:137
 msgid "Slot problems"
 msgstr "Вариантные задачи"
 
-#: applications/models.py:140 applications/models.py:305
+#: applications/models.py:138 applications/models.py:303
 msgid "Minimum total score"
 msgstr "Минимальный балл"
 
-#: applications/models.py:149
+#: applications/models.py:147
 msgid "Practice exam problem"
 msgstr "Задача практического экзамена"
 
-#: applications/models.py:150
+#: applications/models.py:148
 msgid "Practice exams problems"
 msgstr "Задачи практических экзаменов"
 
-#: applications/models.py:152
+#: applications/models.py:150
 msgid "Problem name"
 msgstr "Название задачи"
 
-#: applications/models.py:153
+#: applications/models.py:151
 msgid "Problem id"
 msgstr "ID задачи"
 
-#: applications/models.py:154
+#: applications/models.py:152
 msgid "Problem slot"
 msgstr "Вариант задачи"
 
-#: applications/models.py:155
+#: applications/models.py:153
 msgid "Statement URL"
 msgstr "URL условия"
 
-#: applications/models.py:156
+#: applications/models.py:154
 msgid "Problem score"
 msgstr "Очки за решение"
 
-#: applications/models.py:170
+#: applications/models.py:168
 msgid "Practice exam run"
 msgstr "Посылка на практическом экзамене"
 
-#: applications/models.py:171
+#: applications/models.py:169
 msgid "Practice exams runs"
 msgstr "Посылки на практических экзаменах"
 
-#: applications/models.py:174
+#: applications/models.py:172
 msgid "Run ID"
 msgstr "ID посылки"
 
-#: applications/models.py:176
+#: applications/models.py:174
 msgid "Submitted at"
 msgstr "Дата отправки"
 
-#: applications/models.py:300
+#: applications/models.py:298
 #: applications/templates/applications/group_application.html:50
 msgid "Theory exam"
 msgstr "Теоретический экзамен"
 
-#: applications/models.py:301
+#: applications/models.py:299
 msgid "Theory exams"
 msgstr "Теоретические экзамены"
 
-#: applications/models.py:303
+#: applications/models.py:301
 msgid "Random questions"
 msgstr "Случайные вопросы"
 
-#: applications/models.py:304
+#: applications/models.py:302
 msgid "Slot questions"
 msgstr "Вариантные вопросы"
 
-#: applications/models.py:314
+#: applications/models.py:312
 msgid "Theory exam question"
 msgstr "Вопрос на теоретическом экзамене"
 
-#: applications/models.py:315
+#: applications/models.py:313
 msgid "Theory exams questions"
 msgstr "Вопросы на теоретических экзаменах"
 
-#: applications/models.py:318
+#: applications/models.py:316
 msgid "Question"
 msgstr "Вопрос"
 
-#: applications/models.py:319 applications/models.py:349
-#: applications/models.py:353 applications/models.py:359
-#: applications/models.py:365
+#: applications/models.py:317 applications/models.py:347
+#: applications/models.py:351 applications/models.py:357
+#: applications/models.py:363
 msgid "Answer"
 msgstr "Ответ"
 
-#: applications/models.py:320
+#: applications/models.py:318
 msgid "Remove extra spaces from answer"
 msgstr "Удалять ненужные пробелы"
 
-#: applications/models.py:321
+#: applications/models.py:319
 msgid "Answer is case-sensitive"
 msgstr "Регистр букв имеет значение"
 
-#: applications/models.py:323
+#: applications/models.py:321
 msgid "Question slot"
 msgstr "Вариант вопроса"
 
-#: applications/models.py:324
+#: applications/models.py:322
 msgid "Score"
 msgstr "Балл"
 
-#: applications/models.py:333
+#: applications/models.py:331
 msgid "Integer number as an answer"
 msgstr "Целое число как ответ"
 
-#: applications/models.py:334
+#: applications/models.py:332
 msgid "String as an answer"
 msgstr "Строка как ответ"
 
-#: applications/models.py:335
+#: applications/models.py:333
 msgid "One option as an answer"
 msgstr "Один из перечисленных вариантов"
 
-#: applications/models.py:336
+#: applications/models.py:334
 msgid "Several options as an answer"
 msgstr "Несколько из перечисленных вариантов"
 
-#: applications/models.py:340
+#: applications/models.py:338
 msgid "Answer type"
 msgstr "Тип ответа"
 
-#: applications/models.py:372 applications/models.py:377
+#: applications/models.py:370 applications/models.py:375
 msgid "Possible answer"
 msgstr "Вариант ответа"
 
-#: applications/models.py:373
+#: applications/models.py:371
 msgid "Possible answers"
 msgstr "Варианты ответов"
 
-#: applications/models.py:378
+#: applications/models.py:376
 msgid "Short ID"
 msgstr "Короткий ID"
 
-#: applications/models.py:379
+#: applications/models.py:377
 msgid "This answer is correct"
 msgstr "Правильный ответ"
 
-#: applications/models.py:490
+#: applications/models.py:488
 msgid "Event application"
 msgstr "Заявка на событие"
 
-#: applications/models.py:491
+#: applications/models.py:489
 msgid "Event applications"
 msgstr "Заявки на события"
 
-#: applications/models.py:497
+#: applications/models.py:495
 msgid "Phone number"
 msgstr "Телефон"
 
 #: applications/models.py:498
-msgid "Phone number like +7 (123) 456 78 90"
-msgstr "Номер телефона в формате +7 (123) 456 78 90"
-
-#: applications/models.py:500
 msgid "Grade"
 msgstr "Класс"
 
-#: applications/models.py:500
+#: applications/models.py:498
 msgid "Current grade"
 msgstr "Класс в этом учебном году"
 
-#: applications/models.py:501
+#: applications/models.py:499
 msgid "Home address"
 msgstr "Домашний адрес"
 
-#: applications/models.py:503
+#: applications/models.py:501
 msgid "School"
 msgstr "Школа"
 
-#: applications/models.py:503
+#: applications/models.py:501
 msgid "e.g. School №42"
 msgstr "Например &quot;Школа №42&quot;"
 
-#: applications/models.py:514
+#: applications/models.py:512
 msgid "Testing"
 msgstr "Тестируется"
 
-#: applications/models.py:515
+#: applications/models.py:513
 msgid "Testing succeeded"
 msgstr "Тестирование пройдено"
 
-#: applications/models.py:516
+#: applications/models.py:514
 msgid "Studying"
 msgstr "Обучение"
 
-#: applications/models.py:517
+#: applications/models.py:515
 msgid "Successed"
 msgstr "Обучение окончено"
 
-#: applications/models.py:518
+#: applications/models.py:516
 msgid "Failed"
 msgstr "Обучение не окончено"
 
-#: applications/models.py:519
+#: applications/models.py:517
 msgid "Disqualified"
 msgstr "Исключён"
 
-#: applications/models.py:523
+#: applications/models.py:521
 msgid "Application status"
 msgstr "Статус заявки"
 
@@ -610,7 +606,7 @@ msgstr "Гугл-группа \"django-users\""
 msgid "Django irc channel"
 msgstr "IRC канал Django"
 
-#: main/validators.py:8
+#: main/validators.py:7
 msgid "The format of phone numbers is +7 (123) 456-78-90"
 msgstr "Формат номера телефона: +7 (123) 456-78-90"
 
@@ -698,12 +694,14 @@ msgstr "Восстановление пароля"
 
 #: templates/registration/password_change_done.html:5
 #: templates/registration/password_change_done.html:9
+#: templates/registration/password_reset_complete.html:5
+#: templates/registration/password_reset_complete.html:9
 #: templates/registration/password_reset_done.html:5
 #: templates/registration/password_reset_done.html:9
 msgid "Success"
 msgstr "Успех"
 
-#: templates/registration/password_change_done.html:12
+#: templates/registration/password_change_done.html:11
 msgid "Your password was changed."
 msgstr "Ваш пароль изменён"
 
@@ -712,18 +710,51 @@ msgid ""
 "Please enter your old password, for security's sake, and then enter your new "
 "password twice so we can verify you typed it in correctly."
 msgstr ""
+"В целях безопасности, пожалуйста, введите свой старый пароль, затем введите "
+"новый пароль дважды, чтобы мы могли убедиться в правильности написания."
+
+#: templates/registration/password_reset_complete.html:11
+msgid "Your password has been set.  You may go ahead and log in now."
+msgstr "Ваш пароль был изменён, теперь вы можете войти."
+
+#: templates/registration/password_reset_complete.html:14
+msgid "Log in"
+msgstr "Войти"
+
+#: templates/registration/password_reset_confirm.html:10
+msgid ""
+"Please enter your new password twice so we can verify you typed it in "
+"correctly."
+msgstr "Пожалуйста, введите ваш новый пароль дважды во избежание ошибок."
+
+#: templates/registration/password_reset_confirm.html:16
+msgid "Change my password"
+msgstr "Изменить мой пароль"
+
+#: templates/registration/password_reset_confirm.html:23
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a new password reset."
+msgstr ""
+"Неверная ссылка для восстановления пароля. Возможно, ей уже воспользовались. "
+"Пожалуйста, попробуйте восстановить пароль еще раз."
 
 #: templates/registration/password_reset_done.html:10
 msgid ""
 "We've emailed you instructions for setting your password, if an account "
 "exists with the email you entered. You should receive them shortly."
 msgstr ""
+"Мы отправили вам инструкцию по установке нового пароля на указанный адрес "
+"электронной почты (если в нашей базе данных есть такой адрес). Вы должны "
+"получить ее в ближайшее время."
 
 #: templates/registration/password_reset_done.html:12
 msgid ""
 "If you don't receive an email, please make sure you've entered the address "
 "you registered with, and check your spam folder."
 msgstr ""
+"Если вы не получили письмо, пожалуйста, убедитесь, что вы ввели адрес с "
+"которым Вы зарегистрировались, и проверьте папку со спамом."
 
 #: templates/registration/password_reset_email.txt:2
 #, python-format
@@ -731,33 +762,36 @@ msgid ""
 "You're receiving this email because you requested a password reset for your "
 "user account at %(site_name)s."
 msgstr ""
+"Вы получили это письмо, потому что вы (или кто-то другой) запросили "
+"восстановление пароля от учётной записи на сайте %(site_name)s, которая "
+"связана с этим адресом электронной почты."
 
 #: templates/registration/password_reset_email.txt:4
 msgid "Please go to the following page and choose a new password:"
-msgstr ""
+msgstr "Пожалуйста, перейдите на эту страницу и введите новый пароль:"
 
 #: templates/registration/password_reset_email.txt:8
 msgid "Your username, in case you've forgotten:"
-msgstr ""
+msgstr "Ваше имя пользователя (на случай, если вы его забыли):"
 
 #: templates/registration/password_reset_email.txt:10
 msgid "Thanks for using our site!"
-msgstr ""
+msgstr "Спасибо, что используете наш сайт!"
 
 #: templates/registration/password_reset_email.txt:12
 #, python-format
 msgid "The %(site_name)s team"
-msgstr ""
+msgstr "Команда сайта %(site_name)s"
 
-#: templates/registration/password_reset_form.html:11
+#: templates/registration/password_reset_form.html:12
 msgid "You can reset your password here"
 msgstr "Вы можете восстановить свой пароль с помощью этой формы"
 
-#: templates/registration/password_reset_form.html:22
+#: templates/registration/password_reset_form.html:24
 msgid "E-Mail address"
 msgstr "E-Mail адрес"
 
-#: templates/registration/password_reset_form.html:26
+#: templates/registration/password_reset_form.html:28
 msgid "Send My Password"
 msgstr "Отправить мой пароль"
 
@@ -786,7 +820,7 @@ msgstr "Важные даты"
 
 #: userprofile/apps.py:7
 msgid "Profiles_and_groups"
-msgstr ""
+msgstr "Профили и группы"
 
 #: userprofile/forms.py:44
 msgid "First name"
@@ -796,15 +830,15 @@ msgstr "Имя"
 msgid "Last name"
 msgstr "Фамилия"
 
-#: userprofile/models.py:9
+#: userprofile/models.py:10
 msgid "patronymic"
 msgstr "Отчество"
 
-#: userprofile/models.py:10
+#: userprofile/models.py:11
 msgid "birthday"
 msgstr "Дата рождения"
 
-#: userprofile/models.py:11
+#: userprofile/models.py:12
 msgid "phone"
 msgstr "Номер телефона"
 
@@ -830,293 +864,15 @@ msgstr "E-mail"
 msgid "user_profile_phone"
 msgstr "Телефон"
 
+#: userprofile/templates/userprofile/user_profile.html:41
 msgid "user_profile_edit_profile"
 msgstr "Изменить профиль"
 
 #: userprofile/templates/userprofile/user_profile_edit.html:6
+#, python-format
 msgid "Editing profile of \"%(username)s\""
 msgstr "Редактирование профиля пользователя \"%(username)s\""
 
 #: userprofile/templates/userprofile/user_profile_edit.html:15
 msgid "Edit profile"
 msgstr "Редактировать профиль"
-
-#~ msgid "%(name)s object with primary key %(key)r does not exist."
-#~ msgstr "%(name)s с первичным ключом %(key)r не существует."
-
-#~ msgid "Password changed successfully."
-#~ msgstr "Пароль успешно изменен."
-
-#~ msgid "Change password: %s"
-#~ msgstr "Изменить пароль: %s"
-
-#~ msgid "Authentication and Authorization"
-#~ msgstr "Пользователи и группы"
-
-#~ msgid "password"
-#~ msgstr "пароль"
-
-#~ msgid "last login"
-#~ msgstr "последний вход"
-
-#~ msgid "No password set."
-#~ msgstr "Пароль не задан."
-
-#~ msgid "Invalid password format or unknown hashing algorithm."
-#~ msgstr "Неизвестный формат пароля или алгоритм хеширования."
-
-#~ msgid "The two password fields didn't match."
-#~ msgstr "Два поля с паролями не совпадают."
-
-#~ msgid "Password confirmation"
-#~ msgstr "Подтверждение пароля"
-
-#~ msgid "Enter the same password as before, for verification."
-#~ msgstr "Для подтверждения введите, пожалуйста, пароль ещё раз."
-
-#~ msgid ""
-#~ "Raw passwords are not stored, so there is no way to see this user's "
-#~ "password, but you can change the password using <a href=\"../password/"
-#~ "\">this form</a>."
-#~ msgstr ""
-#~ "Пароли хранятся в защищённом виде, так что у нас нет способа узнать "
-#~ "пароль этого пользователя. Однако вы можете сменить его/её пароль, "
-#~ "используя <a href=\"../password/\">эту форму</a>."
-
-#~ msgid ""
-#~ "Please enter a correct %(username)s and password. Note that both fields "
-#~ "may be case-sensitive."
-#~ msgstr ""
-#~ "Пожалуйста, введите правильные %(username)s и пароль. Оба поля могут быть "
-#~ "чувствительны к регистру."
-
-#~ msgid "This account is inactive."
-#~ msgstr "Эта учетная запись отключена."
-
-#~ msgid "Email"
-#~ msgstr "Адрес электронной почты"
-
-#~ msgid "New password"
-#~ msgstr "Новый пароль"
-
-#~ msgid "New password confirmation"
-#~ msgstr "Подтверждение нового пароля"
-
-#~ msgid "Your old password was entered incorrectly. Please enter it again."
-#~ msgstr ""
-#~ "Ваш старый пароль введен неправильно. Пожалуйста, введите его снова."
-
-#~ msgid "Old password"
-#~ msgstr "Старый пароль"
-
-#~ msgid "Password (again)"
-#~ msgstr "Пароль (еще раз)"
-
-#~ msgid "algorithm"
-#~ msgstr "алгоритм"
-
-#~ msgid "iterations"
-#~ msgstr "итерации"
-
-#~ msgid "salt"
-#~ msgstr "соль"
-
-#~ msgid "hash"
-#~ msgstr "хэш"
-
-#~ msgid "variety"
-#~ msgstr "множество"
-
-#~ msgid "version"
-#~ msgstr "версия"
-
-#~ msgid "memory cost"
-#~ msgstr "затраты памяти"
-
-#~ msgid "time cost"
-#~ msgstr "затраты времени"
-
-#~ msgid "parallelism"
-#~ msgstr "параллелизм"
-
-#~ msgid "work factor"
-#~ msgstr "рабочий фактор"
-
-#~ msgid "checksum"
-#~ msgstr "контрольная сумма"
-
-#~ msgid "name"
-#~ msgstr "имя"
-
-#~ msgid "content type"
-#~ msgstr "тип содержимого"
-
-#~ msgid "codename"
-#~ msgstr "кодовое название"
-
-#~ msgid "permission"
-#~ msgstr "право"
-
-#~ msgid "permissions"
-#~ msgstr "права"
-
-#~ msgid "group"
-#~ msgstr "группа"
-
-#~ msgid "groups"
-#~ msgstr "группы"
-
-#~ msgid "superuser status"
-#~ msgstr "статус суперпользователя"
-
-#~ msgid ""
-#~ "Designates that this user has all permissions without explicitly "
-#~ "assigning them."
-#~ msgstr ""
-#~ "Указывает, что пользователь имеет все права без явного их назначения."
-
-#~ msgid ""
-#~ "The groups this user belongs to. A user will get all permissions granted "
-#~ "to each of their groups."
-#~ msgstr ""
-#~ "Группы, к которым принадлежит данный пользователь. Пользователь получит "
-#~ "все права, указанные в каждой из его/её групп."
-
-#~ msgid "user permissions"
-#~ msgstr "права пользователя"
-
-#~ msgid "Specific permissions for this user."
-#~ msgstr "Индивидуальные права данного пользователя."
-
-#~ msgid "username"
-#~ msgstr "имя пользователя"
-
-#~ msgid ""
-#~ "Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only."
-#~ msgstr ""
-#~ "Обязательное поле. Не более 150 символов. Только буквы, цифры и символы "
-#~ "@/./+/-/_."
-
-#~ msgid "A user with that username already exists."
-#~ msgstr "Пользователь с таким именем уже существует."
-
-#~ msgid "first name"
-#~ msgstr "имя"
-
-#~ msgid "last name"
-#~ msgstr "фамилия"
-
-#~ msgid "email address"
-#~ msgstr "адрес электронной почты"
-
-#~ msgid "staff status"
-#~ msgstr "статус персонала"
-
-#~ msgid "Designates whether the user can log into this admin site."
-#~ msgstr ""
-#~ "Отметьте, если пользователь может входить в административную часть сайта."
-
-#~ msgid "active"
-#~ msgstr "активный"
-
-#~ msgid ""
-#~ "Designates whether this user should be treated as active. Unselect this "
-#~ "instead of deleting accounts."
-#~ msgstr ""
-#~ "Отметьте, если пользователь должен считаться активным. Уберите эту "
-#~ "отметку вместо удаления учётной записи."
-
-#~ msgid "date joined"
-#~ msgstr "дата регистрации"
-
-#~ msgid "user"
-#~ msgstr "пользователь"
-
-#~ msgid "users"
-#~ msgstr "пользователи"
-
-#~ msgid ""
-#~ "This password is too short. It must contain at least %(min_length)d "
-#~ "character."
-#~ msgid_plural ""
-#~ "This password is too short. It must contain at least %(min_length)d "
-#~ "characters."
-#~ msgstr[0] ""
-#~ "Введённый пароль слишком короткий. Он должен содержать как минимум "
-#~ "%(min_length)d символ."
-#~ msgstr[1] ""
-#~ "Введённый пароль слишком короткий. Он должен содержать как минимум "
-#~ "%(min_length)d символа."
-#~ msgstr[2] ""
-#~ "Введённый пароль слишком короткий. Он должен содержать как минимум "
-#~ "%(min_length)d символов."
-#~ msgstr[3] ""
-#~ "Введённый пароль слишком короткий. Он должен содержать как минимум "
-#~ "%(min_length)d символов."
-
-#~ msgid "Your password must contain at least %(min_length)d character."
-#~ msgid_plural ""
-#~ "Your password must contain at least %(min_length)d characters."
-#~ msgstr[0] "Ваш пароль должен содержать как минимум %(min_length)d символ."
-#~ msgstr[1] "Ваш пароль должен содержать как минимум %(min_length)d символа."
-#~ msgstr[2] "Ваш пароль должен содержать как минимум %(min_length)d символов."
-#~ msgstr[3] "Ваш пароль должен содержать как минимум %(min_length)d символов."
-
-#~ msgid "The password is too similar to the %(verbose_name)s."
-#~ msgstr "Введённый пароль слишком похож на %(verbose_name)s."
-
-#~ msgid ""
-#~ "Your password can't be too similar to your other personal information."
-#~ msgstr ""
-#~ "Ваш пароль не должен совпадать с вашим именем или другой персональной "
-#~ "информацией или быть слишком похожим на неё."
-
-#~ msgid "This password is too common."
-#~ msgstr "Введённый пароль слишком широко распространён."
-
-#~ msgid "Your password can't be a commonly used password."
-#~ msgstr "Ваш пароль не может быть одним из широко распространённых паролей."
-
-#~ msgid "This password is entirely numeric."
-#~ msgstr "Введённый пароль состоит только из цифр."
-
-#~ msgid "Your password can't be entirely numeric."
-#~ msgstr "Ваш пароль не может состоять только из цифр."
-
-#~ msgid "Password reset on %(site_name)s"
-#~ msgstr "Сброс пароля на %(site_name)s"
-
-#~ msgid ""
-#~ "Enter a valid username. This value may contain only English letters, "
-#~ "numbers, and @/./+/-/_ characters."
-#~ msgstr ""
-#~ "Введите правильное имя пользователя. Это значение может содержать только "
-#~ "английские буквы, цифры и знаки @/./+/-/_."
-
-#~ msgid ""
-#~ "Enter a valid username. This value may contain only letters, numbers, and "
-#~ "@/./+/-/_ characters."
-#~ msgstr ""
-#~ "Введите правильное имя пользователя. Оно может содержать только буквы, "
-#~ "цифры и знаки @/./+/-/_."
-
-#~ msgid "Logged out"
-#~ msgstr "Не авторизован"
-
-#~ msgid "Password reset"
-#~ msgstr "Восстановление пароля"
-
-#~ msgid "Password reset sent"
-#~ msgstr "Письмо с инструкциями по восстановлению пароля отправлено"
-
-#~ msgid "Enter new password"
-#~ msgstr "Введите новый пароль"
-
-#~ msgid "Password reset unsuccessful"
-#~ msgstr "Ошибка восстановления пароля"
-
-#~ msgid "Password reset complete"
-#~ msgstr "Восстановление пароля завершено"
-
-#~ msgid "Password change successful"
-#~ msgstr "Пароль успешно изменен"
