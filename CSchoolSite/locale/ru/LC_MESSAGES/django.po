@@ -6,8 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-19 19:40+0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2017-01-18 17:19+0300\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -611,6 +610,10 @@ msgstr "Гугл-группа \"django-users\""
 msgid "Django irc channel"
 msgstr "IRC канал Django"
 
+#: main/validators.py:8
+msgid "The format of phone numbers is +7 (123) 456-78-90"
+msgstr "Формат номера телефона: +7 (123) 456-78-90"
+
 #: menu.py:22
 msgid "Dashboard"
 msgstr "Панель управления"
@@ -827,7 +830,6 @@ msgstr "E-mail"
 msgid "user_profile_phone"
 msgstr "Телефон"
 
-#: userprofile/templates/userprofile/user_profile.html:41
 msgid "user_profile_edit_profile"
 msgstr "Изменить профиль"
 
