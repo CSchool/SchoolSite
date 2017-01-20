@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-01-18 23:20+0300\n"
+"POT-Creation-Date: 2017-01-21 01:15+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -94,7 +94,7 @@ msgstr "Номер путёвки"
 msgid "Awaiting payment"
 msgstr "Ожидает оплаты"
 
-#: applications/models.py:80
+#: applications/models.py:80 main/enums.py:10
 msgid "Declined"
 msgstr "Отклонено"
 
@@ -102,7 +102,7 @@ msgstr "Отклонено"
 msgid "Paid"
 msgstr "Оплачено"
 
-#: applications/models.py:82
+#: applications/models.py:82 main/enums.py:9
 msgid "Approved"
 msgstr "Одобрено"
 
@@ -310,59 +310,59 @@ msgstr "Заявка на событие"
 msgid "Event applications"
 msgstr "Заявки на события"
 
-#: applications/models.py:490
+#: applications/models.py:491
 msgid "Can submit applications to the study period"
 msgstr "Может отправить заявку на смену"
 
-#: applications/models.py:496
+#: applications/models.py:498
 msgid "Phone number"
 msgstr "Телефон"
 
-#: applications/models.py:499
+#: applications/models.py:501
 msgid "Grade"
 msgstr "Класс"
 
-#: applications/models.py:499
+#: applications/models.py:501
 msgid "Current grade"
 msgstr "Класс в этом учебном году"
 
-#: applications/models.py:500
+#: applications/models.py:502
 msgid "Home address"
 msgstr "Домашний адрес"
 
-#: applications/models.py:502
+#: applications/models.py:504
 msgid "School"
 msgstr "Школа"
 
-#: applications/models.py:502
+#: applications/models.py:504
 msgid "e.g. School №42"
 msgstr "Например &quot;Школа №42&quot;"
 
-#: applications/models.py:513
+#: applications/models.py:515
 msgid "Testing"
 msgstr "Тестируется"
 
-#: applications/models.py:514
+#: applications/models.py:516
 msgid "Testing succeeded"
 msgstr "Тестирование пройдено"
 
-#: applications/models.py:515
+#: applications/models.py:517
 msgid "Studying"
 msgstr "Обучение"
 
-#: applications/models.py:516
+#: applications/models.py:518
 msgid "Successed"
 msgstr "Обучение окончено"
 
-#: applications/models.py:517
+#: applications/models.py:519
 msgid "Failed"
 msgstr "Обучение не окончено"
 
-#: applications/models.py:518
+#: applications/models.py:520
 msgid "Disqualified"
 msgstr "Исключён"
 
-#: applications/models.py:522
+#: applications/models.py:524
 msgid "Application status"
 msgstr "Статус заявки"
 
@@ -611,6 +611,10 @@ msgstr "Гугл-группа \"django-users\""
 msgid "Django irc channel"
 msgstr "IRC канал Django"
 
+#: main/enums.py:8
+msgid "Waiting"
+msgstr "Ожидание"
+
 #: main/validators.py:7
 msgid "The format of phone numbers is +7 (123) 456-78-90"
 msgstr "Формат номера телефона: +7 (123) 456-78-90"
@@ -770,7 +774,7 @@ msgid "Registration is unavailable"
 msgstr "Регистрация отключена"
 
 #: templates/registration/registration_form.html:4
-#: templates/registration/registration_form.html:7
+#: templates/registration/registration_form.html:7 userprofile/apps.py:69
 msgid "Registration"
 msgstr "Регистрация"
 
@@ -786,21 +790,21 @@ msgstr "Разрешения"
 msgid "Important dates"
 msgstr "Важные даты"
 
-#: userprofile/apps.py:25
+#: userprofile/apps.py:31
 msgid "Education committee"
 msgstr "Комитет образования"
 
-#: userprofile/apps.py:26
+#: userprofile/apps.py:33 userprofile/apps.py:53
 msgid "Students"
 msgstr "Студенты"
 
-#: userprofile/apps.py:27
+#: userprofile/apps.py:34
 msgid "Parents"
 msgstr "Родители"
 
-#: userprofile/apps.py:42
+#: userprofile/apps.py:59
 msgid "Profiles_and_groups"
-msgstr "Пользователи и группы"
+msgstr "Профиль пользователя"
 
 #: userprofile/forms.py:44
 msgid "First name"
@@ -810,17 +814,45 @@ msgstr "Имя"
 msgid "Last name"
 msgstr "Фамилия"
 
-#: userprofile/models.py:10
+#: userprofile/models.py:14
 msgid "patronymic"
 msgstr "Отчество"
 
-#: userprofile/models.py:11
+#: userprofile/models.py:15
 msgid "birthday"
 msgstr "Дата рождения"
 
-#: userprofile/models.py:12
+#: userprofile/models.py:16
 msgid "phone"
 msgstr "Номер телефона"
+
+#: userprofile/models.py:26
+msgid "Family relative"
+msgstr "Родственик"
+
+#: userprofile/models.py:27
+msgid "Family relatives"
+msgstr "Родственики"
+
+#: userprofile/models.py:29
+msgid "Relative"
+msgstr "Родственник"
+
+#: userprofile/models.py:30
+msgid "Child"
+msgstr "Ребенок"
+
+#: userprofile/models.py:31
+msgid "Invited user"
+msgstr "Приглашенный пользователь"
+
+#: userprofile/models.py:33
+msgid "Invite code"
+msgstr "Приглашение"
+
+#: userprofile/models.py:34
+msgid "Status"
+msgstr "Статус"
 
 #: userprofile/templates/userprofile/user_profile.html:6
 #: userprofile/templates/userprofile/user_profile.html:15
@@ -857,6 +889,9 @@ msgstr "Профиль пользователя \"%(username)s\""
 #: userprofile/templates/userprofile/user_profile_edit.html:15
 msgid "Edit profile"
 msgstr "Редактировать профиль"
+
+#~ msgid "Family Relationships"
+#~ msgstr "Родственики"
 
 #~ msgid "Phone number like +7 (123) 456-78-90"
 #~ msgstr "Номер телефона в формате +7 (123) 456-78-90"
