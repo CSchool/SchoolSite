@@ -1,8 +1,11 @@
 from django.conf.urls import include, url
+from django.contrib.auth.decorators import login_required
 from registration.backends.simple.views import RegistrationView
 from userprofile.forms import ExtendedRegistrationForm
 from userprofile import views
 from django.contrib.auth import views as auth_views
+
+from userprofile.tables import PossibleRelativesTable
 
 
 class ExtendedRegistrationView(RegistrationView):
@@ -22,5 +25,7 @@ urlpatterns = [
     url(r'^register/$', ExtendedRegistrationView.as_view(), name='registration_register'),
     url(r'', include('registration.backends.simple.urls')),
     url(r'^profile/$', views.profile, name='user_profile'),
-    url(r'^profile/edit/$', views.edit_profile, name='user_profile_edit')
+    url(r'^profile/edit/$', views.edit_profile, name='user_profile_edit'),
+    url(r'^profile/relatives_choice/$', views.relatives_choice, name='user_profile_relatives_choice'),
+    url(r'^profile/datatables/relatives_choice/$', login_required(PossibleRelativesTable.as_view()), name='possible_relatives_table'),
 ]

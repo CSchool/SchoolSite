@@ -29,3 +29,8 @@ def edit_profile(request):
             return HttpResponseRedirect(reverse('user_profile'))
 
     return render(request, 'userprofile/user_profile_edit.html', {"form": form})
+
+
+@login_required
+def relatives_choice(request):
+    return render(request, 'userprofile/relatives_choice.html')

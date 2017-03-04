@@ -48,8 +48,6 @@ def set_default_group(sender, **kwargs):
 
     user = kwargs["instance"]
     if kwargs["created"] and not user.is_staff:
-        import logging
-        logging.error(Group.objects.all())
         group = Group.objects.get(name=_('Students'))
         user.groups.add(group)
 

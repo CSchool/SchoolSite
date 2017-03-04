@@ -7,7 +7,8 @@
 
 {% block css %}
     {{ block.super }}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/user_profile.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/user_profile.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/dataTables.bootstrap.css' %}" />
 {% endblock %}
 
 {% block content %}
@@ -43,4 +44,19 @@
         </div>
     </div>
 
+    <div class="panel panel-warning">
+        <div class="panel-heading">{% trans 'Family relatives' %}</div>
+        <div class="panel-body"></div>
+        <div class="panel-footer clearfix">
+            <div class="pull-right">
+                <a href="{% url 'user_profile_relatives_choice' %}" class="btn btn-success">{% bootstrap_icon 'plus' %} {% trans 'Select relatives' %}</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
 {% endblock %}

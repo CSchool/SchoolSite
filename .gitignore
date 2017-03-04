@@ -8,3 +8,4 @@ node_modules
 CSchoolSite/static
 *.pyc
 *.mo
+/CSchoolSite/npm-debug.log
