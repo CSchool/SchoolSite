@@ -27,12 +27,8 @@ class PossibleRelativesTable(BaseDatatableView):
         # exclude id from users
         return User.objects.exclude(id__in=excluded_id_list)
 
-    # change some columns (here redefinition comes to play)
-    def prepare_results(self, qs):
-        json_data = []
-
-        for item in qs:
-            full_name = '{} {} {}'.format(item.last_name, item.first_name, item.patronymic).strip()
-            json_data.append([item.username, full_name, item.birthday])
-
-        return json_data
+    def render_column(self, row, column):
+        if column == 'first_name':
+            return '{}'.format(row.get_initials())
+        else:
+            return super(PossibleRelativesTable, self).render_column(row, column)
