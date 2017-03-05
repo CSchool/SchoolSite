@@ -8,6 +8,7 @@
 {% block css %}
     {{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static 'css/dataTables.bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/relatives_choice.css' %}" />
 {% endblock %}
 
 {% block content %}
@@ -20,6 +21,7 @@
                         <th>{% trans 'Username' %}</th>
                         <th>{% trans 'Initials' %}</th>
                         <th>{% trans 'birthday' %}</th>
+                        <th>{% trans 'Action' %}</th>
                     </tr>
                 </thead>
             </table>
@@ -33,14 +35,11 @@
 
     <script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
 
-    <script type="text/javascript">
-        $(document).ready(function () {
-            var relativesTable = $('#relativesTable').dataTable({
-                "processing": true,
-                "serverSide": true,
-                "ajax": "{% url 'possible_relatives_table' %}"
-            });
-        });
+    <script>
+        var dataUrl = "{% url 'possible_relatives_table' %}";
+        var requestUrl = "{% url 'json_relatives_choice' %}";
     </script>
+
+    <script type="text/javascript" src="{% static 'js/relatives_choice.js' %}"></script>
 {% endblock %}
 

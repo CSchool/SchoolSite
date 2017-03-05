@@ -27,5 +27,7 @@ urlpatterns = [
     url(r'^profile/$', views.profile, name='user_profile'),
     url(r'^profile/edit/$', views.edit_profile, name='user_profile_edit'),
     url(r'^profile/relatives_choice/$', views.relatives_choice, name='user_profile_relatives_choice'),
-    url(r'^profile/datatables/relatives_choice/$', login_required(PossibleRelativesTable.as_view()), name='possible_relatives_table'),
+    url(r'^profile/datatables/relatives_choice/$', login_required(PossibleRelativesTable.as_view()),
+        name='possible_relatives_table'),
+    url(r'profile/json/relatives_choice/$', views.json_relatives_choice, name="json_relatives_choice")
 ]

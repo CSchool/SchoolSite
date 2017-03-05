@@ -1,8 +1,12 @@
+import json
+
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 from userprofile.forms import UserForm
 
 
@@ -34,3 +38,12 @@ def edit_profile(request):
 @login_required
 def relatives_choice(request):
     return render(request, 'userprofile/relatives_choice.html')
+
+# temp solution (disbale csfr token checking - need to add token from client side!)
+@login_required
+@csrf_exempt
+def json_relatives_choice(request):
+    if request.is_ajax() and request.method == 'POST':
+        print(request)
+        return HttpResponse(json.dumps({'test': 1}), content_type="application/json")
+

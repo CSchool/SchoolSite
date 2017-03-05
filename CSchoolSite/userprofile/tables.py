@@ -8,8 +8,8 @@ class PossibleRelativesTable(BaseDatatableView):
     max_display_length = 50
 
     # yep, we need to redefine existed column for custom data (even for buttons!)
-    columns = ['username', 'first_name', 'birthday']
-    order_columns = ['username', 'first_name', 'birthday']
+    columns = ['username', 'first_name', 'birthday', 'created']
+    order_columns = ['username', 'first_name', 'birthday', '']
 
     # get data
     def get_initial_queryset(self):
@@ -27,8 +27,12 @@ class PossibleRelativesTable(BaseDatatableView):
         # exclude id from users
         return User.objects.exclude(id__in=excluded_id_list)
 
+    # redefine column data
     def render_column(self, row, column):
         if column == 'first_name':
             return '{}'.format(row.get_initials())
+        elif column == 'created':
+            return '<button type="button" class="btn btn-primary" data-relative="{}">{}</button>'\
+                    .format(row.id, _('Send relationship request'))
         else:
             return super(PossibleRelativesTable, self).render_column(row, column)
