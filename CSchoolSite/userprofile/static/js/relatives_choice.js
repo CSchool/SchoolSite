@@ -18,7 +18,7 @@ $(document).ready(function () {
         $.ajax({
             url: requestUrl,
             type: "POST",
-            data: {relative_id: id},
+            data: JSON.stringify({relative_id: id}),
             cache:false,
             dataType: "json",
             success: function(resp){

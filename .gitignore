@@ -9,3 +9,4 @@ CSchoolSite/static
 *.pyc
 *.mo
 /CSchoolSite/npm-debug.log
+!/CSchoolSite/static/css/notifications.css

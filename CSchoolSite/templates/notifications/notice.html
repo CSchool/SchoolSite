@@ -1,0 +1,30 @@
+{% load i18n %}
+
+<div class="alert alert-{{ notice.level }} alert-notification">
+    <a href="{% url 'notifications:delete' notice.slug %}" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <span class="glyphicon glyphicon-info-sign"></span> <strong>{% trans 'New message' %}</strong>
+    <hr class="message-inner-separator">
+
+
+    <h4>
+    <i class="icon-mail{% if notice.unread %}-alt{% endif %}"></i>
+    {{ notice.actor }}
+    {{ notice.verb }}
+    {% if notice.target %}
+      of {{ notice.target }}
+    {% endif %}
+    </h4>
+
+    <hr class="message-inner-separator">
+    <p>{{ notice.timesince }} {% trans 'ago' %}</p>
+
+
+    <p>{{ notice.description|linebreaksbr }}</p>
+
+
+    <div class="notice-actions">
+    {% for action in notice.data.actions %}
+      <a class="btn" href="{{ action.href }}">{{ action.title }}</a>
+    {% endfor %}
+    </div>
+</div>

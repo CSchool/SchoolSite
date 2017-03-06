@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from news import views as news_views
+import notifications.urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -25,4 +26,5 @@ urlpatterns = [
     url(r'^news/', include('news.urls')),
     url(r'^applications/', include('applications.urls')),
     url(r'^accounts/', include('userprofile.urls')),
+    url('^notifications/', include(notifications.urls, namespace='notifications'), name='notification_list'),
 ]

@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'registration',
     'tinymce',
+    'notifications',
 
     'main',
     'news',

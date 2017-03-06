@@ -3,7 +3,6 @@ from django.utils.translation import ugettext_lazy as _
 
 from userprofile.models import Relationship, User
 
-
 class PossibleRelativesTable(BaseDatatableView):
     max_display_length = 50
 
@@ -15,12 +14,18 @@ class PossibleRelativesTable(BaseDatatableView):
     def get_initial_queryset(self):
         user = self.request.user
 
+        print(user.id)
+
         # check is user parent or child
         excluded_id_list = []
-        if user.groups.filter(name=_('Parents')).exists():
-            excluded_id_list = Relationship.objects.filter(relative=user.id).values('child')
-        elif user.groups.filter(name=_('Students')).exists():
-            excluded_id_list = Relationship.objects.filter(child=user.id).values('relative')
+
+        try:
+            if user.groups.filter(name=_('Parents')).exists():
+                excluded_id_list = Relationship.objects.get(relative=user.id).values('child')
+            elif user.groups.filter(name=_('Students')).exists():
+                excluded_id_list = Relationship.objects.get(child=user.id).values('relative')
+        except Relationship.DoesNotExist:
+            excluded_id_list = []
 
         excluded_id_list.append(user.id)
 

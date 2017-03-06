@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block page_title %}{% trans 'Notifications' %}{% endblock %}
+
+{% block content %}
+    <ul class="list-group">
+        {% for notice in notifications %}
+            <li class="list-group-item">
+                {% include 'notifications/notice.html' %}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+

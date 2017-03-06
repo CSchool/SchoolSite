@@ -2,6 +2,8 @@ from django.apps import AppConfig
 from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
 
+from CSchoolSite import settings
+
 
 def create_permissions_list(permissions_list, model_name=None):
     from django.contrib.auth.models import Permission
@@ -65,6 +67,3 @@ class UserProfileConfig(AppConfig):
         post_save.connect(set_default_group, sender=User)
 
         apps.get_app_config('registration').verbose_name = _("Registration")
-
-
-
