@@ -5,8 +5,9 @@ Vagrantfile
 *.sqlite3
 .idea
 node_modules
+!/CSchoolSite/static/css/notifications.css
 CSchoolSite/static
 *.pyc
 *.mo
 /CSchoolSite/npm-debug.log
-!/CSchoolSite/static/css/notifications.css
+
