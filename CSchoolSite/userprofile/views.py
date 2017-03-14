@@ -3,10 +3,12 @@ import traceback
 
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.hashers import make_password
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.utils.crypto import get_random_string
 from django.views.decorators.csrf import csrf_exempt
 from userprofile.forms import User, UserForm
 from notifications.signals import notify
@@ -49,12 +51,18 @@ def json_relatives_choice(request):
             data = json.loads(request.body.decode('utf-8'))
             relative = User.objects.get(id=data['relative_id'])
 
-            notify.send(request.user, recipient=relative, verb=_(
-                "{} ({}) has chosen you as your relative!".format(request.user.username,
-                                                                   request.user.get_initials())))
+            # generate invitation code
+            invitation_code = get_random_string(length=8)
+            encrypted_code = make_password(invitation_code)
 
-            # notification_send([relative], 'relationship_invite',
-            #                  {"username": request.user.username, "initials": request.user.get_initials()})
+            # description=_(
+            #    "{} ({}) has chosen you as your relative!<br>Your invitation code for relationship acceptance is {}"
+            #    .format(request.user.username, request.user.get_initials(), invitation_code))
+
+            notify.send(request.user, recipient=relative, verb=_('Relationship request'),
+                        template='notifications/templates/relationship_request.html',
+                        username=request.user.username, initials=request.user.get_initials(),
+                        invitation_code=invitation_code)
 
             return HttpResponse(json.dumps({'status': 'OK'}), content_type="application/json")
         except Exception as e:
