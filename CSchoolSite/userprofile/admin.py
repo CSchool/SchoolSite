@@ -36,4 +36,11 @@ class UserAdmin(BaseUserAdmin):
 
 admin.site.register(User, UserAdmin)
 
-admin.site.register(Relationship)
+
+class RelationshipAdmin(admin.ModelAdmin):
+    list_display = ('id', 'relative', 'child', 'invited_user', 'status', 'request')
+    search_fields = ('id', 'relative', 'child', 'invited_user', 'status', 'request')
+    #list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
+
+
+admin.site.register(Relationship, RelationshipAdmin)

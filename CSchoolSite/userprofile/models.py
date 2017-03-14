@@ -7,7 +7,9 @@ from main.enums import REQUEST_STATUS
 from main.enums import WAITING
 from main.validators import PhoneValidator
 
+
 # Create your models here.
+
 
 
 class User(AbstractUser):
@@ -26,12 +28,17 @@ class Relationship(models.Model):
         verbose_name = _('Family relative')
         verbose_name_plural = _('Family relatives')
 
-    relative = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="related_user", verbose_name=_('Relative'))
-    child = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="child_user", verbose_name=_('Child'))
-    invited_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="invited_user", verbose_name=_('Invited user'))
+    relative = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="related_user",
+                                 null=True, default=None, verbose_name=_('Relative'))
+    child = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="child_user", null=True,
+                              default=None, verbose_name=_('Child'))
+    invited_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="invited_user",
+                                     null=True, default=None, verbose_name=_('Invited user'))
 
     code = models.CharField(max_length=10, verbose_name=_('Invite code'))
-    status = models.CharField(max_length=2, choices=REQUEST_STATUS, default=WAITING, verbose_name=_('Status'))
+    request = models.CharField(max_length=2, choices=REQUEST_STATUS, default=WAITING,
+                               verbose_name=_('Relationship request'))
+    status = models.TextField(verbose_name=_('Relationship status'), default='')
 
     def __str__(self):
-        return self.id
+        return _('Relationship #%(id)s') % {'id': self.id}

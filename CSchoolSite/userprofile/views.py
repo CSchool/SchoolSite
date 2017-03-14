@@ -13,6 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 from userprofile.forms import User, UserForm
 from notifications.signals import notify
 from django.utils.translation import ugettext_lazy as _
+from userprofile.models import Relationship
 
 
 @login_required
@@ -50,21 +51,31 @@ def json_relatives_choice(request):
         try:
             data = json.loads(request.body.decode('utf-8'))
             relative = User.objects.get(id=data['relative_id'])
+            relative_type = data['relative_choice']
 
-            # generate invitation code
-            invitation_code = get_random_string(length=8)
-            encrypted_code = make_password(invitation_code)
+            if relative_type in ('parent', 'child',):
+                # generate invitation code
+                invitation_code = get_random_string(length=8)
+                encrypted_code = make_password(invitation_code)
 
-            # description=_(
-            #    "{} ({}) has chosen you as your relative!<br>Your invitation code for relationship acceptance is {}"
-            #    .format(request.user.username, request.user.get_initials(), invitation_code))
+                relative_person_id = relative.id if relative_type == 'parent' else request.user.id
+                child_person_id = request.user.id if relative_type == 'parent' else relative.id
+                invited_person_id = relative.id if relative_type == 'parent' else request.user.id
 
-            notify.send(request.user, recipient=relative, verb=_('Relationship request'),
-                        template='notifications/templates/relationship_request.html',
-                        username=request.user.username, initials=request.user.get_initials(),
-                        invitation_code=invitation_code)
+                relationship = Relationship(relative=User.objects.get(id=relative_person_id),
+                                            child=User.objects.get(id=child_person_id),
+                                            invited_user=User.objects.get(id=invited_person_id),
+                                            code=encrypted_code)
+                relationship.save()
 
-            return HttpResponse(json.dumps({'status': 'OK'}), content_type="application/json")
+                notify.send(request.user, recipient=relative, verb=_('Relationship request'),
+                            template='notifications/templates/relationship_request.html',
+                            username=request.user.username, initials=request.user.get_initials(),
+                            invitation_code=invitation_code)
+
+                return HttpResponse(json.dumps({'status': 'OK'}), content_type="application/json")
+            else:
+                raise ValueError(_('Your relative type is incorrect!'))
         except Exception as e:
             print(e)
             print(traceback.format_exc())
