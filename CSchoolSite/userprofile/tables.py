@@ -24,21 +24,17 @@ class PossibleRelativesTable(BaseDatatableView):
             print(Relationship.objects.get(relative=user.id))
             exclude_child = Relationship.objects.filter(relative=user.id).values_list('child', flat=True)
         except Relationship.DoesNotExist:
-            print('!!')
             pass
 
         try:
             print(Relationship.objects.get(child=user.id))
             exclude_parent = Relationship.objects.filter(child=user.id).values_list('relative', flat=True)
         except Relationship.DoesNotExist:
-            print('!!1')
             pass
 
         excluded_id_list.append(user.id)
         excluded_id_list.extend(exclude_child)
         excluded_id_list.extend(exclude_parent)
-
-        print(excluded_id_list)
 
         # exclude id from users
         return User.objects.exclude(id__in=excluded_id_list)
@@ -55,3 +51,6 @@ class PossibleRelativesTable(BaseDatatableView):
                 .format(row.id, _('Send relationship request'))
         else:
             return super(PossibleRelativesTable, self).render_column(row, column)
+
+
+#class RelationshipTable(BaseDatatableView):
