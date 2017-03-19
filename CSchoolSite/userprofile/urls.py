@@ -5,7 +5,7 @@ from userprofile.forms import ExtendedRegistrationForm
 from userprofile import views
 from django.contrib.auth import views as auth_views
 
-from userprofile.tables import PossibleRelativesTable
+from userprofile.tables import PossibleRelativesTable, RelationshipTable
 
 
 class ExtendedRegistrationView(RegistrationView):
@@ -29,5 +29,8 @@ urlpatterns = [
     url(r'^profile/relatives_choice/$', views.relatives_choice, name='user_profile_relatives_choice'),
     url(r'^profile/datatables/relatives_choice/$', login_required(PossibleRelativesTable.as_view()),
         name='possible_relatives_table'),
+    url(r'^profile/datatables/relationship/$', login_required(RelationshipTable.as_view()), name='relationship_table'),
+    url(r'^profile/relationship_acceptance/(?P<relative>\w+)/$', views.relationship_acceptance,
+        name='relationship_acceptance'),
     url(r'profile/json/relatives_choice/$', views.json_relatives_choice, name="json_relatives_choice")
 ]

@@ -1,7 +1,7 @@
 {% load i18n %}
 
 
-{% with code=notice.data.invitation_code %}
+{% with code=notice.data.invitation_code type=notice.data.relative_type %}
 {% if notice.data.initials %}
     {% blocktrans with username=notice.data.username initials=notice.data.initials %}
         <p>{{ username }} ({{ initials }}) has chosen you as your relative!</p>
@@ -11,7 +11,11 @@
         <p>{{ username }}  has chosen you as your relative!</p>
     {% endblocktrans %}
 {% endif %}
-    <p>Your invitation code for relationship acceptance: <strong>{{ notice.data.invitation_code }}</strong></p>
-    <a href="{% url 'user_profile' %}" class="btn btn-info" role="button">{% trans 'Go to profile' %}</a>
+    {% if type == 'parent' %}
+        <p><strong>{% trans 'Don\'t forget that you can check your child academic progress in his profile!' %}</strong></p>
+    {% endif %}
+    <p>You can accept invitation by clicking at the link at the bottom of message or in profile later.</p>
+    <p>Invitation code for relationship acceptance: <strong>{{ notice.data.invitation_code }}</strong></p>
+    <a href="{% url 'relationship_acceptance' relative=notice.actor %}" class="btn btn-info" role="button">{% trans 'Accept relationship' %}</a>
 {% endwith %}
 

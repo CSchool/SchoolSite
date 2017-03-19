@@ -1,4 +1,4 @@
-from django.forms import ModelForm, DateInput, models
+from django.forms import ModelForm, DateInput, models, Form
 from registration.forms import RegistrationForm
 
 from .models import User
@@ -50,3 +50,17 @@ class UserForm(ModelForm):
         model = User
         fields = ['first_name', 'last_name', 'patronymic', 'birthday', 'email', 'phone']
         widgets = {'birthday': DateInput(attrs={'class': 'datepicker'})}
+
+
+class RelationshipAcceptanceForm(Form):
+
+    def __init__(self, *args, **kwargs):
+        relationship_label = kwargs.pop('relationship_label')
+        super(RelationshipAcceptanceForm, self).__init__(*args, **kwargs)
+        self.fields['relationship'].label = relationship_label
+        self.fields['relationship'].widget.attrs['placeholder'] = _('Parent')
+
+        self.fields['password'].widget.attrs['placeholder'] = ''
+
+    relationship = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput, label=_('Invitation code'))

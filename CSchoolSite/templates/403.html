@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+{% load static %}
+{% load i18n %}
+
+{% block page_title %}{% trans '403 Error - Access denied!' %}{% endblock %}
+
+{% block content %}
+    <div class="alert alert-danger text-center">
+        <h3><strong>{% trans '403 ERROR' %}</strong></h3>
+        <h4>
+        {% if exception %}
+            {{ exception }}
+        {% else %}
+            {% trans 'Access denied!' %}
+        {% endif %}
+        </h4>
+    </div>
+
+{% endblock %}
