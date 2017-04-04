@@ -12,8 +12,11 @@ from applications.models import Period, Event, PracticeExamApplication, EventApp
 from applications.decorators import study_group_application
 import ejudge
 
+
 @login_required
 def choose_period(req):
+    if not req.user.is_eligible_for_application():
+        raise PermissionDenied
     periods = Period.objects.all().order_by("-begin")
     return render(req, "applications/choose_period.html", {
         "periods": periods
@@ -27,10 +30,18 @@ def choose_group(req, period_id):
         period = Period.objects.get(id=period_id)
     except Period.DoesNotExist:
         raise Http404
-    groups = Event.objects.all().filter(type=Event.CLASS_GROUP)
+    if not req.user.is_eligible_for_application(period):
+        raise PermissionDenied
+    groups = period.event_set.filter(type=Event.CLASS_GROUP).all()
+    metatypes = {}
+    for group in groups:
+        if group.metatype not in metatypes:
+            metatypes[group.metatype] = dict(groups=[], colwidth=12, name=group.metatype)
+        metatypes[group.metatype]['groups'].append(group)
+        metatypes[group.metatype]['colwidth'] = 12 // len(metatypes[group.metatype]['groups'])
     return render(req, "applications/choose_group.html", {
         "period": period,
-        "groups": groups
+        "metatypes": list(metatypes.values())
     })
 
 
@@ -42,6 +53,8 @@ def confirm_group(req, group_id):
     except Event.DoesNotExist:
         raise Http404
     period = group.period
+    if not req.user.is_eligible_for_application(period):
+        raise PermissionDenied
     return render(req, "applications/confirm_group.html", {
         "period": period,
         "group": group
@@ -56,6 +69,8 @@ def create_application(req):
         try:
             group = Event.objects.get(id=form.cleaned_data['group_id'], type=Event.CLASS_GROUP)
         except Event.DoesNotExist:
+            raise PermissionDenied
+        if not req.user.is_eligible_for_application(group.period):
             raise PermissionDenied
         try:
             ea = EventApplication.objects.get(user=req.user, event=group)

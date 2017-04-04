@@ -17,7 +17,7 @@ def study_group_application(func):
                 group = Event.objects.get(id=group_id)
                 period = group.period
             f = EventApplication.objects.filter(user=req.user, event__type=Event.CLASS_GROUP, event__period=period)
-            if f.count() > 0:
+            if f:
                 return redirect('applications_group_application', group_id=f.get().event_id)
         except:
             pass

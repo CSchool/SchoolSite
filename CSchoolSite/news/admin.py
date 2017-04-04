@@ -7,7 +7,7 @@ from tinymce.widgets import AdminTinyMCE
 
 class NewsPostAdmin(admin.ModelAdmin):
     formfield_overrides = {
-        models.TextField: {'widget': AdminTinyMCE()},
+        models.TextField: {'widget': AdminTinyMCE(attrs={'plugins': 'link'})},
     }
     list_display = ('title', 'user', 'created')
     readonly_fields = ('user', 'modified')

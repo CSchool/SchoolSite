@@ -53,7 +53,7 @@
                     </li>
                 </ul>
                 {% block submit_application_button %}
-                {% if perms.can_submit_application %}
+                {% if user.is_eligible_for_application %}
                     <div class="navbar-form navbar-right ">
                     <a href="{% url 'applications_choose_period' %}" class="btn btn-success">
                         {% bootstrap_icon 'plus' %}

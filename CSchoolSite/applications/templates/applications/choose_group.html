@@ -2,24 +2,61 @@
 {% load i18n %}
 {% block page_title %}{% trans 'Submit application to' %} {{ period.name }}{% endblock %}
 {% block submit_application_button %}{% endblock %}
+{% block css %}
+    <style type="text/css">
+.row {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  flex-wrap: wrap;
+}
+.row > [class*='col-'] {
+  display: flex;
+  flex-direction: column;
+}
+.panel {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+}
+.panel-title,.panel-footer {
+    flex: 0 1 auto;
+}
+.panel-body {
+    flex: 1 1 auto;
+}
+    </style>
+{% endblock %}
 {% block content %}
 <h3 class="page-header text-center">
     {% trans 'Submit application to' %} {{ period.name }}
 </h3>
-{% for group in groups %}
-    <div class="col-xs-12 col-md-4">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">{{ group.name }}</h3>
-            </div>
-            <div class="panel-body">
-                {{ group.description|safe }}
-                <br />
-                <a href="{% url 'applications_confirm_group' group.id %}" class="btn btn-block btn-primary">
-                    {% trans 'Submit application' %}
-                </a>
+{% for metatype in metatypes %}
+    <h4 class="text-center">
+        {{ metatype.name }}
+    </h4>
+    <div class="row">
+    {% for group in metatype.groups %}
+        <div class="col-xs-12 col-md-{{ metatype.colwidth }}">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ group.name }}</h3>
+                </div>
+                <div class="panel-body">
+                    {{ group.description|safe }}
+                </div>
+                <div class="panel-footer">
+                    <a href="{% url 'applications_confirm_group' group.id %}" class="btn btn-block btn-primary">
+                        {% trans 'Submit application' %}
+                    </a>
+                </div>
             </div>
         </div>
+    {% endfor %}
     </div>
 {% endfor %}
 {% endblock %}

@@ -146,6 +146,13 @@ USE_L10N = True
 
 USE_TZ = True
 
+TINYMCE_DEFAULT_CONFIG = {
+    'plugins': "table,spellchecker,paste,searchreplace,link",
+    'cleanup_on_startup': True
+}
+TINYMCE_SPELLCHECKER = True
+TINYMCE_COMPRESSOR = True
+
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Static files (CSS, JavaScript, Images)
