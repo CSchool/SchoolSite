@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='user',
             name='birthday',
-            field=models.DateField(blank=True, default='', null=True, verbose_name='birthday'),
+            field=models.DateField(blank=True, null=True, verbose_name='birthday'),
         ),
         migrations.AlterField(
             model_name='user',
@@ -25,6 +25,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='user',
             name='phone',
-            field=models.CharField(blank=True, default='', max_length=16, null=True, verbose_name='phone'),
+            field=models.CharField(blank=True, max_length=16, null=True, verbose_name='phone'),
         ),
     ]
