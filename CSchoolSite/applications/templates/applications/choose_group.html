@@ -35,13 +35,13 @@
 <h3 class="page-header text-center">
     {% trans 'Submit application to' %} {{ period.name }}
 </h3>
-{% for metatype in metatypes %}
+{% for category in categories %}
     <h4 class="text-center">
-        {{ metatype.name }}
+        {{ category.name }}
     </h4>
     <div class="row">
-    {% for group in metatype.groups %}
-        <div class="col-xs-12 col-md-{{ metatype.colwidth }}">
+    {% for group in category.groups %}
+        <div class="col-xs-12 col-md-{{ category.colwidth }}">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title">{{ group.name }}</h3>

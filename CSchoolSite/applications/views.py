@@ -33,15 +33,15 @@ def choose_group(req, period_id):
     if not req.user.is_eligible_for_application(period):
         raise PermissionDenied
     groups = period.event_set.filter(type=Event.CLASS_GROUP).all()
-    metatypes = {}
+    categories = {}
     for group in groups:
-        if group.metatype not in metatypes:
-            metatypes[group.metatype] = dict(groups=[], colwidth=12, name=group.metatype)
-        metatypes[group.metatype]['groups'].append(group)
-        metatypes[group.metatype]['colwidth'] = 12 // len(metatypes[group.metatype]['groups'])
+        if group.category not in categories:
+            categories[group.category] = dict(groups=[], colwidth=12, name=group.category)
+        categories[group.category]['groups'].append(group)
+        categories[group.category]['colwidth'] = 12 // len(categories[group.category]['groups'])
     return render(req, "applications/choose_group.html", {
         "period": period,
-        "metatypes": list(metatypes.values())
+        "categories": list(categories.values())
     })
 
 

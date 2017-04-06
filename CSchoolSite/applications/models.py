@@ -102,7 +102,7 @@ class Event(models.Model):
     #end = models.DateTimeField(verbose_name=_('Event ends'))
     #registration_begin = models.DateTimeField(verbose_name=_('Registration begins'))
     #registration_end = models.DateTimeField(verbose_name=_('Registration ends'))
-    metatype = models.CharField(max_length=100, verbose_name=_('Meta type'), blank=True, default='')
+    category = models.CharField(max_length=100, verbose_name=_('Category'), blank=True, default='')
     is_open = models.BooleanField(verbose_name=_('Registration open'))
     limit = models.IntegerField(verbose_name=_('Participants limit'))
 
