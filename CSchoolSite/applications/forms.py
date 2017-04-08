@@ -32,10 +32,14 @@ class EventApplicationAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         instance = kwargs.get('instance')
         if instance:
-            if instance.theory_exam:
+            if hasattr(instance, 'theory_exam') and instance.theory_exam:
                 self.base_fields['theory_score'].initial = "<b>%d</b> / %d (min %d)" % \
                     (instance.theory_exam.cur_score, instance.theory_exam.max_score, instance.event.theoryexam.min_score)
-            if instance.practice_exam:
+            else:
+                self.base_fields['theory_score'].initial = _('Unavailable')
+            if hasattr(instance, 'practice_exam') and instance.practice_exam:
                 self.base_fields['practice_score'].initial = "<b>%d</b> / %d (min %d)" % \
                     (instance.practice_exam.cur_score, instance.practice_exam.max_score, instance.event.practiceexam.min_score)
+            else:
+                self.base_fields['practice_score'].initial = _('Unavailable')
         forms.ModelForm.__init__(self, *args, **kwargs)
