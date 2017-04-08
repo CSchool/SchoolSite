@@ -22,7 +22,7 @@
                 </h4>
             </div>
             <div class="panel-body">
-                {{ question.question.question.question }}
+                {{ question.question.question.question|safe }}
                 <hr />
                 <form method="POST">
                 {% csrf_token %}

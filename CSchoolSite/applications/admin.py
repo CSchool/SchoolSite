@@ -35,11 +35,13 @@ admin.site.register(PracticeExamProblem)
 class TheoryExamQuestionOptionInline(admin.TabularInline):
     model = TheoryExamQuestionOption
 
-
 class TheoryExamQuestionAdmin(admin.ModelAdmin):
     inlines = [
         TheoryExamQuestionOptionInline
     ]
+    formfield_overrides =  {
+        models.TextField: {'widget': AdminTinyMCE()},
+    }
 
 admin.site.register(TheoryExamQuestion, TheoryExamQuestionAdmin)
 admin.site.register(TheoryExam)

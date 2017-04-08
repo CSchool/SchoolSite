@@ -314,7 +314,7 @@ class TheoryExamQuestion(models.Model):
         verbose_name_plural = _('Theory exams questions')
 
     title = models.CharField(max_length=100, verbose_name=_('Name'))
-    question = models.CharField(max_length=500, verbose_name=_('Question'))
+    question = models.TextField(verbose_name=_('Question'))
     answer = models.CharField(max_length=100, verbose_name=_('Answer'))
     trim_answer = models.BooleanField(default=True, verbose_name=_('Remove extra spaces from answer'))
     case_sensitive_answer = models.BooleanField(default=False, verbose_name=_('Answer is case-sensitive'))
