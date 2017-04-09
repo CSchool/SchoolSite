@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from applications.models import EventApplication
+from applications.models import EventApplication, PracticeExamRun
 
 
 class CreateApplicationForm(forms.Form):
@@ -42,4 +42,23 @@ class EventApplicationAdminForm(forms.ModelForm):
                     (instance.practice_exam.cur_score, instance.practice_exam.max_score, instance.event.practiceexam.min_score)
             else:
                 self.base_fields['practice_score'].initial = _('Unavailable')
+        forms.ModelForm.__init__(self, *args, **kwargs)
+
+
+class PracticeExamRunAdminForm(forms.ModelForm):
+    class Meta:
+        model = PracticeExamRun
+        fields = ('user', 'ejudge_run_id', 'problem', 'language', 'report', 'size')
+
+    language = forms.CharField(disabled=True, widget=TextDisplayWidget(), label=_('Language'))
+    report = forms.CharField(disabled=True, widget=TextDisplayWidget(), label=_('Report'))
+    size = forms.CharField(disabled=True, widget=TextDisplayWidget(), label=_('Size'))
+
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.get('instance')
+        if instance:
+            info = instance.info
+            self.base_fields['language'].initial = info['compiler']
+            self.base_fields['report'].initial = info['verbose_verdict'] + (" (%d)" % info['score'] if info['score'] else "")
+            self.base_fields['size'].initial = info['size']
         forms.ModelForm.__init__(self, *args, **kwargs)

@@ -2,10 +2,11 @@ from django.contrib import admin
 from django.db import models
 from tinymce.widgets import AdminTinyMCE
 
-from applications.models import Period, CampVoucher, Event, EventApplication, PracticeExam, PracticeExamApplication
+from applications.models import Period, CampVoucher, Event, EventApplication, PracticeExam, PracticeExamApplication, \
+    PracticeExamRun
 from applications.models import PracticeExamProblem
 from applications.models import TheoryExam, TheoryExamQuestion, TheoryExamQuestionOption
-from applications.forms import EventApplicationAdminForm
+from applications.forms import EventApplicationAdminForm, PracticeExamRunAdminForm
 
 
 admin.site.register(Period)
@@ -43,5 +44,14 @@ class TheoryExamQuestionAdmin(admin.ModelAdmin):
         models.TextField: {'widget': AdminTinyMCE()},
     }
 
+class PracticeExamRunAdmin(admin.ModelAdmin):
+    form = PracticeExamRunAdminForm
+    readonly_fields = ('user', 'ejudge_run_id', 'problem')
+    list_display = ('__str__', 'ejudge_run_id',)
+
+    def has_add_permission(self, request):
+        return False
+
 admin.site.register(TheoryExamQuestion, TheoryExamQuestionAdmin)
 admin.site.register(TheoryExam)
+admin.site.register(PracticeExamRun, PracticeExamRunAdmin)
