@@ -1,4 +1,5 @@
 import tempfile
+import mimetypes
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
@@ -8,7 +9,7 @@ from django.views.decorators.http import require_POST
 
 from applications.forms import CreateApplicationForm, EventApplicationGenericForm
 from applications.models import Period, Event, PracticeExamApplication, EventApplication, PracticeExamRun, \
-    TheoryExamApplication, TheoryExamApplicationQuestion, TheoryExamQuestion
+    TheoryExamApplication, TheoryExamApplicationQuestion, TheoryExamQuestion, PracticeExamProblem
 from applications.decorators import study_group_application
 import ejudge
 
@@ -41,7 +42,7 @@ def choose_group(req, period_id):
         categories[group.category]['colwidth'] = 12 // len(categories[group.category]['groups'])
     return render(req, "applications/choose_group.html", {
         "period": period,
-        "categories": list(categories.values())
+        "categories": sorted(list(categories.values()), key=lambda x: x['name'])
     })
 
 
@@ -150,6 +151,32 @@ def group_application_edit_info(req, group_id):
 
 
 @login_required
+def group_application_view_statement(req, group_id, problem_id):
+    try:
+        group = Event.objects.get(id=group_id, type=Event.CLASS_GROUP, eventapplication__user=req.user)
+        application = group.eventapplication_set.get(user=req.user)
+    except Event.DoesNotExist:
+        raise Http404
+    except EventApplication.DoesNotExist:
+        raise Http404
+    if application.practice_exam is None:
+        raise Http404
+    try:
+        problem = application.practice_exam.problems.filter(id=problem_id).get()
+    except PracticeExamProblem.DoesNotExist:
+        raise Http404
+    if problem.statement is None:
+        raise Http404
+    mime = mimetypes.MimeTypes()
+    mime_type = mime.guess_type(problem.statement.path)[0]
+    f = problem.statement.file
+    f.open()
+    content = f.read()
+    f.close()
+    return HttpResponse(content, content_type=mime_type)
+
+
+@login_required
 def group_application_practice_exam(req, group_id):
     try:
         group = Event.objects.get(id=group_id, type=Event.CLASS_GROUP, eventapplication__user=req.user)
@@ -166,7 +193,8 @@ def group_application_practice_exam(req, group_id):
     for problem in application.practice_exam.problems.all():
         problems.append({
             "problem": problem,
-            "runs": all_runs.filter(problem=problem)
+            "runs": all_runs.filter(problem=problem),
+            "statement_url": reverse('applications_view_statement', args=[group.id, problem.id])
         })
     return render(req, "applications/group_application_practice_exam.html", {
         "group": group,

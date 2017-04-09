@@ -151,7 +151,7 @@ class PracticeExamProblem(models.Model):
     name = models.CharField(max_length=250, verbose_name=_('Problem name'))
     ejudge_id = models.CharField(max_length=100, verbose_name=_('Problem id'), unique=True)
     slot = models.IntegerField(verbose_name=_('Problem slot'))
-    statement_url = models.CharField(max_length=500, verbose_name=_('Statement URL'))
+    statement = models.FileField(verbose_name=_('Statement'), blank=True)
     score = models.IntegerField(verbose_name=_('Problem score'))
 
     exam = models.ForeignKey(PracticeExam, on_delete=models.CASCADE)
@@ -494,7 +494,7 @@ class EventApplication(models.Model):
 
     # Important fields
     phone = models.CharField(max_length=18, verbose_name=_('Phone number'),
-                             null=True, validators=[PhoneValidator()])
+                             null=True, validators=[PhoneValidator()], help_text=_('The format of phone numbers is +7 (123) 456-78-90'))
     grade = models.IntegerField(choices=[(i, i) for i in range(1, 12)],
                                 null=True, verbose_name=_('Grade'), help_text=_("Current grade"))
     address = models.CharField(max_length=100, null=True, verbose_name=_('Home address'))

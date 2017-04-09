@@ -6,5 +6,6 @@ Vagrantfile
 .idea
 node_modules
 CSchoolSite/static
+CSchoolSite/media
 *.pyc
 *.mo

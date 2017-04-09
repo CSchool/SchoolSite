@@ -21,4 +21,6 @@ urlpatterns = [
         views.run_log, name='applications_run_log'),
     url(r'^delete/(?P<application_id>[0-9]+)',
         views.group_application_delete, name='applications_delete'),
+    url(r'^statement/(?P<group_id>[0-9]+)/(?P<problem_id>[0-9]+)',
+        views.group_application_view_statement, name='applications_view_statement'),
 ]
