@@ -12,7 +12,9 @@
     {% csrf_token %}
     {% bootstrap_form form %}
     {% buttons %}
+        {% if application.modifiable %}
         <button type="submit" class="btn btn-lg btn-primary btn-block">{% trans 'Submit' %}</button>
+        {% endif %}
     {% endbuttons %}
     </form>
     </div>

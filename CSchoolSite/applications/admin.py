@@ -36,6 +36,7 @@ admin.site.register(PracticeExamProblem)
 class TheoryExamQuestionOptionInline(admin.TabularInline):
     model = TheoryExamQuestionOption
 
+
 class TheoryExamQuestionAdmin(admin.ModelAdmin):
     inlines = [
         TheoryExamQuestionOptionInline
@@ -43,6 +44,7 @@ class TheoryExamQuestionAdmin(admin.ModelAdmin):
     formfield_overrides =  {
         models.TextField: {'widget': AdminTinyMCE()},
     }
+
 
 class PracticeExamRunAdmin(admin.ModelAdmin):
     form = PracticeExamRunAdminForm

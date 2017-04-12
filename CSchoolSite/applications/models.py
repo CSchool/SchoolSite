@@ -54,7 +54,14 @@ class Period(models.Model):
     def ended(self):
         if timezone.now() > self.end:
             return True
-        return False
+        return
+
+    def get_application_status(self, user):
+        try:
+            application = EventApplication.objects.filter(user=user, event__period=self).get()
+        except EventApplication.DoesNotExist:
+            return "NA", "Not applicable"
+        return application.status, application.get_status_display()
 
 
 class CampVoucher(models.Model):
@@ -280,6 +287,14 @@ class PracticeExamApplication(models.Model):
         return score
 
     @property
+    def passed(self):
+        return self.cur_score >= self.application.event.practiceexam.min_score
+
+    @property
+    def percentage(self):
+        return "%d%%" % round(self.cur_score * 100 / self.max_score)
+
+    @property
     def max_score(self):
         return self.problems.aggregate(models.Sum('score'))['score__sum']
 
@@ -400,7 +415,7 @@ class TheoryExamApplicationQuestion(models.Model):
                 ans = self.answer.split(',')
         form = DynForm(dict(answer=ans))
         if not form.is_valid():
-            return DynForm
+            return None
         return form
 
 
@@ -480,6 +495,14 @@ class TheoryExamApplication(models.Model):
         return score
 
     @property
+    def passed(self):
+        return self.cur_score >= self.application.event.theoryexam.min_score
+
+    @property
+    def percentage(self):
+        return "%d%%" % round(self.cur_score * 100 / self.max_score)
+
+    @property
     def max_score(self):
         return self.questions.aggregate(models.Sum('score'))['score__sum']
 
@@ -504,6 +527,8 @@ class EventApplication(models.Model):
     # Registration status
     TESTING = 'TG'
     TESTING_SUCCEEDED = 'TS'
+    TESTING_FAILED = 'TF'
+    ENROLLED = 'ER'
     STUDYING = 'ST'
     SUCCESSED = 'SC'
     FAILED = 'FL'
@@ -512,6 +537,8 @@ class EventApplication(models.Model):
     EVENT_APPLICATION_STATUS_CHOICES = (
         (TESTING, _('Testing')),
         (TESTING_SUCCEEDED, _('Testing succeeded')),
+        (TESTING_FAILED, _('Testing failed')),
+        (ENROLLED, _('Enrolled')),
         (STUDYING, _('Studying')),
         (SUCCESSED, _('Successed')),
         (FAILED, _('Failed')),
@@ -530,3 +557,7 @@ class EventApplication(models.Model):
                self.grade is not None and \
                self.address is not None and \
                self.school is not None
+
+    @property
+    def modifiable(self):
+        return self.status == EventApplication.TESTING

@@ -24,7 +24,7 @@ class TextDisplayWidget(forms.widgets.TextInput):
 class EventApplicationAdminForm(forms.ModelForm):
     class Meta:
         model = EventApplication
-        fields = ('user', 'event', 'phone', 'grade', 'address', 'school', 'theory_score', 'practice_score')
+        fields = ('user', 'event', 'phone', 'grade', 'address', 'school', 'theory_score', 'practice_score', 'status')
 
     theory_score = forms.CharField(disabled=True, widget=TextDisplayWidget(), label=_('Theory score'))
     practice_score = forms.CharField(disabled=True, widget=TextDisplayWidget(), label=_('Practice score'))

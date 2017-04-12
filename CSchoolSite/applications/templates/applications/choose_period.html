@@ -17,27 +17,33 @@
     </thead>
     <tbody>
         {% for period in periods %}
-            {% if period.registration_started %}
-                <tr class="{% if period.registration_open %}success{% endif %}">
-                    <td>{{ period.name }}</td>
-                    <td>{{ period.registration_end|date:"j M Y H:i" }}</td>
-                    <td>{{ period.begin|date:"j M Y" }} &ndash; {{ period.end|date:"j M Y" }}</td>
+            {% if period.period.registration_started %}
+                <tr class="{% if period.period.registration_open %}success{% endif %}">
+                    <td>{{ period.period.name }}</td>
+                    <td>{{ period.period.registration_end|date:"j M Y H:i" }}</td>
+                    <td>{{ period.period.begin|date:"j M Y" }} &ndash; {{ period.period.end|date:"j M Y" }}</td>
                     <td><b>
-                        {% if period.registration_open %}
-                            <a href="{% url 'applications_choose_group' period.id %}">
+                    {% if period.status == 'NA' %}
+                        {% if period.period.registration_open %}
+                            <a href="{% url 'applications_choose_group' period.period.id %}">
                                 {% trans 'Submit application' %}
                             </a>
                         {% else %}
-                            {% if period.ongoing %}
+                            {% if period.period.ongoing %}
                                 {% trans 'Ongoing' %}
                             {% else %}
-                                {% if not period.began %}
+                                {% if not period.period.began %}
                                     {% trans 'Not yet started' %}
                                 {% else %}
                                     {% trans 'Ended' %}
                                 {% endif %}
                             {% endif %}
                         {% endif %}
+                    {% else %}
+                        <a href="{% url 'applications_choose_group' period.period.id %}">
+                            {{ period.status_verbose }}
+                        </a>
+                    {% endif %}
                     </b></td>
                 </tr>
             {% endif %}

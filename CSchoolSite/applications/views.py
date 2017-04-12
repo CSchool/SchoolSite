@@ -7,7 +7,7 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect, reverse
 from django.views.decorators.http import require_POST
 
-from applications.forms import CreateApplicationForm, EventApplicationGenericForm
+from applications.forms import CreateApplicationForm, EventApplicationGenericForm, TextDisplayWidget
 from applications.models import Period, Event, PracticeExamApplication, EventApplication, PracticeExamRun, \
     TheoryExamApplication, TheoryExamApplicationQuestion, TheoryExamQuestion, PracticeExamProblem
 from applications.decorators import study_group_application
@@ -18,7 +18,10 @@ import ejudge
 def choose_period(req):
     if not req.user.is_eligible_for_application():
         raise PermissionDenied
-    periods = Period.objects.all().order_by("-begin")
+    periods = []
+    for p in Period.objects.order_by("-begin").all():
+        status, status_verbose = p.get_application_status(req.user)
+        periods.append(dict(period=p, status=status, status_verbose=status_verbose))
     return render(req, "applications/choose_period.html", {
         "periods": periods
     })
@@ -103,6 +106,31 @@ def group_application(req, group_id):
     except:
         raise Http404
 
+    confirm_submit = False
+    if req.POST.get('confirm_submit') is not None:
+        if application.modifiable:
+            confirm_submit = True
+
+    if req.POST.get('confirm_application_submit') is not None:
+        if not application.modifiable:
+            raise PermissionDenied
+        passed = True
+        if theory_exam:
+            passed = passed and theory_exam.passed
+        if practice_exam:
+            passed = passed and practice_exam.passed
+        if passed:
+            application.status = EventApplication.TESTING_SUCCEEDED
+        else:
+            application.status = EventApplication.TESTING_FAILED
+        application.save()
+        return redirect(reverse('applications_group_application', args=[group_id]))
+
+    form = EventApplicationGenericForm(instance=application)
+    for key in form.fields.keys():
+        form.fields[key].widget = TextDisplayWidget()
+        form.fields[key].help_text = None
+
     if practice_exam is None:
         practice_solved = None
         practice_total = None
@@ -123,7 +151,9 @@ def group_application(req, group_id):
         "solved_practice": practice_solved,
         "total_practice": practice_total,
         "answered_theory": theory_answered,
-        "total_theory": theory_total
+        "total_theory": theory_total,
+        "info_form": form,
+        "confirm_submit": confirm_submit
     })
 
 
@@ -137,12 +167,18 @@ def group_application_edit_info(req, group_id):
     except EventApplication.DoesNotExist:
         raise Http404
     if req.method == "POST":
+        if not application.modifiable:
+            raise PermissionDenied
         form = EventApplicationGenericForm(req.POST, instance=application)
         if form.is_valid():
             form.save()
             return redirect(reverse('applications_group_application', args=[group_id]))
     else:
         form = EventApplicationGenericForm(instance=application)
+        if not application.modifiable:
+            for key in form.fields.keys():
+                form.fields[key].widget = TextDisplayWidget()
+                form.fields[key].help_text = None
     return render(req, "applications/group_application_edit_info.html", {
         "group": group,
         "application": application,
@@ -218,12 +254,24 @@ def group_application_theory_exam(req, group_id):
     qs = []
     qsbm = {}
     for question in questions:
+        empty = False
+        form = question.django_form
+        if form is None:
+            empty = True
+            form = question.question.django_form()
+        if not application.modifiable:
+            for key in form.fields.keys():
+                form.fields[key].widget = TextDisplayWidget()
+                form.fields[key].help_text = None
         qs.append({
             "question": question,
-            "form": question.django_form
+            "form": form,
+            "display": not empty or application.modifiable
         })
         qsbm[question.question.id] = len(qs) - 1
     if req.POST.get('qsubmit'):
+        if not application.modifiable:
+            raise PermissionDenied
         try:
             question = TheoryExamApplicationQuestion.objects.get(id=int(req.POST['question_id']))
             form = question.question.django_form(req.POST)
@@ -260,6 +308,8 @@ def group_application_submit_run(req, group_id):
             raise PermissionDenied
         if 'problem_id' not in req.POST:
             raise PermissionDenied
+        if not application.modifiable:
+            raise PermissionDenied
         file = req.FILES['source']
         with tempfile.NamedTemporaryFile() as tmp:
             for chunk in file.chunks():
@@ -269,6 +319,19 @@ def group_application_submit_run(req, group_id):
         return redirect(reverse('applications_group_application_practice_exam', args=[group_id]))
     except:
         raise PermissionDenied
+
+
+@login_required
+def group_application_delete_confirmation(req, application_id):
+    try:
+        application = EventApplication.objects.get(id=application_id, user=req.user)
+    except EventApplication.DoesNotExist:
+        raise Http404
+    return render(req, "applications/confirm_application_delete.html", {
+        "application": application,
+        "group": application.event,
+        "period": application.event.period
+    })
 
 
 @login_required
