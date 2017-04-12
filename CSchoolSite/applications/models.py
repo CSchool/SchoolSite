@@ -112,6 +112,7 @@ class Event(models.Model):
     category = models.CharField(max_length=100, verbose_name=_('Category'), blank=True, default='')
     is_open = models.BooleanField(verbose_name=_('Registration open'))
     limit = models.IntegerField(verbose_name=_('Participants limit'))
+    difficulty = models.IntegerField(verbose_name=_('Relative difficulty'), default=0)
 
     # Event type
     CLASS_GROUP = 'CL'

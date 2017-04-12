@@ -200,7 +200,8 @@
         <form method="POST">
             {% csrf_token %}
             <input type="hidden" name="confirm_submit" value="True" />
-            <button type="submit" class="btn btn-block btn-lg btn-success{% if not application.is_general_filled %} disabled{% endif %}">
+            <button type="submit" class="btn btn-block btn-lg btn-success"
+                {% if not application.is_general_filled %} disabled="disabled"{% endif %}>
                 {% bootstrap_icon 'ok' %}
                 {% trans 'Submit application' %}
             </button>

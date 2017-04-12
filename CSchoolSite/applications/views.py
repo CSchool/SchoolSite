@@ -36,7 +36,7 @@ def choose_group(req, period_id):
         raise Http404
     if not req.user.is_eligible_for_application(period):
         raise PermissionDenied
-    groups = period.event_set.filter(type=Event.CLASS_GROUP).all()
+    groups = period.event_set.filter(type=Event.CLASS_GROUP).order_by("difficulty").all()
     categories = {}
     for group in groups:
         if group.category not in categories:
@@ -113,6 +113,8 @@ def group_application(req, group_id):
 
     if req.POST.get('confirm_application_submit') is not None:
         if not application.modifiable:
+            raise PermissionDenied
+        if not application.is_general_filled:
             raise PermissionDenied
         passed = True
         if theory_exam:
