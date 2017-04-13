@@ -10,7 +10,7 @@
     {% if confirm_submit %}
     <div class="alert alert-warning" role="alert">
         {% bootstrap_icon 'alert' %}
-        <b>{% trans 'Are you sure?' %}</b>
+        <b>{% trans 'Are you sure?' %}</b><br />
         {% blocktrans %}
             Please check that everything is correct. You will not be able
             to edit your application after submitting.
@@ -25,6 +25,26 @@
             </button>
         </form>
     </div>
+    {% endif %}
+    {% if application.status == application.TESTING_FAILED %}
+        <div class="alert alert-danger" role="alert">
+        <b>{% trans 'You failed testing' %}</b><br />
+        {% blocktrans %}
+            You didn't meet requirements for application to this group.
+            Don't worry, perhaps you are not yet ready. You can
+        {% endblocktrans %}
+        <b><a href="{% url 'applications_move_group' group.period.id %}">
+        {% blocktrans %}move your application to an easier group{% endblocktrans %}</a></b>.
+        </div>
+    {% endif %}
+    {% if application.status == application.TESTING_SUCCEEDED %}
+        <div class="alert alert-success" role="alert">
+        <b>{% trans 'Congratulations' %}</b><br />
+        {% trans 'You are enrolled to' %} {{ group.period.name }}!
+        {% blocktrans %}
+            Now you will need to enter some additional information.
+        {% endblocktrans %}
+        </div>
     {% endif %}
     <div class="panel {% if application.modifiable and not confirm_submit %}panel-default{% else %}panel-primary{% endif %}">
         <div class="panel-heading">
@@ -185,7 +205,7 @@
     </div>
     {% endif %}
 
-    {% if application.modifiable and not confirm_submit %}
+    {% if application.modifiable and not confirm_submit or application.status == application.TESTING_FAILED %}
     <hr />
     <div class="col-md-4">
         <form action="{% url 'applications_delete_confirmation' application.id %}" method="POST">
@@ -196,16 +216,18 @@
             </button>
         </form>
     </div>
-    <div class="col-md-4 col-md-offset-4">
-        <form method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="confirm_submit" value="True" />
-            <button type="submit" class="btn btn-block btn-lg btn-success"
-                {% if not application.is_general_filled %} disabled="disabled"{% endif %}>
-                {% bootstrap_icon 'ok' %}
-                {% trans 'Submit application' %}
-            </button>
-        </form>
-    </div>
+    {% if application.modifiable and not confirm_submit %}
+        <div class="col-md-4 col-md-offset-4">
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="confirm_submit" value="True" />
+                <button type="submit" class="btn btn-block btn-lg btn-success"
+                    {% if not application.is_general_filled %} disabled="disabled"{% endif %}>
+                    {% bootstrap_icon 'ok' %}
+                    {% trans 'Submit application' %}
+                </button>
+            </form>
+        </div>
+        {% endif %}
     {% endif %}
 {% endblock %}

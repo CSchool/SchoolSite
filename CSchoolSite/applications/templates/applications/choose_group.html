@@ -36,9 +36,11 @@
     {% trans 'Submit application to' %} {{ period.name }}
 </h3>
 {% for category in categories %}
+    {% if not move %}
     <h4 class="text-center">
         {{ category.name }}
     </h4>
+    {% endif %}
     <div class="row">
     {% for group in category.groups %}
         <div class="col-xs-12 col-md-{{ category.colwidth }}">
@@ -50,13 +52,29 @@
                     {{ group.description|safe }}
                 </div>
                 <div class="panel-footer">
-                    <a href="{% url 'applications_confirm_group' group.id %}" class="btn btn-block btn-primary">
-                        {% trans 'Submit application' %}
-                    </a>
+                    {% if move %}
+                        <form action="{% url 'applications_create_application' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="group_id" value="{{ group.id }}" />
+                            <input type="hidden" name="move" value="True" />
+                            <button class="btn btn-block btn-primary" type="submit">
+                                {% trans 'Move application' %}
+                            </button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'applications_confirm_group' group.id %}" class="btn btn-block btn-primary">
+                            {% trans 'Submit application' %}
+                        </a>
+                    {% endif %}
                 </div>
             </div>
         </div>
     {% endfor %}
     </div>
 {% endfor %}
+{% if move %}
+    <a href="{% url 'applications_choose_group' period.id %}">
+        &laquo; {% trans 'Back to application' %}
+    </a>
+{% endif %}
 {% endblock %}

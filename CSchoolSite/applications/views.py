@@ -45,7 +45,38 @@ def choose_group(req, period_id):
         categories[group.category]['colwidth'] = 12 // len(categories[group.category]['groups'])
     return render(req, "applications/choose_group.html", {
         "period": period,
-        "categories": sorted(list(categories.values()), key=lambda x: x['name'])
+        "categories": sorted(list(categories.values()), key=lambda x: x['name']),
+        "move": False
+    })
+
+
+@login_required
+def move_group(req, period_id):
+    try:
+        period = Period.objects.get(id=period_id)
+        application = EventApplication.objects.filter(event__period=period, user=req.user).get()
+    except Period.DoesNotExist:
+        raise Http404
+    except EventApplication.DoesNotExist:
+        raise PermissionDenied
+    if not req.user.is_eligible_for_application(period):
+        raise PermissionDenied
+    move = True
+    groups = period.event_set.filter(type=Event.CLASS_GROUP, category=application.event.category)\
+        .filter(difficulty__lt=application.event.difficulty).order_by("difficulty").all()
+    if not groups:
+        groups = period.event_set.filter(type=Event.CLASS_GROUP).order_by("difficulty").all()
+        move = False
+    categories = {}
+    for group in groups:
+        if group.category not in categories:
+            categories[group.category] = dict(groups=[], colwidth=12, name=group.category)
+        categories[group.category]['groups'].append(group)
+        categories[group.category]['colwidth'] = 12 // len(categories[group.category]['groups'])
+    return render(req, "applications/choose_group.html", {
+        "period": period,
+        "categories": sorted(list(categories.values()), key=lambda x: x['name']),
+        "move": move
     })
 
 
@@ -72,15 +103,31 @@ def create_application(req):
     if form.is_valid():
         try:
             group = Event.objects.get(id=form.cleaned_data['group_id'], type=Event.CLASS_GROUP)
+            period = group.period
         except Event.DoesNotExist:
             raise PermissionDenied
         if not req.user.is_eligible_for_application(group.period):
             raise PermissionDenied
-        try:
-            ea = EventApplication.objects.get(user=req.user, event=group)
-        except EventApplication.DoesNotExist:
-            ea = EventApplication.objects.create(user=req.user, event=group)
+        if req.POST.get('move'):
+            # move application
+            try:
+                ea = EventApplication.objects.filter(event__period=period, user=req.user).get()
+            except EventApplication.DoesNotExist:
+                raise PermissionDenied
+            if hasattr(ea, 'theory_exam') and ea.theory_exam:
+                ea.theory_exam.delete()
+            if hasattr(ea, 'practice_exam') and ea.practice_exam:
+                ea.practice_exam.delete()
+            ea.status = EventApplication.TESTING
+            ea.user = req.user
+            ea.event = group
             ea.save()
+        else:
+            try:
+                ea = EventApplication.objects.get(user=req.user, event=group)
+            except EventApplication.DoesNotExist:
+                ea = EventApplication.objects.create(user=req.user, event=group)
+                ea.save()
         if hasattr(group, 'practiceexam'):
             PracticeExamApplication.generate_for_user(req.user, group.practiceexam).save()
         if hasattr(group, 'theoryexam'):

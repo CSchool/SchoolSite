@@ -12,7 +12,7 @@
             <th>{% trans 'Period' %}</th>
             <th>{% trans 'Registration ends' %}</th>
             <th>{% trans 'Period dates' %}</th>
-            <th></th>
+            <th>{% trans 'Application status' %}</th>
         </tr>
     </thead>
     <tbody>
@@ -26,7 +26,7 @@
                     {% if period.status == 'NA' %}
                         {% if period.period.registration_open %}
                             <a href="{% url 'applications_choose_group' period.period.id %}">
-                                {% trans 'Submit application' %}
+                                {% trans 'Submit application' %} &raquo;
                             </a>
                         {% else %}
                             {% if period.period.ongoing %}
