@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-13 16:52+0300\n"
+"POT-Creation-Date: 2017-04-13 22:08+0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -19,7 +19,7 @@ msgstr ""
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Generator: Poedit 1.8.7.1\n"
 
-#: applications/apps.py:10
+#: applications/apps.py:10 templates/base.html:44
 msgid "Education committee"
 msgstr "Комитет образования"
 
@@ -27,30 +27,38 @@ msgstr "Комитет образования"
 msgid "Applications"
 msgstr "Заявки"
 
-#: applications/forms.py:29
+#: applications/forms.py:25 applications/models.py:77
+msgid "Voucher ID"
+msgstr "Номер путёвки"
+
+#: applications/forms.py:26 applications/models.py:552
+msgid "Confirm participation"
+msgstr "Подтвердить участие"
+
+#: applications/forms.py:35
 msgid "Theory score"
 msgstr "Балл за теорию"
 
-#: applications/forms.py:30
+#: applications/forms.py:36
 msgid "Practice score"
 msgstr "Балл за практику"
 
-#: applications/forms.py:39 applications/forms.py:44
+#: applications/forms.py:45 applications/forms.py:50
 msgid "Unavailable"
 msgstr "Недоступно"
 
-#: applications/forms.py:53
+#: applications/forms.py:59
 #: applications/templates/applications/group_application_practice_exam.html:36
 #: applications/templates/applications/group_application_practice_exam.html:60
 msgid "Language"
 msgstr "Язык"
 
-#: applications/forms.py:54
+#: applications/forms.py:60
 #: applications/templates/applications/group_application_practice_exam.html:63
 msgid "Report"
 msgstr "Вердикт"
 
-#: applications/forms.py:55
+#: applications/forms.py:61
 #: applications/templates/applications/group_application_practice_exam.html:61
 msgid "Size"
 msgstr "Размер"
@@ -92,6 +100,7 @@ msgid "Registration ends"
 msgstr "Окончание регистрации"
 
 #: applications/models.py:69
+#: applications/templates/applications/group_application.html:213
 msgid "Camp voucher"
 msgstr "Путёвка"
 
@@ -106,10 +115,6 @@ msgstr "Просматривать путёвки"
 #: applications/models.py:75
 msgid "Voucher owner"
 msgstr "Владелец путёвки"
-
-#: applications/models.py:77
-msgid "Voucher ID"
-msgstr "Номер путёвки"
 
 #: applications/models.py:86
 msgid "Awaiting payment"
@@ -412,8 +417,8 @@ msgstr "Скопировать заявку"
 #: applications/templates/applications/choose_period.html:3
 #: applications/templates/applications/choose_period.html:7
 #: applications/templates/applications/choose_period.html:29
-#: applications/templates/applications/group_application.html:227
-#: templates/base.html:60
+#: applications/templates/applications/group_application.html:270
+#: templates/base.html:65
 msgid "Submit application"
 msgstr "Подать заявку"
 
@@ -506,6 +511,7 @@ msgstr ""
 "        "
 
 #: applications/templates/applications/group_application.html:24
+#: applications/templates/applications/group_application.html:244
 #: applications/templates/applications/group_application_edit_info.html:16
 #: applications/templates/applications/group_application_practice_exam.html:49
 msgid "Submit"
@@ -600,7 +606,15 @@ msgstr "Решать задачи"
 msgid "Solutions"
 msgstr "Решения"
 
-#: applications/templates/applications/group_application.html:215
+#: applications/templates/applications/group_application.html:229
+msgid "voucher information missing"
+msgstr "информация отсутствует"
+
+#: applications/templates/applications/group_application.html:234
+msgid "participation not confirmed"
+msgstr "участие не подтверждено"
+
+#: applications/templates/applications/group_application.html:258
 msgid "Delete application"
 msgstr "Удалить заявку"
 
@@ -692,7 +706,7 @@ msgstr "Выйти"
 msgid "Actions_admin"
 msgstr "Действия"
 
-#: dashboard.py:51 menu.py:29 templates/base.html:42
+#: dashboard.py:51 menu.py:29 templates/base.html:47
 msgid "Administration"
 msgstr "Администрирование"
 
@@ -776,19 +790,23 @@ msgstr "Компьютерная школа"
 msgid "Guest"
 msgstr "Гость"
 
-#: templates/base.html:44
+#: templates/base.html:42
+msgid "Superuser"
+msgstr "Суперпользователь"
+
+#: templates/base.html:49
 msgid "Profile"
 msgstr "Профиль"
 
-#: templates/base.html:46
+#: templates/base.html:51
 msgid "Sign off"
 msgstr "Выйти"
 
-#: templates/base.html:48 templates/registration/login.html:16
+#: templates/base.html:53 templates/registration/login.html:16
 msgid "Sign in"
 msgstr "Войти"
 
-#: templates/base.html:50 templates/registration/registration_form.html:14
+#: templates/base.html:55 templates/registration/registration_form.html:14
 msgid "Sign up"
 msgstr "Зарегистироваться"
 

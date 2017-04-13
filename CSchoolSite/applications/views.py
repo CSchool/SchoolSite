@@ -189,9 +189,12 @@ def group_application(req, group_id):
                 if not voucher:
                     voucher = CampVoucher.objects.create(user=req.user,
                                                          period=group.period,
-                                                         voucher_id=voucher_form.cleaned_data.get('voucher_id'))
+                                                         voucher_id=voucher_form.cleaned_data.get('voucher_id'),
+                                                         status=CampVoucher.AWAITING_PAYMENT)
                 else:
-                    voucher.voucher_id = voucher_form.cleaned_data.get('voucher_id')
+                    if voucher.voucher_id != voucher_form.cleaned_data.get('voucher_id'):
+                        voucher.voucher_id = voucher_form.cleaned_data.get('voucher_id')
+                        voucher.status = CampVoucher.AWAITING_PAYMENT
                 voucher.save()
             else:
                 if voucher:
