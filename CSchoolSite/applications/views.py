@@ -7,9 +7,9 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect, reverse
 from django.views.decorators.http import require_POST
 
-from applications.forms import CreateApplicationForm, EventApplicationGenericForm, TextDisplayWidget
+from applications.forms import CreateApplicationForm, EventApplicationGenericForm, TextDisplayWidget, VoucherForm
 from applications.models import Period, Event, PracticeExamApplication, EventApplication, PracticeExamRun, \
-    TheoryExamApplication, TheoryExamApplicationQuestion, TheoryExamQuestion, PracticeExamProblem
+    TheoryExamApplication, TheoryExamApplicationQuestion, TheoryExamQuestion, PracticeExamProblem, CampVoucher
 from applications.decorators import study_group_application
 import ejudge
 
@@ -175,6 +175,34 @@ def group_application(req, group_id):
         application.save()
         return redirect(reverse('applications_group_application', args=[group_id]))
 
+    try:
+        voucher = CampVoucher.objects.filter(user=req.user, period=group.period).get()
+    except CampVoucher.DoesNotExist:
+        voucher = None
+
+    if req.POST.get('voucher_submit'):
+        voucher_form = VoucherForm(req.POST)
+        if voucher_form.is_valid():
+            application.confirm_participation = voucher_form.cleaned_data.get('confirm_participation')
+            application.save()
+            if voucher_form.cleaned_data.get('voucher_id'):
+                if not voucher:
+                    voucher = CampVoucher.objects.create(user=req.user,
+                                                         period=group.period,
+                                                         voucher_id=voucher_form.cleaned_data.get('voucher_id'))
+                else:
+                    voucher.voucher_id = voucher_form.cleaned_data.get('voucher_id')
+                voucher.save()
+            else:
+                if voucher:
+                    voucher.delete()
+            return redirect(reverse('applications_group_application', args=[group.id]))
+    else:
+        voucher_form = VoucherForm()
+        if voucher:
+            voucher_form.fields['voucher_id'].initial = voucher.voucher_id
+        voucher_form.fields['confirm_participation'].initial = application.confirm_participation
+
     form = EventApplicationGenericForm(instance=application)
     for key in form.fields.keys():
         form.fields[key].widget = TextDisplayWidget()
@@ -202,7 +230,9 @@ def group_application(req, group_id):
         "answered_theory": theory_answered,
         "total_theory": theory_total,
         "info_form": form,
-        "confirm_submit": confirm_submit
+        "confirm_submit": confirm_submit,
+        "voucher": voucher,
+        "voucher_form": voucher_form
     })
 
 
@@ -228,6 +258,34 @@ def group_application_edit_info(req, group_id):
             for key in form.fields.keys():
                 form.fields[key].widget = TextDisplayWidget()
                 form.fields[key].help_text = None
+    return render(req, "applications/group_application_edit_info.html", {
+        "group": group,
+        "application": application,
+        "form": form
+    })
+
+
+@login_required
+def group_application_voucher_info(req, group_id):
+    try:
+        group = Event.objects.get(id=group_id, type=Event.CLASS_GROUP, eventapplication__user=req.user)
+        application = group.eventapplication_set.get(user=req.user)
+    except Event.DoesNotExist:
+        raise Http404
+    except EventApplication.DoesNotExist:
+        raise Http404
+    if application.status != EventApplication.TESTING_SUCCEEDED:
+        raise PermissionDenied
+    if req.method == "POST":
+        form = VoucherForm(req.POST)
+    else:
+        form = VoucherForm()
+        try:
+            voucher = CampVoucher.objects.get(period=group.period, user=req.user)
+            form.fields['voucher_id'].initial = voucher.voucher_id
+        except CampVoucher.DoesNotExist:
+            voucher = None
+        form.fields['confirm_participation'].initial = application.confirm_participation
     return render(req, "applications/group_application_edit_info.html", {
         "group": group,
         "application": application,

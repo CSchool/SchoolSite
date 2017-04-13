@@ -549,6 +549,8 @@ class EventApplication(models.Model):
     status = models.CharField(max_length=2, choices=EVENT_APPLICATION_STATUS_CHOICES,
                               default=TESTING, verbose_name=_('Application status'))
 
+    confirm_participation = models.BooleanField(verbose_name=_('Confirm participation'), default=False)
+
     def __str__(self):
         return self.user.get_full_name() + " - " + self.event.__str__()
 

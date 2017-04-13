@@ -38,6 +38,11 @@
                         <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             {% if user.is_authenticated %}
+                                {% if user.is_superuser %}
+                                    <li class="dropdown-header">{% trans 'Superuser' %}</li>
+                                {% elif perms.applications.view_campvoucher %}
+                                    <li class="dropdown-header">{% trans 'Education committee' %}</li>
+                                {% endif %}
                                 {% if user.is_staff %}
                                     <li><a href="/admin">{% trans 'Administration' %}</a></li>
                                 {% endif %}

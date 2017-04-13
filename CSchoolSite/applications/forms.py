@@ -21,10 +21,16 @@ class TextDisplayWidget(forms.widgets.TextInput):
         return '<p>%s</p>' % value
 
 
+class VoucherForm(forms.Form):
+    voucher_id = forms.CharField(required=False, label=_('Voucher ID'))
+    confirm_participation = forms.BooleanField(required=False, label=_('Confirm participation'))
+
+
 class EventApplicationAdminForm(forms.ModelForm):
     class Meta:
         model = EventApplication
-        fields = ('user', 'event', 'phone', 'grade', 'address', 'school', 'theory_score', 'practice_score', 'status')
+        fields = ('user', 'event', 'phone', 'grade', 'address',
+                  'school', 'theory_score', 'practice_score', 'status', 'confirm_participation')
 
     theory_score = forms.CharField(disabled=True, widget=TextDisplayWidget(), label=_('Theory score'))
     practice_score = forms.CharField(disabled=True, widget=TextDisplayWidget(), label=_('Practice score'))
