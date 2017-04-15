@@ -139,7 +139,6 @@ def relationship_acceptance(request, relative):
 
         if form.data['password'] == relationship.code:
             relationship.request = APPROVED
-            relationship.status = form.data['relationship']
             relationship.save()
 
             if not is_user_parent and not is_relative_parent:

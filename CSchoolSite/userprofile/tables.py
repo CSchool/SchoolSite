@@ -113,11 +113,11 @@ class RelationshipTable(BaseDatatableView):
                 # parents know their children
                 return _('Child')
             else:
-                # children doesn't know parents yet
+                # children don't know parents yet
                 if row.request != APPROVED:
                     return _('Unknown')
                 else:
-                    return row.status
+                    return _('Parent')
         elif column == 'modified':
             if row.request != APPROVED:
                 # acceptation link or nothing

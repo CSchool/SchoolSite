@@ -39,7 +39,7 @@ admin.site.register(User, UserAdmin)
 
 
 class RelationshipAdmin(admin.ModelAdmin):
-    list_display = ('id', 'get_relative_link', 'get_child_link', 'invited_user', 'status', 'request')
+    list_display = ('id', 'get_relative_link', 'get_child_link', 'invited_user', 'request')
     search_fields = ('id', 'relative', 'child', 'invited_user', 'status', 'request')
 
     def get_relative_link(self, object):

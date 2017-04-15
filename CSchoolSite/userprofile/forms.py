@@ -66,5 +66,4 @@ class RelationshipAcceptanceForm(Form):
 
         self.fields['password'].widget.attrs['placeholder'] = ''
 
-    relationship = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput, label=_('Invitation code'))
