@@ -26,7 +26,7 @@ SECRET_KEY = ')1ji)&$y2qxf3!d(_$9vauea=35-6yb=x1(-1h%cx+)(zflku4'
 DEBUG = True
 
 if DEBUG:
-    ALLOWED_HOSTS = ['192.168.33.10', '127.0.0.1', 'localhost'] # need for vagrant
+    ALLOWED_HOSTS = ['192.168.30.10', '127.0.0.1', 'localhost'] # need for vagrant
 else:
     ALLOWED_HOSTS = []
 
@@ -47,10 +47,11 @@ INSTALLED_APPS = [
     'bootstrap3',
     'registration',
     'tinymce',
+    'notifications',
 
     'main',
     'news',
-    'applications.apps.ApplicationsConfig',
+    'applications',
     'userprofile'
 ]
 
@@ -106,6 +107,8 @@ DATABASES = {
     }
 }
 
+# for notifications
+NOTIFICATIONS_USE_JSONFIELD=True
 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators

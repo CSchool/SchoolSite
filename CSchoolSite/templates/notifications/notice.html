@@ -1,0 +1,20 @@
+{% load i18n %}
+
+<div class="panel panel-{{ notice.level }} alert-notification">
+    <div class="panel-heading">
+        <a href="{% url 'notifications:delete' notice.slug %}" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <span class="glyphicon glyphicon-info-sign"></span> <strong>{% blocktrans with action=notice.verb actor=notice.actor %}{{ action }} from {{ actor }}{% endblocktrans %}</strong>
+    </div>
+    <div class="panel-body">
+         {% if notice.data.template %}
+            {% include notice.data.template %}
+        {% else %}
+            {{ notice.description }}
+        {% endif %}
+
+
+        <hr class="message-inner-separator">
+
+         <p>{{ notice.timesince }} {% trans 'ago' %}</p>
+    </div>
+</div>

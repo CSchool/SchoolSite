@@ -7,7 +7,8 @@
 
 {% block css %}
     {{ block.super }}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/user_profile.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/user_profile.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/dataTables.bootstrap.css' %}" />
 {% endblock %}
 
 {% block content %}
@@ -30,7 +31,7 @@
                     </tr>
                     <tr>
                         <td>{% trans "user_profile_phone" %}:</td>
-                        <td>{{ user.phone }}</td>
+                        <td>{% if user.phone %}{{ user.phone }}{% else %}<b>{% trans 'Unknown' %}</b>{% endif %}</td>
                     </tr>
                 </tbody>
             </table>
@@ -43,4 +44,34 @@
         </div>
     </div>
 
+    <div class="panel panel-warning">
+        <div class="panel-heading">{% trans 'Family relatives' %}</div>
+        <div class="panel-body">
+            <table id="relationshipTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th>{% trans 'Relative' %}</th>
+                        <th>{% trans 'Relationship status' %}</th>
+                        <th>{% trans 'Relationship request' %}</th>
+                        <th>{% trans 'Action' %}</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="panel-footer clearfix">
+            <div class="pull-right">
+                <a href="{% url 'user_profile_relatives_choice' %}" class="btn btn-success">{% bootstrap_icon 'plus' %} {% trans 'Select relatives' %}</a>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    {{ block.super }}
+    <script>
+        var dataUrl = "{% url 'relationship_table' %}";
+    </script>
+    <script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/user_profile.js' %}"></script>
 {% endblock %}

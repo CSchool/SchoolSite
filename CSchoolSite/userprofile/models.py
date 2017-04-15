@@ -3,11 +3,13 @@ from datetime import datetime
 from django.contrib.auth.models import User, AbstractUser
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
+from CSchoolSite import settings
+from main.enums import REQUEST_STATUS
+from main.enums import WAITING
 from main.validators import PhoneValidator
 
 from applications.models import Period
-
-# Create your models here.
 
 
 class User(AbstractUser):
@@ -26,3 +28,24 @@ class User(AbstractUser):
         if period:
             return period.registration_open
         return bool(Period.objects.filter(registration_begin__lt=datetime.now(), registration_end__gt=datetime.now()))
+
+
+class Relationship(models.Model):
+    class Meta:
+        verbose_name = _('Family relative')
+        verbose_name_plural = _('Family relatives')
+
+    relative = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="related_user",
+                                 null=True, default=None, verbose_name=_('Relative'))
+    child = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="child_user", null=True,
+                              default=None, verbose_name=_('Child'))
+    invited_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="invited_user",
+                                     null=True, default=None, verbose_name=_('Invited user'))
+
+    code = models.CharField(max_length=10, verbose_name=_('Invite code'))
+    request = models.CharField(max_length=2, choices=REQUEST_STATUS, default=WAITING,
+                               verbose_name=_('Relationship request'))
+    status = models.TextField(verbose_name=_('Relationship status'), default='')
+
+    def __str__(self):
+        return _('Relationship #%(id)s') % {'id': self.id}

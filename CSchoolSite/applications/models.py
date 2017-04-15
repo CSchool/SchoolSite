@@ -512,6 +512,9 @@ class EventApplication(models.Model):
     class Meta:
         verbose_name = _('Event application')
         verbose_name_plural = _('Event applications')
+        permissions = (
+            ('can_submit_application', _("Can submit applications to the study period")),
+        )
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)

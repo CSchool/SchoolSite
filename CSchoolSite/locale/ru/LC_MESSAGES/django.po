@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-13 22:08+0300\n"
+"POT-Creation-Date: 2017-04-15 17:08+0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -19,11 +19,7 @@ msgstr ""
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Generator: Poedit 1.8.7.1\n"
 
-#: applications/apps.py:10 templates/base.html:44
-msgid "Education committee"
-msgstr "Комитет образования"
-
-#: applications/apps.py:23
+#: applications/apps.py:7
 msgid "Applications"
 msgstr "Заявки"
 
@@ -31,7 +27,7 @@ msgstr "Заявки"
 msgid "Voucher ID"
 msgstr "Номер путёвки"
 
-#: applications/forms.py:26 applications/models.py:552
+#: applications/forms.py:26 applications/models.py:555
 msgid "Confirm participation"
 msgstr "Подтвердить участие"
 
@@ -120,7 +116,7 @@ msgstr "Владелец путёвки"
 msgid "Awaiting payment"
 msgstr "Ожидает оплаты"
 
-#: applications/models.py:87
+#: applications/models.py:87 main/enums.py:10
 msgid "Declined"
 msgstr "Отклонено"
 
@@ -128,7 +124,7 @@ msgstr "Отклонено"
 msgid "Paid"
 msgstr "Оплачено"
 
-#: applications/models.py:89
+#: applications/models.py:89 main/enums.py:9
 msgid "Approved"
 msgstr "Одобрено"
 
@@ -337,67 +333,71 @@ msgstr "Заявка на событие"
 msgid "Event applications"
 msgstr "Заявки на события"
 
-#: applications/models.py:520
+#: applications/models.py:516
+msgid "Can submit applications to the study period"
+msgstr "Можно подать заявку"
+
+#: applications/models.py:523
 msgid "Phone number"
 msgstr "Телефон"
 
-#: applications/models.py:521 main/validators.py:7 userprofile/models.py:17
+#: applications/models.py:524 main/validators.py:7 userprofile/models.py:19
 msgid "The format of phone numbers is +7 (123) 456-78-90"
 msgstr "Формат номера телефона: +7 (123) 456-78-90"
 
-#: applications/models.py:523
+#: applications/models.py:526
 msgid "Grade"
 msgstr "Класс"
 
-#: applications/models.py:523
+#: applications/models.py:526
 msgid "Current grade"
 msgstr "Класс в этом учебном году"
 
-#: applications/models.py:524
+#: applications/models.py:527
 msgid "Home address"
 msgstr "Домашний адрес"
 
-#: applications/models.py:526
+#: applications/models.py:529
 msgid "School"
 msgstr "Школа"
 
-#: applications/models.py:526
+#: applications/models.py:529
 msgid "e.g. School №42"
 msgstr "Например &quot;Школа №42&quot;"
 
-#: applications/models.py:539
+#: applications/models.py:542
 msgid "Testing"
 msgstr "Тестируется"
 
-#: applications/models.py:540
+#: applications/models.py:543
 msgid "Testing succeeded"
 msgstr "Тестирование пройдено"
 
-#: applications/models.py:541
+#: applications/models.py:544
 msgid "Testing failed"
 msgstr "Тестирование провалено"
 
-#: applications/models.py:542
+#: applications/models.py:545
 msgid "Enrolled"
 msgstr "Зачислен"
 
-#: applications/models.py:543
+#: applications/models.py:546
 msgid "Studying"
 msgstr "Обучение"
 
-#: applications/models.py:544
+#: applications/models.py:547
 msgid "Successed"
 msgstr "Обучение окончено"
 
-#: applications/models.py:545
+#: applications/models.py:548
 msgid "Failed"
 msgstr "Обучение не окончено"
 
-#: applications/models.py:546
+#: applications/models.py:549
 msgid "Disqualified"
 msgstr "Исключён"
 
-#: applications/models.py:550
+#: applications/models.py:553
 #: applications/templates/applications/choose_period.html:15
 msgid "Application status"
 msgstr "Статус заявки"
@@ -418,7 +418,7 @@ msgstr "Скопировать заявку"
 #: applications/templates/applications/choose_period.html:7
 #: applications/templates/applications/choose_period.html:29
 #: applications/templates/applications/group_application.html:270
-#: templates/base.html:65
+#: templates/base.html:75
 msgid "Submit application"
 msgstr "Подать заявку"
 
@@ -694,7 +694,7 @@ msgstr "Вернуться на сайт"
 #: dashboard.py:37 templates/registration/password_change_form.html:5
 #: templates/registration/password_change_form.html:8
 #: templates/registration/password_change_form.html:15
-#: userprofile/templates/userprofile/user_profile.html:40
+#: userprofile/templates/userprofile/user_profile.html:41
 msgid "Change password"
 msgstr "Изменить пароль"
 
@@ -706,7 +706,7 @@ msgstr "Выйти"
 msgid "Actions_admin"
 msgstr "Действия"
 
-#: dashboard.py:51 menu.py:29 templates/base.html:47
+#: dashboard.py:51 menu.py:29 templates/base.html:56
 msgid "Administration"
 msgstr "Администрирование"
 
@@ -733,6 +733,10 @@ msgstr "Гугл-группа \"django-users\""
 #: dashboard.py:80
 msgid "Django irc channel"
 msgstr "IRC канал Django"
+
+#: main/enums.py:8
+msgid "Waiting"
+msgstr "Ожидание"
 
 #: menu.py:22
 msgid "Dashboard"
@@ -778,37 +782,98 @@ msgstr "Изменено"
 msgid "Read more"
 msgstr "Показать больше"
 
-#: templates/base.html:8
+#: templates/403.html:6
+msgid "403 Error - Access denied!"
+msgstr "Ошибка 403 - Доступ запрещён!"
+
+#: templates/403.html:10
+msgid "403 ERROR"
+msgstr "ОШИБКА 403"
+
+#: templates/403.html:15
+msgid "Access denied!"
+msgstr "Доступ запрещён!"
+
+#: templates/base.html:10
 msgid "Main page"
 msgstr "Главная страница"
 
-#: templates/base.html:8 templates/base.html:25
+#: templates/base.html:10 templates/base.html:28
 msgid "Computer school"
 msgstr "Компьютерная школа"
 
-#: templates/base.html:36
+#: templates/base.html:45
 msgid "Guest"
 msgstr "Гость"
 
-#: templates/base.html:42
+#: templates/base.html:51
 msgid "Superuser"
 msgstr "Суперпользователь"
 
-#: templates/base.html:49
+#: templates/base.html:53 userprofile/apps.py:33
+msgid "Education committee"
+msgstr "Комитет образования"
+
+#: templates/base.html:59
 msgid "Profile"
 msgstr "Профиль"
 
-#: templates/base.html:51
+#: templates/base.html:61
 msgid "Sign off"
 msgstr "Выйти"
 
-#: templates/base.html:53 templates/registration/login.html:16
+#: templates/base.html:63 templates/registration/login.html:16
 msgid "Sign in"
 msgstr "Войти"
 
-#: templates/base.html:55 templates/registration/registration_form.html:14
+#: templates/base.html:65 templates/registration/registration_form.html:14
 msgid "Sign up"
 msgstr "Зарегистироваться"
+
+#: templates/notifications/list.html:4
+msgid "Notifications"
+msgstr "Уведомления"
+
+#: templates/notifications/notice.html:6
+#, python-format
+msgid "%(action)s from %(actor)s"
+msgstr "%(action)s от %(actor)s"
+
+#: templates/notifications/notice.html:18
+msgid "ago"
+msgstr "назад"
+
+#: templates/notifications/templates/relationship_request.html:6
+#, python-format
+msgid ""
+"\n"
+"        <p>%(username)s (%(initials)s) has chosen you as your relative!</p>\n"
+"    "
+msgstr ""
+"\n"
+"        <p>%(username)s (%(initials)s) выбрал вас своим родственником!</p>"
+
+#: templates/notifications/templates/relationship_request.html:10
+#, python-format
+msgid ""
+"\n"
+"        <p>%(username)s  has chosen you as your relative!</p>\n"
+"    "
+msgstr ""
+"\n"
+"        <p>%(username)s  выбрал вас своим родственником!</p>\n"
+"    "
+
+#: templates/notifications/templates/relationship_request.html:15
+msgid ""
+"Don't forget that you can check your child academic progress in his profile!"
+msgstr ""
+"Не забудьте, вы всегда можете посмотреть успеваемость вашего ребёнка в его "
+"профиле!"
+
+#: templates/notifications/templates/relationship_request.html:19
+msgid "Accept relationship"
+msgstr "Подтвердить родственника"
 
 #: templates/registration/login.html:4 templates/registration/login.html:7
 msgid "Authorization"
@@ -929,24 +994,42 @@ msgid "Registration is unavailable"
 msgstr "Регистрация отключена"
 
 #: templates/registration/registration_form.html:4
-#: templates/registration/registration_form.html:7
+#: templates/registration/registration_form.html:7 userprofile/apps.py:69
 msgid "Registration"
 msgstr "Регистрация"
 
 # django.contrib.auth translations
-#: userprofile/admin.py:17
+#: userprofile/admin.py:18
 msgid "Personal info"
 msgstr "Персональная информация"
 
-#: userprofile/admin.py:25
+#: userprofile/admin.py:26
 msgid "Permissions"
 msgstr "Права доступа"
 
-#: userprofile/admin.py:27
+#: userprofile/admin.py:28
 msgid "Important dates"
 msgstr "Важные даты"
 
-#: userprofile/apps.py:7
+#: userprofile/admin.py:51 userprofile/models.py:39
+#: userprofile/templates/userprofile/user_profile.html:53
+msgid "Relative"
+msgstr "Отношение"
+
+#: userprofile/admin.py:59 userprofile/models.py:41 userprofile/tables.py:115
+msgid "Child"
+msgstr "Ребёнок"
+
+#: userprofile/apps.py:35 userprofile/apps.py:53
+msgid "Students"
+msgstr "Ученики"
+
+#: userprofile/apps.py:36 userprofile/tables.py:57 userprofile/tables.py:133
+#: userprofile/views.py:65 userprofile/views.py:125
+msgid "Parents"
+msgstr "Родители"
+
+#: userprofile/apps.py:59
 msgid "Profiles_and_groups"
 msgstr "Профили и группы"
 
@@ -958,43 +1041,129 @@ msgstr "Имя"
 msgid "Last name"
 msgstr "Фамилия"
 
-#: userprofile/models.py:14
+#: userprofile/forms.py:61
+msgid "Parent"
+msgstr "Родитель"
+
+#: userprofile/forms.py:66
+msgid "Invitation code"
+msgstr "Пригласительный код"
+
+#: userprofile/models.py:16
 msgid "patronymic"
 msgstr "Отчество"
 
-#: userprofile/models.py:15
+#: userprofile/models.py:17
+#: userprofile/templates/userprofile/relatives_choice.html:23
 msgid "birthday"
 msgstr "Дата рождения"
 
-#: userprofile/models.py:16
+#: userprofile/models.py:18
 msgid "phone"
 msgstr "Номер телефона"
 
+#: userprofile/models.py:35
+msgid "Family relative"
+msgstr "Родственник"
+
+#: userprofile/models.py:36
+#: userprofile/templates/userprofile/user_profile.html:48
+msgid "Family relatives"
+msgstr "Родственники"
+
+#: userprofile/models.py:43
+msgid "Invited user"
+msgstr "Пригласивший пользователь"
+
+#: userprofile/models.py:45
+msgid "Invite code"
+msgstr "Пригласительный код"
+
+#: userprofile/models.py:47
+#: userprofile/templates/userprofile/user_profile.html:55
+#: userprofile/views.py:99
+msgid "Relationship request"
+msgstr "Запрос родства"
+
+#: userprofile/models.py:48
+#: userprofile/templates/userprofile/user_profile.html:54
+msgid "Relationship status"
+msgstr "Статус родства"
+
+#: userprofile/models.py:51
+#, python-format
+msgid "Relationship #%(id)s"
+msgstr "Отношение #%(id)s"
+
+#: userprofile/tables.py:90
+msgid "Send relationship request"
+msgstr "Отправить запрос родства"
+
+#: userprofile/tables.py:119
+msgid "Unknown"
+msgstr "Неизвестно"
+
+#: userprofile/tables.py:128
+msgid "Accept"
+msgstr "Принять"
+
+#: userprofile/templates/userprofile/relationship_acceptance.html:6
+msgid "Relationship clarification"
+msgstr "Уточнение родства"
+
+#: userprofile/templates/userprofile/relationship_acceptance.html:12
+#, python-format
+msgid "Relationship request from %(username)s"
+msgstr "Запрос на подтверждение родства от %(username)s"
+
+#: userprofile/templates/userprofile/relationship_acceptance.html:19
+msgid "Send relationship data"
+msgstr "Подтвердить"
+
+#: userprofile/templates/userprofile/relatives_choice.html:6
+#: userprofile/templates/userprofile/relatives_choice.html:16
+msgid "Choose your relatives"
+msgstr "Выберите родственников"
+
+#: userprofile/templates/userprofile/relatives_choice.html:21
+msgid "Username"
+msgstr "Имя пользователя"
+
+#: userprofile/templates/userprofile/relatives_choice.html:22
+#: userprofile/templates/userprofile/user_profile.html:21
+msgid "Initials"
+msgstr "ФИО"
+
+#: userprofile/templates/userprofile/relatives_choice.html:24
+#: userprofile/templates/userprofile/user_profile.html:56
+msgid "Action"
+msgstr "Действие"
+
 #: userprofile/templates/userprofile/user_profile.html:6
-#: userprofile/templates/userprofile/user_profile.html:15
+#: userprofile/templates/userprofile/user_profile.html:16
 #, python-format
 msgid "Profile of user \"%(username)s\""
 msgstr "Профиль пользователя \"%(username)s\""
 
-#: userprofile/templates/userprofile/user_profile.html:20
-msgid "Initials"
-msgstr "ФИО"
-
-#: userprofile/templates/userprofile/user_profile.html:24
+#: userprofile/templates/userprofile/user_profile.html:25
 msgid "user_profile_birthday"
 msgstr "Дата рождения"
 
-#: userprofile/templates/userprofile/user_profile.html:28
+#: userprofile/templates/userprofile/user_profile.html:29
 msgid "user_profile_email"
 msgstr "E-mail"
 
-#: userprofile/templates/userprofile/user_profile.html:32
+#: userprofile/templates/userprofile/user_profile.html:33
 msgid "user_profile_phone"
 msgstr "Телефон"
 
-#: userprofile/templates/userprofile/user_profile.html:41
+#: userprofile/templates/userprofile/user_profile.html:42
 msgid "user_profile_edit_profile"
 msgstr "Изменить профиль"
+
+#: userprofile/templates/userprofile/user_profile.html:63
+msgid "Select relatives"
+msgstr "Выберите родственников"
 
 #: userprofile/templates/userprofile/user_profile_edit.html:6
 #, python-format
@@ -1004,6 +1173,31 @@ msgstr "Редактирование профиля пользователя \"%
 #: userprofile/templates/userprofile/user_profile_edit.html:15
 msgid "Edit profile"
 msgstr "Редактировать профиль"
+
+#: userprofile/views.py:71
+msgid "You can't add another parent as child!"
+msgstr "Нельзя добавить родителя, как ребёнка!"
+
+#: userprofile/views.py:120
+msgid "This person didn't send you a relationship request!"
+msgstr "Этот человек не отправил запрос!"
+
+#: userprofile/views.py:123
+msgid "Request has already approved!"
+msgstr "Запрос уже подтверждён!"
+
+#: userprofile/views.py:136
+msgid "Specify your relationship"
+msgstr "Выберите тип отношения"
+
+#: userprofile/views.py:138
+#, python-format
+msgid "Specify %(user)s relationship"
+msgstr "Выберите тип отношения с %(user)s"
+
+#: userprofile/views.py:154
+msgid "Invitation code are not same!"
+msgstr "Коды не совпадают"
 
 #~ msgid "Statement URL"
 #~ msgstr "URL условия"
