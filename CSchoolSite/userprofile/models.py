@@ -10,6 +10,7 @@ from main.enums import WAITING
 from main.validators import PhoneValidator
 
 from applications.models import Period
+from userprofile.utils import is_group_member
 
 
 
@@ -26,9 +27,24 @@ class User(AbstractUser):
     def is_eligible_for_application(self, period=None):
         if not self.is_authenticated():
             return False
+        if not self.is_parent:
+            return False
         if period:
             return period.registration_open
         return bool(Period.objects.filter(registration_begin__lt=datetime.now(), registration_end__gt=datetime.now()))
+
+    def is_eligible_for_application_viewing(self):
+        if not self.is_authenticated():
+            return False
+        return bool(Period.objects.filter(registration_begin__lt=datetime.now(), registration_end__gt=datetime.now()))
+
+    @property
+    def is_parent(self):
+        return is_group_member(self, _('Parents'))
+
+    @property
+    def is_student(self):
+        return is_group_member(self, _('Students'))
 
 
 class Relationship(models.Model):

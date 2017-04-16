@@ -126,16 +126,8 @@ def relationship_acceptance(request, relative):
 
     # TODO: integrate children query
 
-    # get proper label for relationship field in form
-    relationship_label = ''
-    if (not is_user_parent and not is_relative_parent) or (is_user_parent and not is_relative_parent):
-        # parent give information  about himself
-        relationship_label = _('Specify your relationship')
-    else:
-        relationship_label = _('Specify %(user)s relationship') % {'user': relative.username}
-
     if request.method == 'POST':
-        form = RelationshipAcceptanceForm(request.POST, relationship_label=relationship_label)
+        form = RelationshipAcceptanceForm(request.POST)
 
         if form.data['password'] == relationship.code:
             relationship.request = APPROVED
@@ -149,6 +141,6 @@ def relationship_acceptance(request, relative):
         else:
             form.add_error('password', _('Invitation code are not same!'))
     else:
-        form = RelationshipAcceptanceForm(relationship_label=relationship_label)
+        form = RelationshipAcceptanceForm()
 
     return render(request, 'userprofile/relationship_acceptance.html', {'form': form, 'relative': relative})

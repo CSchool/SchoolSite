@@ -68,12 +68,19 @@
                     </li>
                 </ul>
                 {% block submit_application_button %}
-                {% if user.is_eligible_for_application %}
+                {% if user.is_eligible_for_application_viewing %}
                     <div class="navbar-form navbar-right ">
-                    <a href="{% url 'applications_choose_period' %}" class="btn btn-success">
-                        {% bootstrap_icon 'plus' %}
-                        {% trans 'Submit application' %}
-                    </a>
+                    {% if user.is_eligible_for_application %}
+                        <a href="{% url 'applications_choose_period' %}" class="btn btn-success">
+                            {% bootstrap_icon 'plus' %}
+                            {% trans 'Submit application' %}
+                        </a>
+                    {% else %}
+                        <a href="{% url 'applications_choose_period' %}" class="btn btn-warning">
+                            {% bootstrap_icon 'pencil' %}
+                            {% trans 'Applications' %}
+                        </a>
+                    {% endif %}
                     </div>
                 {% endif %}
                 {% endblock %}

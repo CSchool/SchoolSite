@@ -62,9 +62,14 @@
                             </button>
                         </form>
                     {% else %}
-                        <a href="{% url 'applications_confirm_group' group.id %}" class="btn btn-block btn-primary">
-                            {% trans 'Submit application' %}
-                        </a>
+                        <form action="{% url 'applications_create_application' %}" method="POST">
+                            {% csrf_token %}
+                            <input type="hidden" name="username" value="{{ username }}" />
+                            <input type="hidden" name="group_id" value="{{ group.id }}" />
+                            <button type="submit" class="btn btn-block btn-primary">
+                                {% trans 'Submit application' %}
+                            </button>
+                        </form>
                     {% endif %}
                 </div>
             </div>

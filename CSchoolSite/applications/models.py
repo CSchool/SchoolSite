@@ -1,4 +1,7 @@
 import ejudge
+import uuid
+import os
+
 from django import forms
 from django.db import models
 from django.utils import timezone
@@ -7,6 +10,14 @@ from django.utils.translation import ugettext_lazy as _
 from main.validators import PhoneValidator
 
 from CSchoolSite import settings
+
+
+def get_file_path(prefix):
+    def f(instance, filename):
+        ext = filename.split('.')[-1]
+        filename = "%s.%s" % (uuid.uuid4(), ext)
+        return os.path.join(prefix, filename)
+    return f
 
 
 class Period(models.Model):
@@ -60,8 +71,8 @@ class Period(models.Model):
         try:
             application = EventApplication.objects.filter(user=user, event__period=self).get()
         except EventApplication.DoesNotExist:
-            return "NA", "Not applicable"
-        return application.status, application.get_status_display()
+            return "NA", "Not applicable", None
+        return application.status, application.get_status_display(), application.id
 
 
 class CampVoucher(models.Model):
@@ -507,26 +518,33 @@ class TheoryExamApplication(models.Model):
     def max_score(self):
         return self.questions.aggregate(models.Sum('score'))['score__sum']
 
+class PersonalDataDoc(models.FileField):
+
+    def __init__(self, *args, **kwargs):
+        super(PersonalDataDoc, self).__init__(*args, **kwargs)
+        self.my_url = kwargs.get('my_url')
+
+    @property
+    def url(self):
+        return
 
 class EventApplication(models.Model):
     class Meta:
         verbose_name = _('Event application')
         verbose_name_plural = _('Event applications')
-        permissions = (
-            ('can_submit_application', _("Can submit applications to the study period")),
-        )
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
-    # Important fields
-    phone = models.CharField(max_length=18, verbose_name=_('Phone number'),
-                             null=True, validators=[PhoneValidator()], help_text=_('The format of phone numbers is +7 (123) 456-78-90'))
     grade = models.IntegerField(choices=[(i, i) for i in range(1, 12)],
                                 null=True, verbose_name=_('Grade'), help_text=_("Current grade"))
-    address = models.CharField(max_length=100, null=True, verbose_name=_('Home address'))
+    address = models.TextField(null=True, verbose_name=_('Home address'))
     school = models.CharField(max_length=50, null=True,
                               verbose_name=_('School'), help_text=_("e.g. School №42"))
+
+    organization = models.CharField(max_length=250, null=True, blank=True, verbose_name=_('Organization'))
+    parent_phone_numbers = models.TextField(null=True, blank=True, verbose_name=_("Parents' phone numbers"))
+    personal_data_doc = models.ImageField(null=True, verbose_name=_('Personal data processing agreement'))
 
     # Registration status
     TESTING = 'TG'
@@ -559,11 +577,25 @@ class EventApplication(models.Model):
 
     @property
     def is_general_filled(self):
-        return self.phone is not None and \
-               self.grade is not None and \
+        return self.grade is not None and \
                self.address is not None and \
-               self.school is not None
+               self.school is not None and \
+               self.personal_data_doc is not None
 
     @property
     def modifiable(self):
         return self.status == EventApplication.TESTING
+
+    def has_parent_privileges(self, user):
+        if user.is_staff:
+            return True
+        from userprofile.models import Relationship
+        return Relationship.objects.filter(relative=user, child=self.user).exists()
+
+    def has_child_privileges(self, user):
+        if user.is_staff:
+            return True
+        return user == self.user
+
+    def viewable(self, user):
+        return self.has_parent_privileges(user) or self.user == user or user.is_staff

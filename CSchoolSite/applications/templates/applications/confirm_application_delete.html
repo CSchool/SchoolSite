@@ -13,7 +13,7 @@
         {% trans 'This action cannot be undone' %}
     </div>
 
-    <a class="btn btn-lg btn-default" href="{% url 'applications_choose_group' period.id %}">
+    <a class="btn btn-lg btn-default" href="{% url 'applications_group_application' application.id %}">
         {% trans 'No, take me back' %}
     </a>
     <form style="display: inline;" action="{% url 'applications_delete' application.id %}" method="POST">

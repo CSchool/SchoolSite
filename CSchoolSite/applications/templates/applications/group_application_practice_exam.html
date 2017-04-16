@@ -5,7 +5,7 @@
 {% block submit_application_button %}{% endblock %}
 {% block content %}
     <h3 class="page-header text-center">
-        <a href="{% url 'applications_group_application' group.id %}">{% trans 'Application to' %} &quot;{{ group.name }}&quot;</a>
+        <a href="{% url 'applications_group_application' application.id %}">{% trans 'Application to' %} &quot;{{ group.name }}&quot;</a>
     </h3>
     <p>
         {% blocktrans %}You need to write programs to solve these problems{% endblocktrans %}
@@ -27,9 +27,9 @@
                 </h4>
             </div>
             <div class="panel-body">
-                {% if application.modifiable %}
+                {% if application.modifiable and child_priv %}
                 <h4>{% trans 'Submit run' %}</h4>
-                <form method="POST" action="{% url 'applications_group_application_submit_run' group.id %}"
+                <form method="POST" action="{% url 'applications_group_application_submit_run' application.id %}"
                     enctype="multipart/form-data">
                     {% csrf_token %}
                     <input type="hidden" name="problem_id" value="{{ problem.problem.ejudge_id }}" />

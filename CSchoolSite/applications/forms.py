@@ -1,17 +1,26 @@
+import os
+
 from django import forms
 from django.utils.translation import ugettext_lazy as _
+from django.shortcuts import reverse
 
 from applications.models import EventApplication, PracticeExamRun
 
 
 class CreateApplicationForm(forms.Form):
-    group_id = forms.IntegerField()
+    group_id = forms.IntegerField(required=True)
+    username = forms.CharField(required=True)
 
 
 class EventApplicationGenericForm(forms.ModelForm):
     class Meta:
         model = EventApplication
-        fields = ('phone', 'grade', 'address', 'school')
+        fields = ('grade', 'address', 'school', 'organization', 'parent_phone_numbers', 'personal_data_doc')
+
+
+class EventApplicationRenderForm(EventApplicationGenericForm):
+    class Meta(EventApplicationGenericForm.Meta):
+        exclude = ('personal_data_doc',)
 
 
 class TextDisplayWidget(forms.widgets.TextInput):
@@ -29,15 +38,25 @@ class VoucherForm(forms.Form):
 class EventApplicationAdminForm(forms.ModelForm):
     class Meta:
         model = EventApplication
-        fields = ('user', 'event', 'phone', 'grade', 'address',
-                  'school', 'theory_score', 'practice_score', 'status', 'confirm_participation')
+        fields = ('user', 'event', 'grade', 'address',
+                  'school', 'organization', 'parent_phone_numbers', 'personal_data_doc_link',
+                  'theory_score', 'practice_score', 'status', 'confirm_participation')
 
     theory_score = forms.CharField(disabled=True, widget=TextDisplayWidget(), label=_('Theory score'))
     practice_score = forms.CharField(disabled=True, widget=TextDisplayWidget(), label=_('Practice score'))
+    personal_data_doc_link = forms.CharField(disabled=True, widget=TextDisplayWidget(),
+                                             label=_('Personal data processing agreement'))
 
     def __init__(self, *args, **kwargs):
         instance = kwargs.get('instance')
         if instance:
+            if hasattr(instance, 'personal_data_doc') and instance.personal_data_doc:
+                path = os.path.basename(instance.personal_data_doc.name)
+                self.base_fields['personal_data_doc_link'].initial = '''
+                    <a href="%s">%s</a>
+                ''' % (reverse('applications_group_application_doc', args=[instance.id, path]), path)
+            else:
+                self.base_fields['personal_data_doc_link'].initial = _('Not yet uploaded')
             if hasattr(instance, 'theory_exam') and instance.theory_exam:
                 self.base_fields['theory_score'].initial = "<b>%d</b> / %d (min %d)" % \
                     (instance.theory_exam.cur_score, instance.theory_exam.max_score, instance.event.theoryexam.min_score)

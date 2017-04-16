@@ -59,10 +59,7 @@ class UserForm(ModelForm):
 class RelationshipAcceptanceForm(Form):
 
     def __init__(self, *args, **kwargs):
-        relationship_label = kwargs.pop('relationship_label')
         super(RelationshipAcceptanceForm, self).__init__(*args, **kwargs)
-        self.fields['relationship'].label = relationship_label
-        self.fields['relationship'].widget.attrs['placeholder'] = _('Parent')
 
         self.fields['password'].widget.attrs['placeholder'] = ''
 

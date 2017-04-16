@@ -18,7 +18,7 @@
         <br /><br />
         <form method="POST">
             {% csrf_token %}
-            <a href="{% url 'applications_group_application' group.id %}" role="button"
+            <a href="{% url 'applications_group_application' application.id %}" role="button"
                class="btn btn-default">{% trans 'Cancel' %}</a>
             <button type="submit" name="confirm_application_submit" class="btn btn-primary">
                 {% trans 'Submit' %}
@@ -46,22 +46,27 @@
         {% endblocktrans %}
         </div>
     {% endif %}
-    <div class="panel {% if application.modifiable and not confirm_submit %}panel-default{% else %}panel-primary{% endif %}">
+    <div class="panel {% if parent_priv and application.modifiable and not confirm_submit %}
+        panel-default{% else %}panel-primary{% endif %}">
         <div class="panel-heading">
-            {% if application.modifiable and not confirm_submit %}
-            <a href="{% url 'applications_group_application_edit_info' group.id %}" class="btn btn-primary pull-right">
+            {% if parent_priv and application.modifiable and not confirm_submit %}
+            <a href="{% url 'applications_group_application_edit_info' application.id %}" class="btn btn-primary pull-right">
                 {% bootstrap_icon 'pencil' %}
-                {% blocktrans %}Tell us about you{% endblocktrans %}
+                {% blocktrans %}Tell us about your child{% endblocktrans %}
             </a>
-            {% elif confirm_submit %}
-            <a href="{% url 'applications_group_application_edit_info' group.id %}" class="btn btn-default pull-right">
+            {% elif parent_priv and application.modifiable and confirm_submit %}
+            <a href="{% url 'applications_group_application_edit_info' application.id %}" class="btn btn-default pull-right">
                 {% bootstrap_icon 'pencil' %}
                 {% blocktrans %}Edit{% endblocktrans %}
             </a>
             {% endif %}
             <h4>
-                {% trans "About yourself" %}
-                {% if application.modifiable and not confirm_submit %}
+                {% if parent_priv %}
+                    {% trans "About your child" %}
+                {% else %}
+                    {% trans "About yourself" %}
+                {% endif %}
+                {% if parent_priv and application.modifiable and not confirm_submit %}
                     {% if not application.is_general_filled %}
                         <span class="text-danger">
                             &nbsp; {% trans 'fill now' %}
@@ -72,12 +77,44 @@
                         </span>
                     {% endif %}
                 {% endif %}
+                {% if not parent_priv and application.modifiable and not confirm_submit %}
+                    {% if not application.is_general_filled %}
+                        <span class="italic">
+                            &nbsp; ({% trans 'ask your parents to fill this now' %})
+                        </span>
+                    {% else %}
+                        <span class="italic">
+                            &nbsp; ({% trans 'filled by your parents' %})
+                        </span>
+                    {% endif %}
+                {% endif %}
             </h4>
         </div>
-        {% if not application.modifiable or confirm_submit %}
-        <div class="panel-body">
+        {% if not parent_priv or not application.modifiable or confirm_submit %}
+        {% comment %}<div class="panel-body">
             {% bootstrap_form info_form %}
-        </div>
+        </div>{% endcomment %}
+            <table class="table">
+            <tbody>
+            {% for field in info_form %}
+                <tr>
+                <td>{{ field.label_tag }}</td>
+                <td>
+                    {% if field.name == 'personal_data_doc' %}
+                        {% if personal_data_doc_name %}
+                            <a href="{% url 'applications_group_application_doc' application.id personal_data_doc_name %}">
+                                {{ personal_data_doc_name }}
+                            </a>
+                        {% else %}
+                            <i>{% trans 'Not yet uploaded' %}</i>
+                        {% endif %}
+                    {% else %}
+                        {{ field|linebreaksbr }}
+                    {% endif %}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+            </table>
         {% endif %}
     </div>
 
@@ -94,14 +131,14 @@
     {% if application.theory_exam %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            {% if application.modifiable %}
-                <a href="{% url 'applications_group_application_theory_exam' group.id %}"
+            {% if application.modifiable and child_priv %}
+                <a href="{% url 'applications_group_application_theory_exam' application.id %}"
                    class="btn btn-primary pull-right{% if not application.is_general_filled %} disabled{% endif %}">
                     {% bootstrap_icon 'ok' %}
                     {% trans 'Answer questions' %}
                 </a>
             {% else %}
-                <a href="{% url 'applications_group_application_theory_exam' group.id %}"
+                <a href="{% url 'applications_group_application_theory_exam' application.id %}"
                    class="btn btn-default pull-right{% if not application.is_general_filled %} disabled{% endif %}">
                     {% trans 'Answers' %}
                     {% bootstrap_icon 'chevron-right' %}
@@ -151,14 +188,14 @@
     {% if application.practice_exam %}
     <div class="panel panel-default">
         <div class="panel-heading">
-            {% if application.modifiable %}
-                <a href="{% url 'applications_group_application_practice_exam' group.id %}"
+            {% if application.modifiable and child_priv %}
+                <a href="{% url 'applications_group_application_practice_exam' application.id %}"
                    class="btn btn-primary pull-right{% if not application.is_general_filled %} disabled{% endif %}">
                     {% bootstrap_icon 'ok' %}
                     {% trans 'Solve problems' %}
                 </a>
             {% else %}
-                <a href="{% url 'applications_group_application_practice_exam' group.id %}"
+                <a href="{% url 'applications_group_application_practice_exam' application.id %}"
                    class="btn btn-default pull-right{% if not application.is_general_filled %} disabled{% endif %}">
                     {% trans 'Solutions' %}
                     {% bootstrap_icon 'chevron-right' %}
@@ -180,7 +217,7 @@
                 {% trans "Practice exam" %}
                 &nbsp;
                 {% if application.modifiable %}
-                    {% if answered_practice < total_practice %}
+                    {% if solved_practice < total_practice %}
                         <span class="text-danger">
                             {{ solved_practice }} {% trans 'out of' %} {{ total_practice }}
                         </span>
@@ -248,29 +285,31 @@
         </div>
     {% endif %}
 
-    {% if application.modifiable and not confirm_submit or application.status == application.TESTING_FAILED %}
-    <hr />
-    <div class="col-md-4">
-        <form action="{% url 'applications_delete_confirmation' application.id %}" method="POST">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-block btn-lg btn-danger">
-                {% bootstrap_icon 'trash' %}
-                {% trans 'Delete application' %}
-            </button>
-        </form>
-    </div>
-    {% if application.modifiable and not confirm_submit %}
-        <div class="col-md-4 col-md-offset-4">
-            <form method="POST">
+    {% if parent_priv %}
+        {% if application.modifiable and not confirm_submit or application.status == application.TESTING_FAILED %}
+        <hr />
+        <div class="col-md-4">
+            <form action="{% url 'applications_delete_confirmation' application.id %}" method="POST">
                 {% csrf_token %}
-                <input type="hidden" name="confirm_submit" value="True" />
-                <button type="submit" class="btn btn-block btn-lg btn-success"
-                    {% if not application.is_general_filled %} disabled="disabled"{% endif %}>
-                    {% bootstrap_icon 'ok' %}
-                    {% trans 'Submit application' %}
+                <button type="submit" class="btn btn-block btn-lg btn-danger">
+                    {% bootstrap_icon 'trash' %}
+                    {% trans 'Delete application' %}
                 </button>
             </form>
         </div>
+        {% if application.modifiable and not confirm_submit %}
+            <div class="col-md-4 col-md-offset-4">
+                <form method="POST">
+                    {% csrf_token %}
+                    <input type="hidden" name="confirm_submit" value="True" />
+                    <button type="submit" class="btn btn-block btn-lg btn-success"
+                        {% if not application.is_general_filled %} disabled="disabled"{% endif %}>
+                        {% bootstrap_icon 'ok' %}
+                        {% trans 'Submit application' %}
+                    </button>
+                </form>
+            </div>
+            {% endif %}
         {% endif %}
     {% endif %}
 {% endblock %}

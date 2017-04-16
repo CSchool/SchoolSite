@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load bootstrap3 %}
 {% block page_title %}{% trans 'Submit application' %}{% endblock %}
 {% block submit_application_button %}{% endblock %}
 {% block content %}
@@ -12,7 +13,7 @@
             <th>{% trans 'Period' %}</th>
             <th>{% trans 'Registration ends' %}</th>
             <th>{% trans 'Period dates' %}</th>
-            <th>{% trans 'Application status' %}</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -23,26 +24,51 @@
                     <td>{{ period.period.registration_end|date:"j M Y H:i" }}</td>
                     <td>{{ period.period.begin|date:"j M Y" }} &ndash; {{ period.period.end|date:"j M Y" }}</td>
                     <td><b>
-                    {% if period.status == 'NA' %}
-                        {% if period.period.registration_open %}
-                            <a href="{% url 'applications_choose_group' period.period.id %}">
-                                {% trans 'Submit application' %} &raquo;
-                            </a>
-                        {% else %}
-                            {% if period.period.ongoing %}
-                                {% trans 'Ongoing' %}
+                    {% if period.status == "NA" %}
+                        {% if period.allow %}
+                            {% if period.period.registration_open %}
+                                <div class="dropdown">
+                                    <a href="#" class="dropdown-toggle" type="button"
+                                    id="pdropdown-{{ period.period.id }}" data-toggle="dropdown"
+                                    aria-haspopup="true" aria-expanded="true">
+                                        {% trans 'Submit application' %}
+                                        <span class="caret"></span>
+                                    </a>
+                                    <ul class="dropdown-menu" aria-labelledby="pdropdown-{{ period.period.id }}">
+                                        {% if period.children %}
+                                        <li class="dropdown-header">{% trans 'Did not apply' %}</li>
+                                        {% for child in period.children %}
+                                            <li><a href="{% url 'applications_choose_group' child.username period.period.id %}">
+                                                {% bootstrap_icon 'plus' %}
+                                                {{ child.get_initials }} &raquo;
+                                            </a></li>
+                                        {% endfor %}
+                                        {% endif %}
+                                        {% if period.achildren %}
+                                        <li class="dropdown-header">{% trans 'Did apply' %}</li>
+                                        {% for child in period.achildren %}
+                                            <li><a href="{% url 'applications_group_application' child.application.id %}">
+                                                {% bootstrap_icon 'pencil' %}
+                                                {{ child.child.get_initials }} &raquo;
+                                            </a></li>
+                                        {% endfor %}
+                                        {% endif %}
+                                    </ul>
+                                </div>
                             {% else %}
-                                {% if not period.period.began %}
-                                    {% trans 'Not yet started' %}
+                                {% if period.period.ongoing %}
+                                    {% trans 'Ongoing' %}
                                 {% else %}
-                                    {% trans 'Ended' %}
+                                    {% if not period.period.began %}
+                                        {% trans 'Not yet started' %}
+                                    {% else %}
+                                        {% trans 'Ended' %}
+                                    {% endif %}
                                 {% endif %}
                             {% endif %}
                         {% endif %}
                     {% else %}
-                        <a href="{% url 'applications_choose_group' period.period.id %}">
-                            {{ period.status_verbose }}
-                        </a>
+                        <a href="{% url 'applications_group_application' period.app_id %}">{{ period.status_verbose }} &raquo;</a>
                     {% endif %}
                     </b></td>
                 </tr>

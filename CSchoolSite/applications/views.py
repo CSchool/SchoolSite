@@ -1,40 +1,68 @@
 import tempfile
 import mimetypes
+import os
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.core.files.storage import FileSystemStorage
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect, reverse
 from django.views.decorators.http import require_POST
 
-from applications.forms import CreateApplicationForm, EventApplicationGenericForm, TextDisplayWidget, VoucherForm
+from applications.forms import CreateApplicationForm, EventApplicationGenericForm, TextDisplayWidget, VoucherForm, \
+    EventApplicationRenderForm
 from applications.models import Period, Event, PracticeExamApplication, EventApplication, PracticeExamRun, \
-    TheoryExamApplication, TheoryExamApplicationQuestion, TheoryExamQuestion, PracticeExamProblem, CampVoucher
+    TheoryExamApplication, TheoryExamApplicationQuestion, TheoryExamQuestion, PracticeExamProblem,\
+    CampVoucher, get_file_path
 from applications.decorators import study_group_application
+from userprofile.models import Relationship, User
+
 import ejudge
 
 
 @login_required
 def choose_period(req):
-    if not req.user.is_eligible_for_application():
+    if not req.user.is_eligible_for_application_viewing():
         raise PermissionDenied
     periods = []
+    pmap = {}
     for p in Period.objects.order_by("-begin").all():
-        status, status_verbose = p.get_application_status(req.user)
-        periods.append(dict(period=p, status=status, status_verbose=status_verbose))
+        status, status_verbose, app_id = p.get_application_status(req.user) # TODO: N + 1 query is bad
+        pmap[p.id] = len(periods)
+        periods.append(dict(period=p, status=status, status_verbose=status_verbose, app_id=app_id,
+                            allow=req.user.is_eligible_for_application(p), achildren=[]))
+    if req.user.is_eligible_for_application():
+        children = Relationship.objects.filter(relative=req.user).all()
+        assoc = EventApplication.objects\
+            .filter(user_id__in=map(lambda x: x.child.id, children))\
+            .filter(event__period_id__in=map(lambda x: x['period'].id, periods))\
+            .all()
+        for ea in assoc:
+            periods[pmap[ea.event.period.id]]['achildren'].append(dict(child=ea.user, application=ea))
+        for p in periods:
+            p['achildren_set'] = set([x['child'].id for x in p['achildren']])
+        children_set = set(children)
+        for p in periods:
+            p['children'] = []
+            for child in children_set:
+                if child.child.id not in p['achildren_set']:
+                    p['children'].append(child.child)
+
     return render(req, "applications/choose_period.html", {
         "periods": periods
     })
 
-
 @login_required
 @study_group_application
-def choose_group(req, period_id):
+def choose_group(req, username, period_id):
     try:
         period = Period.objects.get(id=period_id)
-    except Period.DoesNotExist:
+        user = User.objects.get(username=username)
+    except Exception:
         raise Http404
     if not req.user.is_eligible_for_application(period):
+        raise PermissionDenied
+    if not Relationship.objects.filter(relative=req.user, child=user).exists():
         raise PermissionDenied
     groups = period.event_set.filter(type=Event.CLASS_GROUP).order_by("difficulty").all()
     categories = {}
@@ -46,7 +74,8 @@ def choose_group(req, period_id):
     return render(req, "applications/choose_group.html", {
         "period": period,
         "categories": sorted(list(categories.values()), key=lambda x: x['name']),
-        "move": False
+        "move": False,
+        "username": username
     })
 
 
@@ -81,37 +110,24 @@ def move_group(req, period_id):
 
 
 @login_required
-@study_group_application
-def confirm_group(req, group_id):
-    try:
-        group = Event.objects.get(id=group_id, type=Event.CLASS_GROUP)
-    except Event.DoesNotExist:
-        raise Http404
-    period = group.period
-    if not req.user.is_eligible_for_application(period):
-        raise PermissionDenied
-    return render(req, "applications/confirm_group.html", {
-        "period": period,
-        "group": group
-    })
-
-
-@login_required
 @require_POST
 def create_application(req):
     form = CreateApplicationForm(req.POST)
     if form.is_valid():
         try:
             group = Event.objects.get(id=form.cleaned_data['group_id'], type=Event.CLASS_GROUP)
+            user = User.objects.get(username=form.cleaned_data['username'])
             period = group.period
-        except Event.DoesNotExist:
+        except Exception:
             raise PermissionDenied
         if not req.user.is_eligible_for_application(group.period):
+            raise PermissionDenied
+        if not Relationship.objects.filter(relative=req.user, child=user).exists():
             raise PermissionDenied
         if req.POST.get('move'):
             # move application
             try:
-                ea = EventApplication.objects.filter(event__period=period, user=req.user).get()
+                ea = EventApplication.objects.filter(event__period=period, user=user).get()
             except EventApplication.DoesNotExist:
                 raise PermissionDenied
             if hasattr(ea, 'theory_exam') and ea.theory_exam:
@@ -119,28 +135,30 @@ def create_application(req):
             if hasattr(ea, 'practice_exam') and ea.practice_exam:
                 ea.practice_exam.delete()
             ea.status = EventApplication.TESTING
-            ea.user = req.user
+            ea.user = user
             ea.event = group
             ea.save()
         else:
             try:
-                ea = EventApplication.objects.get(user=req.user, event=group)
+                ea = EventApplication.objects.get(user=user, event=group)
             except EventApplication.DoesNotExist:
-                ea = EventApplication.objects.create(user=req.user, event=group)
+                ea = EventApplication.objects.create(user=user, event=group)
                 ea.save()
         if hasattr(group, 'practiceexam'):
-            PracticeExamApplication.generate_for_user(req.user, group.practiceexam).save()
+            PracticeExamApplication.generate_for_user(user, group.practiceexam).save()
         if hasattr(group, 'theoryexam'):
-            TheoryExamApplication.generate_for_user(req.user, group.theoryexam).save()
-        return redirect(reverse('applications_group_application', args=[group.id]))
+            TheoryExamApplication.generate_for_user(user, group.theoryexam).save()
+        return redirect(reverse('applications_group_application', args=[ea.id]))
     raise PermissionDenied
 
 
 @login_required
-def group_application(req, group_id):
+def group_application(req, application_id):
     try:
-        group = Event.objects.get(id=group_id, type=Event.CLASS_GROUP, eventapplication__user=req.user)
-        application = group.eventapplication_set.get(user=req.user)
+        application = EventApplication.objects.get(id=application_id, event__type=Event.CLASS_GROUP)
+        if not application.viewable(req.user):
+            raise PermissionDenied
+        group = application.event
         try:
             practice_exam = application.practice_exam
         except PracticeExamApplication.DoesNotExist:
@@ -153,15 +171,20 @@ def group_application(req, group_id):
     except:
         raise Http404
 
+    parent_priv = application.has_parent_privileges(req.user)
+    child_priv = application.has_child_privileges(req.user)
+
     confirm_submit = False
     if req.POST.get('confirm_submit') is not None:
-        if application.modifiable:
+        if application.modifiable and parent_priv:
             confirm_submit = True
 
     if req.POST.get('confirm_application_submit') is not None:
         if not application.modifiable:
             raise PermissionDenied
         if not application.is_general_filled:
+            raise PermissionDenied
+        if not parent_priv:
             raise PermissionDenied
         passed = True
         if theory_exam:
@@ -173,7 +196,7 @@ def group_application(req, group_id):
         else:
             application.status = EventApplication.TESTING_FAILED
         application.save()
-        return redirect(reverse('applications_group_application', args=[group_id]))
+        return redirect(reverse('applications_group_application', args=[application.id]))
 
     try:
         voucher = CampVoucher.objects.filter(user=req.user, period=group.period).get()
@@ -199,17 +222,17 @@ def group_application(req, group_id):
             else:
                 if voucher:
                     voucher.delete()
-            return redirect(reverse('applications_group_application', args=[group.id]))
+            return redirect(reverse('applications_group_application', args=[application.id]))
     else:
         voucher_form = VoucherForm()
         if voucher:
             voucher_form.fields['voucher_id'].initial = voucher.voucher_id
         voucher_form.fields['confirm_participation'].initial = application.confirm_participation
 
-    form = EventApplicationGenericForm(instance=application)
-    for key in form.fields.keys():
-        form.fields[key].widget = TextDisplayWidget()
-        form.fields[key].help_text = None
+    info_form = EventApplicationGenericForm(instance=application)
+    for key in info_form.fields.keys():
+        info_form.fields[key].widget = TextDisplayWidget()
+        info_form.fields[key].help_text = None
 
     if practice_exam is None:
         practice_solved = None
@@ -232,31 +255,50 @@ def group_application(req, group_id):
         "total_practice": practice_total,
         "answered_theory": theory_answered,
         "total_theory": theory_total,
-        "info_form": form,
+        "info_form": info_form,
         "confirm_submit": confirm_submit,
         "voucher": voucher,
-        "voucher_form": voucher_form
+        "voucher_form": voucher_form,
+        "parent_priv": parent_priv,
+        "child_priv": child_priv,
+        "personal_data_doc_name": os.path.basename(application.personal_data_doc.name)
     })
 
 
 @login_required
-def group_application_edit_info(req, group_id):
+def group_application_edit_info(req, application_id):
     try:
-        group = Event.objects.get(id=group_id, type=Event.CLASS_GROUP, eventapplication__user=req.user)
-        application = group.eventapplication_set.get(user=req.user)
+        application = EventApplication.objects.get(id=application_id, event__type=Event.CLASS_GROUP)
+        if not application.viewable(req.user):
+            raise PermissionDenied
+        group = application.event
     except Event.DoesNotExist:
         raise Http404
     except EventApplication.DoesNotExist:
         raise Http404
+    uploaded = None
+    render_file = False
     if req.method == "POST":
         if not application.modifiable:
             raise PermissionDenied
-        form = EventApplicationGenericForm(req.POST, instance=application)
+        form = EventApplicationGenericForm(req.POST, req.FILES, instance=application)
         if form.is_valid():
-            form.save()
-            return redirect(reverse('applications_group_application', args=[group_id]))
+            # form.save() # We handle file upload separately, because privacy
+            form = EventApplicationRenderForm(req.POST, instance=application)
+            if form.is_valid():
+                doc = req.FILES.get('personal_data_doc')
+                if doc is not None:
+                    path = os.path.join('personal_data_docs', 'user_%d' % application.user_id, doc.name)
+                    application.personal_data_doc.name = path
+                form.save()
+                application.save()
+                return redirect(reverse('applications_group_application', args=[application.id]))
+            else:
+                render_file = True # But why would it be invalid
     else:
-        form = EventApplicationGenericForm(instance=application)
+        form = EventApplicationRenderForm(instance=application)
+        render_file = True
+        uploaded = os.path.basename(application.personal_data_doc.name)
         if not application.modifiable:
             for key in form.fields.keys():
                 form.fields[key].widget = TextDisplayWidget()
@@ -264,15 +306,19 @@ def group_application_edit_info(req, group_id):
     return render(req, "applications/group_application_edit_info.html", {
         "group": group,
         "application": application,
-        "form": form
+        "form": form,
+        "uploaded": uploaded,
+        "render_file": render_file
     })
 
 
 @login_required
-def group_application_voucher_info(req, group_id):
+def group_application_voucher_info(req, application_id):
     try:
-        group = Event.objects.get(id=group_id, type=Event.CLASS_GROUP, eventapplication__user=req.user)
-        application = group.eventapplication_set.get(user=req.user)
+        application = EventApplication.objects.get(id=application_id, event__type=Event.CLASS_GROUP)
+        if not application.viewable(req.user):
+            raise PermissionDenied
+        group = application.event
     except Event.DoesNotExist:
         raise Http404
     except EventApplication.DoesNotExist:
@@ -297,10 +343,12 @@ def group_application_voucher_info(req, group_id):
 
 
 @login_required
-def group_application_view_statement(req, group_id, problem_id):
+def group_application_view_statement(req, application_id, problem_id):
     try:
-        group = Event.objects.get(id=group_id, type=Event.CLASS_GROUP, eventapplication__user=req.user)
-        application = group.eventapplication_set.get(user=req.user)
+        application = EventApplication.objects.get(id=application_id, event__type=Event.CLASS_GROUP)
+        if not application.viewable(req.user):
+            raise PermissionDenied
+        group = application.event
     except Event.DoesNotExist:
         raise Http404
     except EventApplication.DoesNotExist:
@@ -321,45 +369,76 @@ def group_application_view_statement(req, group_id, problem_id):
     f.close()
     return HttpResponse(content, content_type=mime_type)
 
+@login_required
+def group_application_doc(req, application_id, filename):
+    try:
+        application = EventApplication.objects.get(id=application_id, event__type=Event.CLASS_GROUP)
+        if not application.viewable(req.user):
+            raise PermissionDenied
+        group = application.event
+    except Event.DoesNotExist:
+        raise Http404
+    except EventApplication.DoesNotExist:
+        raise Http404
+    if not application.personal_data_doc:
+        raise Http404
+    if os.path.basename(application.personal_data_doc.name) != filename:
+        raise Http404
+    mime = mimetypes.MimeTypes()
+    mime_type = mime.guess_type(application.personal_data_doc.path)[0]
+    f = application.personal_data_doc.file
+    f.open()
+    content = f.read()
+    f.close()
+    return HttpResponse(content, content_type=mime_type)
+
+
 
 @login_required
-def group_application_practice_exam(req, group_id):
+def group_application_practice_exam(req, application_id):
     try:
-        group = Event.objects.get(id=group_id, type=Event.CLASS_GROUP, eventapplication__user=req.user)
-        application = group.eventapplication_set.get(user=req.user)
+        application = EventApplication.objects.get(id=application_id, event__type=Event.CLASS_GROUP)
+        if not application.viewable(req.user):
+            raise PermissionDenied
+        group = application.event
     except Event.DoesNotExist:
         raise Http404
     except EventApplication.DoesNotExist:
         raise Http404
     if application.practice_exam is None:
         raise Http404
+    child_priv = application.has_child_privileges(req.user)
     problems = []
-    all_runs = PracticeExamRun.objects.filter(problem__in=application.practice_exam.problems.all(), user=req.user) \
+    all_runs = PracticeExamRun.objects.filter(problem__in=application.practice_exam.problems.all(), user=application.user) \
         .order_by('-submitted').all()
     for problem in application.practice_exam.problems.all():
         problems.append({
             "problem": problem,
             "runs": all_runs.filter(problem=problem),
-            "statement_url": reverse('applications_view_statement', args=[group.id, problem.id])
+            "statement_url": reverse('applications_view_statement', args=[application.id, problem.id])
         })
     return render(req, "applications/group_application_practice_exam.html", {
         "group": group,
         "application": application,
-        "problems": problems
+        "problems": problems,
+        "child_priv": child_priv,
     })
 
 
 @login_required
-def group_application_theory_exam(req, group_id):
+def group_application_theory_exam(req, application_id):
     try:
-        group = Event.objects.get(id=group_id, type=Event.CLASS_GROUP, eventapplication__user=req.user)
-        application = group.eventapplication_set.get(user=req.user)
+        application = EventApplication.objects.get(id=application_id, event__type=Event.CLASS_GROUP)
+        if not application.viewable(req.user):
+            raise PermissionDenied
+        group = application.event
     except Event.DoesNotExist:
         raise Http404
     except EventApplication.DoesNotExist:
         raise Http404
     if application.theory_exam is None:
         raise Http404
+    child_priv = application.has_child_privileges(req.user)
     questions = list(TheoryExamApplicationQuestion.objects.filter(application=application.theory_exam).all())
     qs = []
     qsbm = {}
@@ -369,18 +448,18 @@ def group_application_theory_exam(req, group_id):
         if form is None:
             empty = True
             form = question.question.django_form()
-        if not application.modifiable:
+        if not application.modifiable or not child_priv:
             for key in form.fields.keys():
                 form.fields[key].widget = TextDisplayWidget()
                 form.fields[key].help_text = None
         qs.append({
             "question": question,
             "form": form,
-            "display": not empty or application.modifiable
+            "display": not empty or (application.modifiable and child_priv)
         })
         qsbm[question.question.id] = len(qs) - 1
     if req.POST.get('qsubmit'):
-        if not application.modifiable:
+        if not application.modifiable or not child_priv:
             raise PermissionDenied
         try:
             question = TheoryExamApplicationQuestion.objects.get(id=int(req.POST['question_id']))
@@ -392,7 +471,7 @@ def group_application_theory_exam(req, group_id):
                 else:
                     question.answer = picked
                 question.save()
-                return redirect(reverse('applications_group_application_theory_exam', args=[group_id]) + "#q" + str(
+                return redirect(reverse('applications_group_application_theory_exam', args=[application.id]) + "#q" + str(
                     question.question.id))
             else:
                 qs[qsbm[question.question.id]]['form'] = form
@@ -402,16 +481,19 @@ def group_application_theory_exam(req, group_id):
     return render(req, "applications/group_application_theory_exam.html", {
         "group": group,
         "application": application,
-        "questions": qs
+        "questions": qs,
+        "child_priv": child_priv,
     })
 
 
 @login_required
 @require_POST
-def group_application_submit_run(req, group_id):
+def group_application_submit_run(req, application_id):
     try:
-        group = Event.objects.get(id=group_id, type=Event.CLASS_GROUP, eventapplication__user=req.user)
-        application = group.eventapplication_set.get(user=req.user)
+        application = EventApplication.objects.get(id=application_id, event__type=Event.CLASS_GROUP)
+        if not application.viewable(req.user):
+            raise PermissionDenied
+        group = application.event
         if 'source' not in req.FILES:
             raise PermissionDenied
         if 'lang' not in req.POST:
@@ -426,7 +508,7 @@ def group_application_submit_run(req, group_id):
                 tmp.write(chunk)
                 tmp.flush()
             PracticeExamRun.submit(req, req.POST['problem_id'], req.POST['lang'], tmp.name)
-        return redirect(reverse('applications_group_application_practice_exam', args=[group_id]))
+        return redirect(reverse('applications_group_application_practice_exam', args=[application.id]))
     except:
         raise PermissionDenied
 
@@ -434,9 +516,14 @@ def group_application_submit_run(req, group_id):
 @login_required
 def group_application_delete_confirmation(req, application_id):
     try:
-        application = EventApplication.objects.get(id=application_id, user=req.user)
+        application = EventApplication.objects.get(id=application_id, event__type=Event.CLASS_GROUP)
+        if not application.viewable(req.user):
+            raise PermissionDenied
+        group = application.event
     except EventApplication.DoesNotExist:
         raise Http404
+    if not application.has_parent_privileges(req.user):
+        raise PermissionDenied
     return render(req, "applications/confirm_application_delete.html", {
         "application": application,
         "group": application.event,
@@ -448,9 +535,14 @@ def group_application_delete_confirmation(req, application_id):
 @require_POST
 def group_application_delete(req, application_id):
     try:
-        application = EventApplication.objects.get(id=application_id, user=req.user)
+        application = EventApplication.objects.get(id=application_id, event__type=Event.CLASS_GROUP)
+        if not application.viewable(req.user):
+            raise PermissionDenied
+        group = application.event
     except EventApplication.DoesNotExist:
         raise Http404
+    if not application.has_parent_privileges(req.user):
+        raise PermissionDenied
     application.delete()
     return redirect(reverse('index'))
 

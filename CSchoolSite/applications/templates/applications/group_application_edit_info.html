@@ -5,12 +5,30 @@
 {% block submit_application_button %}{% endblock %}
 {% block content %}
     <h3 class="page-header text-center">
-        <a href="{% url 'applications_group_application' group.id %}">{% trans 'Application to' %} &quot;{{ group.name }}&quot;</a>
+        <a href="{% url 'applications_group_application' application.id %}">{% trans 'Application to' %} &quot;{{ group.name }}&quot;</a>
     </h3>
     <div class="col-md-6 col-md-offset-3">
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
     {% bootstrap_form form %}
+    {% if render_file %}
+    <div class="form-group">
+        <label class="control-label" for="id_personal_data_doc">
+            {% trans 'Personal data processing agreement' %}
+        </label>
+        <div class="row bootstrap3-multi-input">
+            <div class="col-xs-12">
+            {% if uploaded %}
+                {% trans 'Uploaded' %}: <a href="{% url 'applications_group_application_doc' application.id uploaded %}">
+                    {{ uploaded }}
+                </a><br />
+            {% trans 'Reupload' %}:
+            {% endif %}
+            <input type="file" name="personal_data_doc" title="" id="id_personal_data_doc" class="">
+            </div>
+        </div>
+    </div>
+    {% endif %}
     {% buttons %}
         {% if application.modifiable %}
         <button type="submit" class="btn btn-lg btn-primary btn-block">{% trans 'Submit' %}</button>
