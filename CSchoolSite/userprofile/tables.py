@@ -7,8 +7,6 @@ from django.utils.translation import ugettext_lazy as _
 from userprofile.models import Relationship, User
 from userprofile.utils import is_group_member
 
-from main.enums import APPROVED
-
 
 class PossibleRelativesTable(BaseDatatableView):
     max_display_length = 50
@@ -20,35 +18,6 @@ class PossibleRelativesTable(BaseDatatableView):
     # get data
     def get_initial_queryset(self):
         user = self.request.user
-
-        # # check is user parent or child
-        # excluded_id_list = []
-        # exclude_children = []
-        # exclude_parents = []
-        # exclude_families = []
-        #
-        # # parents_users = Group.objects.get(name=_('Parents')).user_set.values_list('id', flat=True)
-        #
-        # # try:
-        # #   exclude_children = Relationship.objects.filter(relative=user.id).values_list('child', flat=True)
-        # #    # exclude_child = [value for value in exclude_child if value not in parents_users]
-        # # except Relationship.DoesNotExist:
-        # #    pass
-        #
-        # try:
-        #     exclude_parents = Relationship.objects.filter(child=user.id).values_list('relative', flat=True)
-        #     # exclude_parent = [value for value in exclude_parent if value not in parents_users]
-        # except Relationship.DoesNotExist:
-        #     pass
-        #
-        # try:
-        #     exclude_children = Relationship.objects.values_list('child', flat=True)
-        # except Relationship.DoesNotExist:
-        #     pass
-        #
-        # excluded_id_list.append(user.id)
-        # excluded_id_list.extend(exclude_children)
-        # excluded_id_list.extend(exclude_parents)
 
         excluded_id_list = []
         exclude_parents = []
@@ -85,8 +54,24 @@ class PossibleRelativesTable(BaseDatatableView):
         if column == 'first_name':
             return '{}'.format(row.get_initials())
         elif column == 'created':
-            return '<button type="button" class="btn btn-primary" data-relative="{}">{}</button>' \
-                .format(row.id, _('Send relationship request'))
+            return '''
+            <div class="dropdown">
+            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+                {req_text}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="datatables_send_parent" href="#"  data-relative="{row_id}">{parent_text}</a></li>
+                <li><a class="datatables_send_child" href="#"  data-child="{row_id}">{child_text}</a></li>
+            </ul>
+            </div>
+            ''' \
+                .format(
+                    row_id=row.id,
+                    req_text=_('Send relationship request'),
+                    parent_text=_('This is my parent'),
+                    child_text=_('This is my child')
+            )
         else:
             return super(PossibleRelativesTable, self).render_column(row, column)
 
@@ -113,13 +98,9 @@ class RelationshipTable(BaseDatatableView):
                 # parents know their children
                 return _('Child')
             else:
-                # children don't know parents yet
-                if row.request != APPROVED:
-                    return _('Unknown')
-                else:
-                    return _('Parent')
+                return _('Parent')
         elif column == 'modified':
-            if row.request != APPROVED:
+            if row.request != Relationship.APPROVED:
                 # acceptation link or nothing
                 if row.invited_user == user:
                     relative = row.relative if row.invited_user == row.child else row.child

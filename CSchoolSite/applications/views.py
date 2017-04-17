@@ -9,11 +9,10 @@ from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect, reverse
 from django.views.decorators.http import require_POST
 
-from applications.forms import CreateApplicationForm, EventApplicationGenericForm, TextDisplayWidget, VoucherForm, \
+from applications.forms import CreateApplicationForm, EventApplicationGenericForm, TextDisplayWidget, \
     EventApplicationRenderForm
 from applications.models import Period, Event, PracticeExamApplication, EventApplication, PracticeExamRun, \
-    TheoryExamApplication, TheoryExamApplicationQuestion, TheoryExamQuestion, PracticeExamProblem,\
-    CampVoucher, get_file_path
+    TheoryExamApplication, TheoryExamApplicationQuestion, TheoryExamQuestion, PracticeExamProblem
 from applications.decorators import study_group_application
 from userprofile.models import Relationship, User
 
@@ -32,7 +31,7 @@ def choose_period(req):
         periods.append(dict(period=p, status=status, status_verbose=status_verbose, app_id=app_id,
                             allow=req.user.is_eligible_for_application(p), achildren=[]))
     if req.user.is_eligible_for_application():
-        children = Relationship.objects.filter(relative=req.user).all()
+        children = Relationship.objects.filter(relative=req.user, request=Relationship.APPROVED).all()
         assoc = EventApplication.objects\
             .filter(user_id__in=map(lambda x: x.child.id, children))\
             .filter(event__period_id__in=map(lambda x: x['period'].id, periods))\
@@ -62,7 +61,7 @@ def choose_group(req, username, period_id):
         raise Http404
     if not req.user.is_eligible_for_application(period):
         raise PermissionDenied
-    if not Relationship.objects.filter(relative=req.user, child=user).exists():
+    if not Relationship.objects.filter(relative=req.user, child=user, request=Relationship.APPROVED).exists():
         raise PermissionDenied
     groups = period.event_set.filter(type=Event.CLASS_GROUP).order_by("difficulty").all()
     categories = {}
@@ -122,7 +121,7 @@ def create_application(req):
             raise PermissionDenied
         if not req.user.is_eligible_for_application(group.period):
             raise PermissionDenied
-        if not Relationship.objects.filter(relative=req.user, child=user).exists():
+        if not Relationship.objects.filter(relative=req.user, child=user, request=Relationship.APPROVED).exists():
             raise PermissionDenied
         if req.POST.get('move'):
             # move application
@@ -198,37 +197,6 @@ def group_application(req, application_id):
         application.save()
         return redirect(reverse('applications_group_application', args=[application.id]))
 
-    try:
-        voucher = CampVoucher.objects.filter(user=req.user, period=group.period).get()
-    except CampVoucher.DoesNotExist:
-        voucher = None
-
-    if req.POST.get('voucher_submit'):
-        voucher_form = VoucherForm(req.POST)
-        if voucher_form.is_valid():
-            application.confirm_participation = voucher_form.cleaned_data.get('confirm_participation')
-            application.save()
-            if voucher_form.cleaned_data.get('voucher_id'):
-                if not voucher:
-                    voucher = CampVoucher.objects.create(user=req.user,
-                                                         period=group.period,
-                                                         voucher_id=voucher_form.cleaned_data.get('voucher_id'),
-                                                         status=CampVoucher.AWAITING_PAYMENT)
-                else:
-                    if voucher.voucher_id != voucher_form.cleaned_data.get('voucher_id'):
-                        voucher.voucher_id = voucher_form.cleaned_data.get('voucher_id')
-                        voucher.status = CampVoucher.AWAITING_PAYMENT
-                voucher.save()
-            else:
-                if voucher:
-                    voucher.delete()
-            return redirect(reverse('applications_group_application', args=[application.id]))
-    else:
-        voucher_form = VoucherForm()
-        if voucher:
-            voucher_form.fields['voucher_id'].initial = voucher.voucher_id
-        voucher_form.fields['confirm_participation'].initial = application.confirm_participation
-
     info_form = EventApplicationGenericForm(instance=application)
     for key in info_form.fields.keys():
         info_form.fields[key].widget = TextDisplayWidget()
@@ -257,8 +225,6 @@ def group_application(req, application_id):
         "total_theory": theory_total,
         "info_form": info_form,
         "confirm_submit": confirm_submit,
-        "voucher": voucher,
-        "voucher_form": voucher_form,
         "parent_priv": parent_priv,
         "child_priv": child_priv,
         "personal_data_doc_name": os.path.basename(application.personal_data_doc.name)
@@ -313,37 +279,7 @@ def group_application_edit_info(req, application_id):
 
 
 @login_required
-def group_application_voucher_info(req, application_id):
-    try:
-        application = EventApplication.objects.get(id=application_id, event__type=Event.CLASS_GROUP)
-        if not application.viewable(req.user):
-            raise PermissionDenied
-        group = application.event
-    except Event.DoesNotExist:
-        raise Http404
-    except EventApplication.DoesNotExist:
-        raise Http404
-    if application.status != EventApplication.TESTING_SUCCEEDED:
-        raise PermissionDenied
-    if req.method == "POST":
-        form = VoucherForm(req.POST)
-    else:
-        form = VoucherForm()
-        try:
-            voucher = CampVoucher.objects.get(period=group.period, user=req.user)
-            form.fields['voucher_id'].initial = voucher.voucher_id
-        except CampVoucher.DoesNotExist:
-            voucher = None
-        form.fields['confirm_participation'].initial = application.confirm_participation
-    return render(req, "applications/group_application_edit_info.html", {
-        "group": group,
-        "application": application,
-        "form": form
-    })
-
-
-@login_required
-def group_application_view_statement(req, application_id, problem_id):
+def group_application_view_statement(req, application_id, problem_id, filename):
     try:
         application = EventApplication.objects.get(id=application_id, event__type=Event.CLASS_GROUP)
         if not application.viewable(req.user):
@@ -360,6 +296,8 @@ def group_application_view_statement(req, application_id, problem_id):
     except PracticeExamProblem.DoesNotExist:
         raise Http404
     if problem.statement is None:
+        raise Http404
+    if filename != os.path.basename(problem.statement.name):
         raise Http404
     mime = mimetypes.MimeTypes()
     mime_type = mime.guess_type(problem.statement.path)[0]
@@ -415,7 +353,8 @@ def group_application_practice_exam(req, application_id):
         problems.append({
             "problem": problem,
             "runs": all_runs.filter(problem=problem),
-            "statement_url": reverse('applications_view_statement', args=[application.id, problem.id])
+            "statement_url": reverse('applications_view_statement',
+                                     args=[application.id, problem.id, os.path.basename(problem.statement.name)])
         })
     return render(req, "applications/group_application_practice_exam.html", {
         "group": group,

@@ -242,49 +242,6 @@
     </div>
     {% endif %}
 
-    {% if application.status == application.TESTING_SUCCEEDED %}
-        <hr />
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4>
-                    {% trans 'Camp voucher' %}&nbsp;
-                    {% if application.confirm_participation %}
-                        {% if voucher %}
-                            <span class="
-                                {% if voucher.status == voucher.APPROVED %}
-                                    text-success
-                                {% elif voucher.status == voucher.DECLINED %}
-                                    text-danger
-                                {% else %}
-                                    text-warning
-                                {% endif %}">
-                                {{ voucher.get_status_display|lower }}
-
-                            </span>
-                        {% else %}
-                            <span class="text-danger">
-                                {% trans 'voucher information missing' %}
-                            </span>
-                        {% endif %}
-                    {% else %}
-                        <span class="text-danger">
-                            {% trans 'participation not confirmed' %}
-                        </span>
-                    {% endif %}
-                </h4>
-            </div>
-            <div class="panel-body">
-                <form method="POST">
-                    {% csrf_token %}
-                    {% bootstrap_form voucher_form %}
-                    <button type="submit" name="voucher_submit" value="True" class="btn btn-primary pull-right">
-                        {% trans 'Submit' %}
-                    </button>
-                </form>
-            </div>
-        </div>
-    {% endif %}
-
     {% if parent_priv %}
         {% if application.modifiable and not confirm_submit or application.status == application.TESTING_FAILED %}
         <hr />

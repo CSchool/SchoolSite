@@ -12,17 +12,29 @@ $(document).ready(function () {
         ]
     });
 
-    relativesTable.on('click', 'button', function () {
+    relativesTable.on('click', '.datatables_send_parent', function () {
         var id = $(this).data('relative');
-        var row = relativesDatatable.row($(this).parents('tr'));
-        var relative_cell = relativesDatatable.cell(row, 3).node();
-
-        var relative_value = ($('select', relative_cell).val());
 
         $.ajax({
             url: requestUrl,
             type: "POST",
             data: JSON.stringify({relative_id: id}),
+            cache:false,
+            dataType: "json",
+            success: function(resp){
+                relativesDatatable.draw(false);
+                console.log(resp);
+            }
+        });
+    });
+
+    relativesTable.on('click', '.datatables_send_child', function () {
+        var id = $(this).data('child');
+
+        $.ajax({
+            url: requestUrl,
+            type: "POST",
+            data: JSON.stringify({child_id: id}),
             cache:false,
             dataType: "json",
             success: function(resp){

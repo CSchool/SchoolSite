@@ -75,38 +75,6 @@ class Period(models.Model):
         return application.status, application.get_status_display(), application.id
 
 
-class CampVoucher(models.Model):
-    class Meta:
-        verbose_name = _('Camp voucher')
-        verbose_name_plural = _('Camp vouchers')
-        permissions = (
-            ("view_campvoucher", _("view camp vouchers")),
-        )
-
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name=_('Voucher owner'))
-    period = models.ForeignKey('Period', on_delete=models.CASCADE, verbose_name=_('Period'))
-    voucher_id = models.CharField(max_length=30, verbose_name=_('Voucher ID'))
-
-    # Voucher status
-    AWAITING_PAYMENT = 'WP'
-    DECLINED = 'DC'
-    PAID = 'PD'
-    APPROVED = 'AP'
-
-    CAMP_VOUCHER_STATUS_CHOICES = (
-        (AWAITING_PAYMENT, _('Awaiting payment')),
-        (DECLINED, _('Declined')),
-        (PAID, _('Paid')),
-        (APPROVED, _('Approved'))
-    )
-
-    status = models.CharField(max_length=2, choices=CAMP_VOUCHER_STATUS_CHOICES, default=AWAITING_PAYMENT,
-                              verbose_name='Статус')
-
-    def __str__(self):
-        return self.voucher_id
-
-
 class Event(models.Model):
     class Meta:
         verbose_name = _('Event')
@@ -590,7 +558,7 @@ class EventApplication(models.Model):
         if user.is_staff:
             return True
         from userprofile.models import Relationship
-        return Relationship.objects.filter(relative=user, child=self.user).exists()
+        return Relationship.objects.filter(relative=user, child=self.user, request=Relationship.APPROVED).exists()
 
     def has_child_privileges(self, user):
         if user.is_staff:

@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.db import models
 from tinymce.widgets import AdminTinyMCE
 
-from applications.models import Period, CampVoucher, Event, EventApplication, PracticeExam, PracticeExamApplication, \
+from applications.models import Period, Event, EventApplication, PracticeExam, PracticeExamApplication, \
     PracticeExamRun
 from applications.models import PracticeExamProblem
 from applications.models import TheoryExam, TheoryExamQuestion, TheoryExamQuestionOption
@@ -10,7 +10,6 @@ from applications.forms import EventApplicationAdminForm, PracticeExamRunAdminFo
 
 
 admin.site.register(Period)
-admin.site.register(CampVoucher)
 
 
 class EventAdmin(admin.ModelAdmin):

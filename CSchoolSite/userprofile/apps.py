@@ -31,8 +31,8 @@ def create_groups(sender, **kwargs):
 
     groups = [
         {'name': _('Education committee'),
-         'permissions': create_permissions_list(['add', 'change', 'delete', 'view'], 'campvoucher')},
-        {'name': _('Students'), 'permissions': create_permissions_list(['can_submit_application'])},
+         'permissions': []},
+        {'name': _('Students'), 'permissions': []},
         {'name': _('Parents'), 'permissions': []}
     ]
 

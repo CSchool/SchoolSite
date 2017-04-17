@@ -5,8 +5,6 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from CSchoolSite import settings
-from main.enums import REQUEST_STATUS
-from main.enums import WAITING
 from main.validators import PhoneValidator
 
 from applications.models import Period
@@ -21,7 +19,7 @@ class User(AbstractUser):
                              validators=[PhoneValidator()], help_text=_('The format of phone numbers is +7 (123) 456-78-90'))
 
     def get_initials(self):
-        full_name = '%s %s %s' % (self.last_name, self.first_name, self.patronymic)
+        full_name = '%s %s %s' % (self.last_name or '', self.first_name or '', self.patronymic or '')
         return full_name.strip()
 
     def is_eligible_for_application(self, period=None):
@@ -59,7 +57,16 @@ class Relationship(models.Model):
     invited_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="invited_user",
                                      null=True, default=None, verbose_name=_('Invited user'))
 
-    code = models.CharField(max_length=10, verbose_name=_('Invite code'))
+    WAITING = 'WT'
+    APPROVED = 'AP'
+    DECLINED = 'DC'
+
+    REQUEST_STATUS = (
+        (WAITING, _('Waiting')),
+        (APPROVED, _('Approved')),
+        (DECLINED, _('Declined'))
+    )
+
     request = models.CharField(max_length=2, choices=REQUEST_STATUS, default=WAITING,
                                verbose_name=_('Relationship request'))
 

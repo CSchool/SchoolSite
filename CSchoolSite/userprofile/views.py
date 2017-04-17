@@ -21,9 +21,6 @@ from userprofile.models import Relationship
 
 from userprofile.utils import is_group_member
 
-from main.enums import APPROVED
-
-
 @login_required
 def profile(request):
     return render(request, 'userprofile/user_profile.html', {"user": request.user})
@@ -57,48 +54,33 @@ def relatives_choice(request):
 def json_relatives_choice(request):
     if request.is_ajax() and request.method == 'POST':
         try:
-            user = request.user
             data = json.loads(request.body.decode('utf-8'))
-            relative = User.objects.get(id=data['relative_id'])
-            relative_type = ''  # data['relative_choice']
+            child = None
+            parent = None
+            other = None
+            if data.get('relative_id'):
+                relative_id = data.get('relative_id')
+                relative_type = "parent"
+                child = request.user
+                parent = other = User.objects.get(id=relative_id)
+            elif data.get('child_id'):
+                relative_id = data.get('child_id')
+                relative_type = "child"
+                parent = request.user
+                child = other = User.objects.get(id=relative_id)
+            else:
+                raise PermissionDenied
 
             parents_group = _('Parents')
-            is_user_parent = is_group_member(user, parents_group)
-            is_relative_parent = is_group_member(relative, parents_group)
 
-            if is_user_parent and is_relative_parent:
-                # parents can't have child relationship
-                raise ValueError(_("You can't add another parent as child!"))
-            elif not is_user_parent and not is_relative_parent:
-                # both users are not parents and request.user want to invite relative_user as parent
-                relative_type = 'parent'
-            elif (is_user_parent and not is_relative_parent) or (is_relative_parent and not is_user_parent):
-                # only one of persons is parent
-                relative_type = 'child'
-
-            invitation_code = get_random_string(length=8)
-
-            relative_person_id = None
-            child_person_id = None
-            invited_person_id = relative.id
-
-            if relative_type == 'parent':
-                relative_person_id = relative.id
-                child_person_id = user.id
-            elif relative_type == 'child':
-                relative_person_id = relative.id if is_relative_parent else user.id
-                child_person_id = user.id if is_relative_parent else relative.id
-
-            relationship = Relationship(relative=User.objects.get(id=relative_person_id),
-                                        child=User.objects.get(id=child_person_id),
-                                        invited_user=User.objects.get(id=invited_person_id),
-                                        code=invitation_code)
+            relationship = Relationship(relative=parent,
+                                        child=child,
+                                        invited_user=other)
             relationship.save()
 
-            notify.send(request.user, recipient=relative, verb=_('Relationship request'),
+            notify.send(request.user, recipient=other, verb=_('Relationship request'),
                         relative_type=relative_type, template='notifications/templates/relationship_request.html',
-                        username=request.user.username, initials=request.user.get_initials(),
-                        invitation_code=invitation_code)
+                        username=request.user.username, initials=request.user.get_initials())
 
             return HttpResponse(json.dumps({'status': 'OK'}), content_type="application/json")
         except Exception as e:
@@ -114,33 +96,36 @@ def relationship_acceptance(request, relative):
     try:
         relationship = Relationship.objects.get(Q(relative=relative, child=user) | Q(relative=user, child=relative))
     except Relationship.DoesNotExist:
-        raise PermissionDenied(_('This person didn\'t send you a relationship request!'))
+        raise PermissionDenied
 
-    if relationship.request == APPROVED:
-        raise PermissionDenied(_('Request has already approved!'))
+    if relationship.request == Relationship.APPROVED:
+        raise PermissionDenied(_('Request has already been approved'))
+
+    if relationship.invited_user != request.user:
+        raise PermissionDenied
 
     parents_group = _('Parents')
+    students_group = _('Students')
 
-    is_user_parent = is_group_member(user, parents_group)
-    is_relative_parent = is_group_member(relative, parents_group)
+    rel_type = _('parent') if relationship.child == user else _('child')
 
     # TODO: integrate children query
 
     if request.method == 'POST':
-        form = RelationshipAcceptanceForm(request.POST)
-
-        if form.data['password'] == relationship.code:
-            relationship.request = APPROVED
+        if request.POST.get('decline'):
+            relationship.request = Relationship.DECLINED
+            relationship.save()
+        else:
+            relationship.request = Relationship.APPROVED
             relationship.save()
 
-            if not is_user_parent and not is_relative_parent:
-                # relative is new parent
-                user.groups.add(Group.objects.get(name=parents_group))
+            if not relationship.relative.is_parent:
+                relationship.relative.groups.add(Group.objects.get(name=parents_group))
 
-            return HttpResponseRedirect(reverse('user_profile'))
-        else:
-            form.add_error('password', _('Invitation code are not same!'))
+            if not relationship.child.is_student:
+                relationship.child.groups.add(Group.objects.get(name=students_group))
+        return HttpResponseRedirect(reverse('user_profile'))
     else:
         form = RelationshipAcceptanceForm()
 
-    return render(request, 'userprofile/relationship_acceptance.html', {'form': form, 'relative': relative})
+    return render(request, 'userprofile/relationship_acceptance.html', {'rel_type': rel_type, 'relative': relative})
