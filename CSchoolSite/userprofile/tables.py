@@ -77,7 +77,7 @@ class RelationshipTable(BaseDatatableView):
 
     def get_initial_queryset(self):
         user = self.request.user
-        return Relationship.objects.filter(Q(relative=user) | Q(child=user)).filter(personal=True)
+        return Relationship.objects.filter(Q(relative=user) | Q(child=user))
 
     def render_column(self, row, column):
         user = self.request.user
