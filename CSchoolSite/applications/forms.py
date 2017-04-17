@@ -23,7 +23,7 @@ class EventApplicationGenericForm(forms.ModelForm):
     class Meta:
         model = EventApplication
         fields = ('student_inititals', 'grade', 'address', 'school', 'organization',
-                  'parent_phone_numbers', 'personal_data_doc')
+                  'parent_phone_numbers', 'voucher_parent', 'personal_data_doc')
 
     student_inititals = forms.CharField(required=False, label=_('Student\'s initials'), widget=TextDisplayWidget())
 

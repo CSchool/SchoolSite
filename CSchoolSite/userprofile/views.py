@@ -23,6 +23,8 @@ from userprofile.utils import is_group_member
 
 @login_required
 def profile(request):
+    if not request.user.personal:
+        raise PermissionDenied
     return render(request, 'userprofile/user_profile.html', {"user": request.user})
 
 
@@ -33,6 +35,8 @@ def logout(req):
 
 @login_required
 def edit_profile(request):
+    if not request.user.personal:
+        raise PermissionDenied
     form = UserForm(request.POST or None, instance=request.user)
 
     if request.method == 'POST':
@@ -69,6 +73,9 @@ def json_relatives_choice(request):
                 parent = request.user
                 child = other = User.objects.get(id=relative_id)
             else:
+                raise PermissionDenied
+
+            if not req.user.personal or not other.personal:
                 raise PermissionDenied
 
             parents_group = _('Parents')

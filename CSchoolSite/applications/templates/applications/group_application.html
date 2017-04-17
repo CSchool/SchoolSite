@@ -37,7 +37,7 @@
         {% blocktrans %}move your application to an easier group{% endblocktrans %}</a></b>.
         </div>
     {% endif %}
-    {% if application.status == application.TESTING_SUCCEEDED %}
+    {% if application.status == application.ACCEPTED %}
         <div class="alert alert-success" role="alert">
         <b>{% trans 'Congratulations' %}</b><br />
         {% trans 'You are enrolled to' %} {{ group.period.name }}!

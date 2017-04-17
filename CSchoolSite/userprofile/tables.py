@@ -42,7 +42,7 @@ class PossibleRelativesTable(BaseDatatableView):
         excluded_id_list.append(user.id)
 
         # exclude id from users
-        return User.objects.exclude(id__in=excluded_id_list)
+        return User.objects.filter(personal=True).exclude(id__in=excluded_id_list)
 
     # redefine column data
     def render_column(self, row, column):
@@ -77,7 +77,7 @@ class RelationshipTable(BaseDatatableView):
 
     def get_initial_queryset(self):
         user = self.request.user
-        return Relationship.objects.filter(Q(relative=user) | Q(child=user))
+        return Relationship.objects.filter(Q(relative=user) | Q(child=user)).filter(personal=True)
 
     def render_column(self, row, column):
         user = self.request.user

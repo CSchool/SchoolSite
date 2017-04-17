@@ -18,12 +18,23 @@ class User(AbstractUser):
     phone = models.CharField(_('phone'), max_length=18, null=True, blank=True, default='',
                              validators=[PhoneValidator()], help_text=_('The format of phone numbers is +7 (123) 456-78-90'))
 
+    personal = models.BooleanField(_('Account is personal'), null=False, blank=False, default=True,
+                                   help_text=_("Enable user profile and social/personal actions"))
+
+    alias = models.CharField(_('Alias'), max_length=250, null=True, blank=True, default='',
+                             help_text=_('Use contents of this field instead of username'))
+
     def get_initials(self):
         full_name = '%s %s %s' % (self.last_name or '', self.first_name or '', self.patronymic or '')
         return full_name.strip()
 
+    def get_aliased_username(self):
+        return self.alias if self.alias else self.username
+
     def is_eligible_for_application(self, period=None):
         if not self.is_authenticated():
+            return False
+        if not self.personal:
             return False
         if not self.is_parent:
             return False
@@ -34,6 +45,8 @@ class User(AbstractUser):
     def is_eligible_for_application_viewing(self):
         if not self.is_authenticated():
             return False
+        if not self.personal:
+            return False
         return bool(Period.objects.filter(registration_begin__lt=datetime.now(), registration_end__gt=datetime.now()))
 
     @property
@@ -43,6 +56,10 @@ class User(AbstractUser):
     @property
     def is_student(self):
         return is_group_member(self, _('Students'))
+
+    @property
+    def is_education_committee(self):
+        return is_group_member(self, _('Education committee'))
 
 
 class Relationship(models.Model):

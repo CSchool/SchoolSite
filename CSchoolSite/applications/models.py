@@ -496,6 +496,7 @@ class PersonalDataDoc(models.FileField):
     def url(self):
         return
 
+
 class EventApplication(models.Model):
     class Meta:
         verbose_name = _('Event application')
@@ -512,13 +513,19 @@ class EventApplication(models.Model):
 
     organization = models.CharField(max_length=250, null=True, blank=True, verbose_name=_('Organization'))
     parent_phone_numbers = models.TextField(null=True, blank=True, verbose_name=_("Parents' phone numbers"))
-    personal_data_doc = models.ImageField(null=True, verbose_name=_('Personal data processing agreement'))
+    personal_data_doc = models.FileField(null=True, verbose_name=_('Personal data processing agreement'))
+
+    voucher_parent = models.CharField(max_length=250, null=True, verbose_name=_('Parent\'s full name'),
+                                      help_text=_('Full name of the parent to whom the voucher is drawn up'))
+
+    voucher_id = models.CharField(max_length=30, null=True, blank=True, verbose_name=_('Voucher ID'))
 
     # Registration status
     TESTING = 'TG'
-    TESTING_SUCCEEDED = 'TS'
+    ACCEPTED = 'AC'
     TESTING_FAILED = 'TF'
     ENROLLED = 'ER'
+    ISSUED = 'IS'
     STUDYING = 'ST'
     SUCCESSED = 'SC'
     FAILED = 'FL'
@@ -526,9 +533,10 @@ class EventApplication(models.Model):
 
     EVENT_APPLICATION_STATUS_CHOICES = (
         (TESTING, _('Testing')),
-        (TESTING_SUCCEEDED, _('Testing succeeded')),
+        (ACCEPTED, _('Accepted')),
         (TESTING_FAILED, _('Testing failed')),
         (ENROLLED, _('Enrolled')),
+        (ISSUED, _('Issued')),
         (STUDYING, _('Studying')),
         (SUCCESSED, _('Successed')),
         (FAILED, _('Failed')),

@@ -36,6 +36,7 @@ class ExtendedRegistrationForm(RegistrationForm):
             User.USERNAME_FIELD,
             'first_name',
             'last_name',
+            'patronymic',
             'email',
             'password1',
             'password2'

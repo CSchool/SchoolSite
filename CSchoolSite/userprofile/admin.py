@@ -21,9 +21,10 @@ class UserAdmin(BaseUserAdmin):
             'patronymic',
             'birthday',
             'email',
-            'phone'
+            'phone',
+            'alias'
         )}),
-        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser',
+        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser', 'personal',
                                        'groups', 'user_permissions')}),
         (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
     )
