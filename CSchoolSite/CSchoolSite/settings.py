@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 
 import os
 
+import CSchoolSite.personalsettings as psettings
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -52,7 +54,9 @@ INSTALLED_APPS = [
     'main',
     'news',
     'applications',
-    'userprofile'
+    'userprofile',
+
+    'django_cleanup'
 ]
 
 STATICFILES_DIRS = [
@@ -67,7 +71,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.locale.LocaleMiddleware',
+    # 'django.middleware.locale.LocaleMiddleware',
 ]
 
 ROOT_URLCONF = 'CSchoolSite.urls'
@@ -102,8 +106,12 @@ WSGI_APPLICATION = 'CSchoolSite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.' + psettings.DATABASE_ENGINE,
+        'NAME': os.path.join(BASE_DIR, psettings.DATABASE_NAME) if psettings.DATABASE_ENGINE == "sqlite3" else psettings.DATABASE_NAME,
+        'USER': psettings.DATABASE_USER,
+        'PASSWORD': psettings.DATABASE_PASSWORD,
+        'HOST': psettings.DATABASE_HOST,
+        'PORT': psettings.DATABASE_PORT
     }
 }
 
@@ -163,15 +171,19 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 STATIC_URL = '/static/'
 
+# media files
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
 # registration
 
 LOGIN_REDIRECT_URL = 'index'
 
 # ejudge integration
-EJUDGE_CONTEST_ID = 7
-EJUDGE_USER_LOGIN = 'cschool_site_user'
-EJUDGE_USER_PASSWORD = 'Jo3J7eaLMriNVCDQ'
+EJUDGE_CONTEST_ID = psettings.EJUDGE_CONTEST_ID
+EJUDGE_USER_LOGIN = psettings.EJUDGE_USER_LOGIN
+EJUDGE_USER_PASSWORD = psettings.EJUDGE_USER_PASSWORD
 EJUDGE_BIN = '/home/ejudge/inst-ejudge/bin'
 EJUDGE_SESSION_TIMEOUT = 43200 # ejudge sets expiry to 24 hours, half that time just in case
-
 EJUDGE_CONTESTS_CMD_PATH = os.path.join(EJUDGE_BIN, 'ejudge-contests-cmd')
