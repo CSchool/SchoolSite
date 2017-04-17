@@ -33,7 +33,7 @@
             You didn't meet requirements for application to this group.
             Don't worry, perhaps you are not yet ready. You can
         {% endblocktrans %}
-        <b><a href="{% url 'applications_move_group' group.period.id %}">
+        <b><a href="{% url 'applications_move_group' application.id %}">
         {% blocktrans %}move your application to an easier group{% endblocktrans %}</a></b>.
         </div>
     {% endif %}
@@ -243,7 +243,6 @@
     {% endif %}
 
     {% if parent_priv %}
-        {% if application.modifiable and not confirm_submit or application.status == application.TESTING_FAILED %}
         <hr />
         <div class="col-md-4">
             <form action="{% url 'applications_delete_confirmation' application.id %}" method="POST">
@@ -266,7 +265,6 @@
                     </button>
                 </form>
             </div>
-            {% endif %}
         {% endif %}
     {% endif %}
 {% endblock %}

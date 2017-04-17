@@ -79,14 +79,19 @@ def choose_group(req, username, period_id):
 
 
 @login_required
-def move_group(req, period_id):
+def move_group(req, application_id):
     try:
-        period = Period.objects.get(id=period_id)
-        application = EventApplication.objects.filter(event__period=period, user=req.user).get()
-    except Period.DoesNotExist:
+        application = EventApplication.objects.get(id=application_id, event__type=Event.CLASS_GROUP)
+        if not application.viewable(req.user):
+            raise PermissionDenied
+        if not application.has_parent_privileges(req.user):
+            raise PermissionDenied
+        group = application.event
+        period = group.period
+    except Event.DoesNotExist:
         raise Http404
     except EventApplication.DoesNotExist:
-        raise PermissionDenied
+        raise Http404
     if not req.user.is_eligible_for_application(period):
         raise PermissionDenied
     move = True
@@ -104,7 +109,9 @@ def move_group(req, period_id):
     return render(req, "applications/choose_group.html", {
         "period": period,
         "categories": sorted(list(categories.values()), key=lambda x: x['name']),
-        "move": move
+        "move": move,
+        "application": application,
+        "username": application.user
     })
 
 

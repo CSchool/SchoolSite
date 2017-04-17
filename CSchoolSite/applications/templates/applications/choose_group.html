@@ -55,6 +55,7 @@
                     {% if move %}
                         <form action="{% url 'applications_create_application' %}" method="POST">
                             {% csrf_token %}
+                            <input type="hidden" name="username" value="{{ username }}" />
                             <input type="hidden" name="group_id" value="{{ group.id }}" />
                             <input type="hidden" name="move" value="True" />
                             <button class="btn btn-block btn-primary" type="submit">
@@ -78,7 +79,7 @@
     </div>
 {% endfor %}
 {% if move %}
-    <a href="{% url 'applications_choose_group' period.id %}">
+    <a href="{% url 'applications_group_application' application.id %}">
         &laquo; {% trans 'Back to application' %}
     </a>
 {% endif %}

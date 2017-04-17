@@ -18,6 +18,9 @@ from django.contrib import admin
 from news import views as news_views
 import notifications.urls
 
+from CSchoolSite import settings
+from main.views import serve_admin_media
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^admin_tools/', include('admin_tools.urls')),
@@ -27,4 +30,6 @@ urlpatterns = [
     url(r'^applications/', include('applications.urls')),
     url(r'^accounts/', include('userprofile.urls')),
     url('^notifications/', include(notifications.urls, namespace='notifications'), name='notification_list'),
+    url('^{}(?P<path>.*)$'.format(settings.MEDIA_URL[1:] if settings.MEDIA_URL[0] == '/' else settings.MEDIA_URL),
+        serve_admin_media, {'document_root': settings.MEDIA_ROOT})
 ]
