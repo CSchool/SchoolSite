@@ -7,6 +7,13 @@ from django.shortcuts import reverse
 from applications.models import EventApplication, PracticeExamRun
 
 
+class TextDisplayWidget(forms.widgets.TextInput):
+    def render(self, name, value, attrs=None, renderer=None):
+        if value is None:
+            value = ''
+        return '<p>%s</p>' % value
+
+
 class CreateApplicationForm(forms.Form):
     group_id = forms.IntegerField(required=True)
     username = forms.CharField(required=True)
@@ -15,19 +22,22 @@ class CreateApplicationForm(forms.Form):
 class EventApplicationGenericForm(forms.ModelForm):
     class Meta:
         model = EventApplication
-        fields = ('grade', 'address', 'school', 'organization', 'parent_phone_numbers', 'personal_data_doc')
+        fields = ('student_inititals', 'grade', 'address', 'school', 'organization',
+                  'parent_phone_numbers', 'personal_data_doc')
+
+    student_inititals = forms.CharField(required=False, label=_('Student\'s initials'), widget=TextDisplayWidget())
+
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.get('instance')
+        if instance:
+            self.base_fields['student_inititals'].initial = instance.user.get_initials()
+        forms.ModelForm.__init__(self, *args, **kwargs)
 
 
 class EventApplicationRenderForm(EventApplicationGenericForm):
     class Meta(EventApplicationGenericForm.Meta):
         exclude = ('personal_data_doc',)
 
-
-class TextDisplayWidget(forms.widgets.TextInput):
-    def render(self, name, value, attrs=None):
-        if value is None:
-            value = ''
-        return '<p>%s</p>' % value
 
 
 class VoucherForm(forms.Form):

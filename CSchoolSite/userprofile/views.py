@@ -121,6 +121,8 @@ def relationship_acceptance(request, relative):
 
             if not relationship.relative.is_parent:
                 relationship.relative.groups.add(Group.objects.get(name=parents_group))
+                if relationship.relative.is_child:
+                    relationship.relative.groups.remove(Group.objects.get(name=students_group))
 
             if not relationship.child.is_student:
                 relationship.child.groups.add(Group.objects.get(name=students_group))

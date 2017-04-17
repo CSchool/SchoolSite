@@ -30,17 +30,12 @@ class PossibleRelativesTable(BaseDatatableView):
             except Relationship.DoesNotExist:
                 pass
 
-            exclude_parents = Relationship.objects.values_list('relative', flat=True)
-
         if is_group_member(user, _('Students')):
             # remove all user's parents
             try:
                 exclude_parents = Relationship.objects.filter(child=user.id).values_list('relative', flat=True)
             except Relationship.DoesNotExist:
                 pass
-
-            # remove all children
-            exclude_children = Relationship.objects.values_list('child', flat=True)
 
         excluded_id_list.extend(exclude_parents)
         excluded_id_list.extend(exclude_children)
