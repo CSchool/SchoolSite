@@ -201,7 +201,7 @@ def group_application(req, application_id):
         if practice_exam:
             passed = passed and practice_exam.passed
         if passed:
-            application.status = EventApplication.TESTING_SUCCEEDED
+            application.status = EventApplication.ACCEPTED
         else:
             application.status = EventApplication.TESTING_FAILED
         application.save()
