@@ -6,6 +6,9 @@ $(document).ready(function () {
         "processing": true,
         "serverSide": true,
         "ajax": dataUrl,
+        "language": {
+            "url": langUrl
+        },
          columnDefs: [
             {width: "5%", orderable: false, searchable: false, targets: 3},
             {className: "text-center", targets: "_all"}

@@ -36,6 +36,21 @@ class EventApplicationGenericForm(forms.ModelForm):
         forms.ModelForm.__init__(self, *args, **kwargs)
 
 
+class EventApplicationPrivForm(EventApplicationGenericForm):
+    class Meta(EventApplicationGenericForm.Meta):
+        fields = ('student_inititals', 'grade', 'address', 'school', 'organization',
+                  'parent_phone_numbers', 'personal_laptop', 'voucher_parent', 'personal_data_doc', 'voucher_id')
+
+    voucher_id = forms.CharField(required=True, label=_('Voucher ID'))
+
+
+class EventApplicationVoucherForm(forms.ModelForm):
+    class Meta:
+        model = EventApplication
+        fields = ('voucher_id',)
+
+    voucher_id = forms.CharField(required=True, label=_('Voucher ID'))
+
 class EventApplicationRenderForm(EventApplicationGenericForm):
     class Meta(EventApplicationGenericForm.Meta):
         exclude = ('personal_data_doc',)
@@ -52,7 +67,7 @@ class EventApplicationAdminForm(forms.ModelForm):
         model = EventApplication
         fields = ('student_initials', 'group', 'grade', 'address',
                   'school', 'organization', 'parent_phone_numbers', 'personal_data_doc_link', 'personal_laptop',
-                  'theory_score', 'practice_score', 'status', 'confirm_participation', 'submitted_at',
+                  'theory_score', 'practice_score', 'status', 'submitted_at',
                   'issued_at', 'issued_by')
 
     student_initials = forms.CharField(disabled=True, widget=TextDisplayWidget(), label=_('Student\'s initials'))

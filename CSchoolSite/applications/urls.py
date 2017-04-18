@@ -1,12 +1,16 @@
 from django.conf.urls import url, include
 from applications import views
+from applications.tables import EnrolledTable
 
 urlpatterns = [
     url(r'^periods$', views.choose_period, name='applications_choose_period'),
-    url(r'^group/(?P<username>\w+)/period/(?P<period_id>[0-9]+)$', views.choose_group, name='applications_choose_group'),
+    url(r'^periods/id(?P<period_id>[0-9]+)/enrolled$', views.view_enrolled, name='applications_view_enrolled'),
+    url(r'^periods/id(?P<period_id>[0-9]+)/enroll/(?P<username>\w+)$', views.choose_group, name='applications_choose_group'),
     url(r'^id(?P<application_id>[0-9]+)/move$', views.move_group, name='applications_move_group'),
     url(r'^id(?P<application_id>[0-9]+)$', views.group_application, name='applications_group_application'),
     url(r'^create$', views.create_application, name='applications_create_application'),
+    url(r'^id(?P<application_id>[0-9]+)/edu$',
+        views.group_application_edu, name='applications_group_application_edu'),
     url(r'^id(?P<application_id>[0-9]+)/edit_info$',
         views.group_application_edit_info, name='applications_group_application_edit_info'),
     url(r'^id(?P<application_id>[0-9]+)/doc/(?P<filename>.+)',
@@ -27,4 +31,7 @@ urlpatterns = [
         views.group_application_delete, name='applications_delete'),
     url(r'^id(?P<application_id>[0-9]+)/statement/(?P<problem_id>[0-9]+)/(?P<filename>.+)',
         views.group_application_view_statement, name='applications_view_statement'),
+
+    url(r'^periods/id(?P<period_id>[0-9]+)/enrolled/datatables/$', EnrolledTable.as_view(),
+        name='applications_enrolled_table'),
 ]

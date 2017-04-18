@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect, reverse
 from django.views.decorators.http import require_POST
 
 from applications.forms import CreateApplicationForm, EventApplicationGenericForm, TextDisplayWidget, \
-    EventApplicationRenderForm
+    EventApplicationRenderForm, EventApplicationPrivForm, EventApplicationVoucherForm
 from applications.models import Period, Event, PracticeExamApplication, EventApplication, PracticeExamRun, \
     TheoryExamApplication, TheoryExamApplicationQuestion, TheoryExamQuestion, PracticeExamProblem
 from applications.decorators import study_group_application
@@ -19,33 +19,51 @@ from userprofile.models import Relationship, User
 import ejudge
 
 
-@login_required
+def view_enrolled(req, period_id):
+    try:
+        period = Period.objects.get(id=period_id)
+    except Period.DoesNotExist:
+        raise Http404
+    applications = EventApplication.objects\
+        .filter(event__period=period)\
+        .filter(status__in=EventApplication.ENROLLED_STATUSES)
+    if req.user.is_authenticated and req.user.is_education_committee:
+        applications = applications.order_by('user__last_name', 'user__first_name')
+    else:
+        applications = applications.order_by('event__difficulty', 'user__last_name', 'user__first_name')
+    return render(req, "applications/view_enrolled.html", {
+        "period": period,
+        "applications": applications
+    })
+
 def choose_period(req):
-    if not req.user.is_eligible_for_application_viewing():
-        raise PermissionDenied
     periods = []
     pmap = {}
-    for p in Period.objects.order_by("-begin").all():
-        status, status_verbose, app_id = p.get_application_status(req.user) # TODO: N + 1 query is bad
-        pmap[p.id] = len(periods)
-        periods.append(dict(period=p, status=status, status_verbose=status_verbose, app_id=app_id,
-                            allow=req.user.is_eligible_for_application(p), achildren=[]))
-    if req.user.is_eligible_for_application():
-        children = Relationship.objects.filter(relative=req.user, request=Relationship.APPROVED).all()
-        assoc = EventApplication.objects\
-            .filter(user_id__in=map(lambda x: x.child.id, children))\
-            .filter(event__period_id__in=map(lambda x: x['period'].id, periods))\
-            .all()
-        for ea in assoc:
-            periods[pmap[ea.event.period.id]]['achildren'].append(dict(child=ea.user, application=ea))
-        for p in periods:
-            p['achildren_set'] = set([x['child'].id for x in p['achildren']])
-        children_set = set(children)
-        for p in periods:
-            p['children'] = []
-            for child in children_set:
-                if child.child.id not in p['achildren_set']:
-                    p['children'].append(child.child)
+    if req.user.is_authenticated and req.user.is_eligible_for_application_viewing():
+        for p in Period.objects.order_by("-begin").all():
+            status, status_verbose, app_id = p.get_application_status(req.user) # TODO: N + 1 query is bad
+            pmap[p.id] = len(periods)
+            periods.append(dict(period=p, status=status, status_verbose=status_verbose, app_id=app_id,
+                                allow=req.user.is_eligible_for_application(p), achildren=[]))
+        if req.user.is_eligible_for_application():
+            children = Relationship.objects.filter(relative=req.user, request=Relationship.APPROVED).all()
+            assoc = EventApplication.objects\
+                .filter(user_id__in=map(lambda x: x.child.id, children))\
+                .filter(event__period_id__in=map(lambda x: x['period'].id, periods))\
+                .all()
+            for ea in assoc:
+                periods[pmap[ea.event.period.id]]['achildren'].append(dict(child=ea.user, application=ea))
+            for p in periods:
+                p['achildren_set'] = set([x['child'].id for x in p['achildren']])
+            children_set = set(children)
+            for p in periods:
+                p['children'] = []
+                for child in children_set:
+                    if child.child.id not in p['achildren_set']:
+                        p['children'].append(child.child)
+    else:
+        for p in Period.objects.order_by("-begin").all():
+            periods.append(dict(period=p, status="NA", status_verbose="Not applicable", allow=False))
 
     return render(req, "applications/choose_period.html", {
         "periods": periods
@@ -160,6 +178,37 @@ def create_application(req):
         return redirect(reverse('applications_group_application', args=[ea.id]))
     raise PermissionDenied
 
+@login_required
+def group_application_edu(req, application_id):
+    try:
+        application = EventApplication.objects.get(id=application_id, event__type=Event.CLASS_GROUP)
+        group = application.event
+    except EventApplication.DoesNotExist:
+        raise Http404
+    if not application.has_global_privileges(req.user):
+        raise PermissionDenied
+    if req.method == "POST":
+        form = EventApplicationVoucherForm(req.POST, instance=application)
+        if form.is_valid():
+            application.voucher_id = form.cleaned_data['voucher_id']
+            application.status = EventApplication.ISSUED
+            application.issued_by = req.user
+            application.save()
+            return redirect(reverse('applications_view_enrolled', args=[group.period.id]))
+    else:
+        form = EventApplicationPrivForm(instance=application)
+    for key in form.fields.keys():
+        if key != "voucher_id":
+            form.fields[key].widget = TextDisplayWidget()
+            form.fields[key].help_text = None
+
+    return render(req, "applications/group_application_voucher.html", {
+        "form": form,
+        "application": application,
+        "group": group,
+        "personal_data_doc_name": os.path.basename(application.personal_data_doc.name)
+    })
+
 
 @login_required
 def group_application(req, application_id):
@@ -182,6 +231,7 @@ def group_application(req, application_id):
 
     parent_priv = application.has_parent_privileges(req.user)
     child_priv = application.has_child_privileges(req.user)
+    priv = application.has_global_privileges(req.user)
 
     confirm_submit = False
     if req.POST.get('confirm_submit') is not None:
@@ -237,6 +287,7 @@ def group_application(req, application_id):
         "confirm_submit": confirm_submit,
         "parent_priv": parent_priv,
         "child_priv": child_priv,
+        "priv": priv,
         "personal_data_doc_name": os.path.basename(application.personal_data_doc.name)
     })
 

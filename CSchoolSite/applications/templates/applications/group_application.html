@@ -40,9 +40,27 @@
     {% if application.status == application.ACCEPTED %}
         <div class="alert alert-success" role="alert">
         <b>{% trans 'Congratulations' %}</b><br />
-        {% trans 'You are enrolled to' %} {{ group.period.name }}!
-        {% blocktrans %}
-            Now you will need to enter some additional information.
+        {% blocktrans with period=group.period.name%}
+            This application to {{ period }} was accepted!
+            Soon, teacher will review this application and contact you if necessary.
+        {% endblocktrans %}
+        </div>
+    {% endif %}
+    {% if application.status == application.ENROLLED %}
+        <div class="alert alert-success" role="alert">
+        <b>{% trans 'Congratulations' %}</b><br />
+        {% blocktrans with period=group.period.name%}
+            You are now enrolled to {{ period }}!
+            Please, draw up a camp voucher.
+        {% endblocktrans %}
+        </div>
+    {% endif %}
+    {% if application.status == application.ISSUED %}
+        <div class="alert alert-success" role="alert">
+        <b>{% trans 'Congratulations' %}</b><br />
+        {% blocktrans with period=group.period.name%}
+            You are now enrolled to {{ period }}!
+            Your voucher is approved.
         {% endblocktrans %}
         </div>
     {% endif %}
@@ -61,7 +79,9 @@
             </a>
             {% endif %}
             <h4>
-                {% if parent_priv %}
+                {% if priv %}
+                    {% trans 'About this student' %}
+                {% elif parent_priv %}
                     {% trans "About your child" %}
                 {% else %}
                     {% trans "About yourself" %}
@@ -91,9 +111,6 @@
             </h4>
         </div>
         {% if not parent_priv or not application.modifiable or confirm_submit %}
-        {% comment %}<div class="panel-body">
-            {% bootstrap_form info_form %}
-        </div>{% endcomment %}
             <table class="table">
             <tbody>
             {% for field in info_form %}

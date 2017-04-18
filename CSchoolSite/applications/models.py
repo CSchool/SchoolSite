@@ -550,13 +550,31 @@ class EventApplication(models.Model):
         (DISQUALIFIED, _('Disqualified'))
     )
 
+    ENROLLED_STATUSES = (
+        ACCEPTED,
+        ENROLLED,
+        ISSUED,
+        STUDYING,
+        SUCCESSED,
+        FAILED,
+        DISQUALIFIED
+    )
+
     status = models.CharField(max_length=2, choices=EVENT_APPLICATION_STATUS_CHOICES,
                               default=TESTING, verbose_name=_('Application status'))
 
-    confirm_participation = models.BooleanField(verbose_name=_('Confirm participation'), default=False)
-
     def __str__(self):
         return self.user.get_full_name() + " - " + self.event.__str__()
+
+    @property
+    def enrolled_color(self):
+        if self.status == EventApplication.ACCEPTED:
+            return 'warning'
+        if self.status in (EventApplication.FAILED, EventApplication.DISQUALIFIED):
+            return 'danger'
+        if self.status in EventApplication.ENROLLED_STATUSES:
+            return 'success'
+        return 'danger'
 
     def save(self, *args, **kwargs):
         if self.status != EventApplication.TESTING and self.submitted_at is None:
@@ -587,5 +605,12 @@ class EventApplication(models.Model):
             return True
         return user == self.user
 
+    def has_global_privileges(self, user):
+        if user.is_superuser:
+            return True
+        if user.is_education_committee:
+            return True
+        return False
+
     def viewable(self, user):
-        return self.has_parent_privileges(user) or self.user == user or user.is_staff
+        return self.has_global_privileges(user) or self.has_parent_privileges(user) or self.has_child_privileges(user)

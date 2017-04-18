@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block page_title %}{% trans 'Application to' %} {{ group.period.name }}{% endblock %}
+{% block submit_application_button %}{% endblock %}
+{% block content %}
+    <h3 class="page-header text-center">
+        {% trans 'Application to' %} {{ group.period.name }}
+    </h3>
+
+    <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h4>{% trans 'Application info' %}</h4>
+        </div>
+        <div class="panel-body">
+            <table class="table">
+                <tbody>
+                {% for field in form %}
+                    <tr>
+                    {% if field.name != 'voucher_id' %}
+                    <td>{{ field.label_tag }}</td>
+                    <td>
+                        {% if field.name == 'personal_data_doc' %}
+                            {% if personal_data_doc_name %}
+                                <a href="{% url 'applications_group_application_doc' application.id personal_data_doc_name %}">
+                                    {{ personal_data_doc_name }}
+                                </a>
+                            {% else %}
+                                <i>{% trans 'Not yet uploaded' %}</i>
+                            {% endif %}
+                        {% else %}
+                            {{ field|linebreaksbr }}
+                        {% endif %}</td>
+                    {% else %}
+                        <td colspan="2">
+                        {% bootstrap_field field %}
+                        </td>
+                    {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="panel-footer">
+            <div class="row">
+            <div class="col-md-6">
+                <a href="{% url 'applications_view_enrolled' group.period.id %}"
+                   class="btn btn-lg btn-default btn-block">{% trans 'Back' %}</a>
+            </div>
+            <div class="col-md-6">
+                <button type="submit" class="btn btn-lg btn-success btn-block">{% trans 'Issue voucher' %}</button>
+            </div>
+            </div>
+        </div>
+    </div>
+    </form>
+{% endblock %}

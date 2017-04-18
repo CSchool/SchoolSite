@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
-{% block page_title %}{% trans 'Submit application' %}{% endblock %}
+{% block page_title %}{% trans 'Periods' %}{% endblock %}
 {% block submit_application_button %}{% endblock %}
 {% block content %}
 <h3 class="page-header text-center">
-    {% trans 'Submit application' %}
+    {% trans 'Periods' %}
 </h3>
 <table class="table">
     <thead>
@@ -13,6 +13,7 @@
             <th>{% trans 'Period' %}</th>
             <th>{% trans 'Registration ends' %}</th>
             <th>{% trans 'Period dates' %}</th>
+            <th></th>
             <th></th>
         </tr>
     </thead>
@@ -23,6 +24,11 @@
                     <td>{{ period.period.name }}</td>
                     <td>{{ period.period.registration_end|date:"j M Y H:i" }}</td>
                     <td>{{ period.period.begin|date:"j M Y" }} &ndash; {{ period.period.end|date:"j M Y" }}</td>
+                    <td>
+                        <a href="{% url 'applications_view_enrolled' period.period.id %}">
+                            {% trans 'Enrolled students' %}
+                        </a>
+                    </td>
                     <td><b>
                     {% if period.status == "NA" %}
                         {% if period.allow %}
@@ -38,7 +44,7 @@
                                         {% if period.children %}
                                         <li class="dropdown-header">{% trans 'Did not apply' %}</li>
                                         {% for child in period.children %}
-                                            <li><a href="{% url 'applications_choose_group' child.username period.period.id %}">
+                                            <li><a href="{% url 'applications_choose_group' period.period.id child.username %}">
                                                 {% bootstrap_icon 'plus' %}
                                                 {{ child.get_initials }} &raquo;
                                             </a></li>

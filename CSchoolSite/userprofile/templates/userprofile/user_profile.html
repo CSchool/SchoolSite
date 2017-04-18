@@ -71,6 +71,7 @@
     {{ block.super }}
     <script>
         var dataUrl = "{% url 'relationship_table' %}";
+        var langUrl = "{% static 'DataTablesRussian.json' %}";
     </script>
     <script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/user_profile.js' %}"></script>
