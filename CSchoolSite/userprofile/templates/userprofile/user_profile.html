@@ -23,15 +23,15 @@
                     </tr>
                     <tr>
                         <td>{% trans "user_profile_birthday" %}:</td>
-                        <td>{{ user.birthday|default_if_none:"" }}</td>
+                        <td>{% if user.birthday %}{{ user.birthday }}{% else %}<i>{% trans 'Unknown' %}</i>{% endif %}</td>
                     </tr>
                     <tr>
                         <td>{% trans "user_profile_email" %}:</td>
-                        <td>{{ user.email }}</td>
+                        <td>{% if user.email %}{{ user.email }}{% else %}<i>{% trans 'Unknown' %}</i>{% endif %}</td>
                     </tr>
                     <tr>
                         <td>{% trans "user_profile_phone" %}:</td>
-                        <td>{% if user.phone %}{{ user.phone }}{% else %}<b>{% trans 'Unknown' %}</b>{% endif %}</td>
+                        <td>{% if user.phone %}{{ user.phone }}{% else %}<i>{% trans 'Unknown' %}</i>{% endif %}</td>
                     </tr>
                 </tbody>
             </table>

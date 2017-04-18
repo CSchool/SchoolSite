@@ -141,6 +141,9 @@ def create_application(req):
             if hasattr(ea, 'practice_exam') and ea.practice_exam:
                 ea.practice_exam.delete()
             ea.status = EventApplication.TESTING
+            ea.issued_by = None
+            ea.issued_at = None
+            ea.submitted_at = None
             ea.user = user
             ea.event = group
             ea.save()

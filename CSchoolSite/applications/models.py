@@ -82,7 +82,7 @@ class Event(models.Model):
 
     name = models.CharField(max_length=100, verbose_name=_('Name'))
     period = models.ForeignKey('Period', on_delete=models.CASCADE, verbose_name=_('Period'))
-    users = models.ManyToManyField(settings.AUTH_USER_MODEL, through='EventApplication')
+    users = models.ManyToManyField(settings.AUTH_USER_MODEL, through='EventApplication', through_fields=('event', 'user'))
     description = models.TextField(verbose_name=_('Description'))
     #begin = models.DateTimeField(verbose_name=_('Event begins'))
     #end = models.DateTimeField(verbose_name=_('Event ends'))
@@ -513,12 +513,19 @@ class EventApplication(models.Model):
 
     organization = models.CharField(max_length=250, null=True, blank=True, verbose_name=_('Organization'))
     parent_phone_numbers = models.TextField(null=True, blank=True, verbose_name=_("Parents' phone numbers"))
+    personal_laptop = models.BooleanField(default=False, blank=True, verbose_name=_('Personal laptop will be used'))
     personal_data_doc = models.FileField(null=True, verbose_name=_('Personal data processing agreement'))
 
     voucher_parent = models.CharField(max_length=250, null=True, verbose_name=_('Parent\'s full name'),
                                       help_text=_('Full name of the parent to whom the voucher is drawn up'))
 
     voucher_id = models.CharField(max_length=30, null=True, blank=True, verbose_name=_('Voucher ID'))
+
+    submitted_at = models.DateTimeField(null=True, blank=True, verbose_name=_('Submitted at'), default=None)
+
+    issued_at = models.DateTimeField(null=True, blank=True, verbose_name=_('Issued at'), default=None)
+    issued_by = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, verbose_name=_('Issued by'), default=None,
+                                  related_name='issued_applications', related_query_name='issued_application')
 
     # Registration status
     TESTING = 'TG'
@@ -550,6 +557,13 @@ class EventApplication(models.Model):
 
     def __str__(self):
         return self.user.get_full_name() + " - " + self.event.__str__()
+
+    def save(self, *args, **kwargs):
+        if self.status != EventApplication.TESTING and self.submitted_at is None:
+            self.submitted_at = timezone.now()
+        if self.status == EventApplication.ISSUED and self.issued_at is None:
+            self.issued_at = timezone.now()
+        super(EventApplication, self).save(*args, **kwargs)
 
     @property
     def is_general_filled(self):

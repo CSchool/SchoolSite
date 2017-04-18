@@ -9,8 +9,10 @@ from applications.models import EventApplication, PracticeExamRun
 
 class TextDisplayWidget(forms.widgets.TextInput):
     def render(self, name, value, attrs=None, renderer=None):
-        if value is None:
-            value = ''
+        if isinstance(value, bool):
+            return '<p>%s</p>' % (_('Yes') if value else _('No'))
+        if not value:
+            return '<i>%s</i>' % _('Unknown')
         return '<p>%s</p>' % value
 
 
@@ -23,7 +25,7 @@ class EventApplicationGenericForm(forms.ModelForm):
     class Meta:
         model = EventApplication
         fields = ('student_inititals', 'grade', 'address', 'school', 'organization',
-                  'parent_phone_numbers', 'voucher_parent', 'personal_data_doc')
+                  'parent_phone_numbers', 'personal_laptop', 'voucher_parent', 'personal_data_doc')
 
     student_inititals = forms.CharField(required=False, label=_('Student\'s initials'), widget=TextDisplayWidget())
 
@@ -48,10 +50,13 @@ class VoucherForm(forms.Form):
 class EventApplicationAdminForm(forms.ModelForm):
     class Meta:
         model = EventApplication
-        fields = ('user', 'event', 'grade', 'address',
-                  'school', 'organization', 'parent_phone_numbers', 'personal_data_doc_link',
-                  'theory_score', 'practice_score', 'status', 'confirm_participation')
+        fields = ('student_initials', 'group', 'grade', 'address',
+                  'school', 'organization', 'parent_phone_numbers', 'personal_data_doc_link', 'personal_laptop',
+                  'theory_score', 'practice_score', 'status', 'confirm_participation', 'submitted_at',
+                  'issued_at', 'issued_by')
 
+    student_initials = forms.CharField(disabled=True, widget=TextDisplayWidget(), label=_('Student\'s initials'))
+    group = forms.CharField(disabled=True, widget=TextDisplayWidget(), label=_('Group'))
     theory_score = forms.CharField(disabled=True, widget=TextDisplayWidget(), label=_('Theory score'))
     practice_score = forms.CharField(disabled=True, widget=TextDisplayWidget(), label=_('Practice score'))
     personal_data_doc_link = forms.CharField(disabled=True, widget=TextDisplayWidget(),
@@ -67,6 +72,8 @@ class EventApplicationAdminForm(forms.ModelForm):
                 ''' % (reverse('applications_group_application_doc', args=[instance.id, path]), path)
             else:
                 self.base_fields['personal_data_doc_link'].initial = _('Not yet uploaded')
+            self.base_fields['student_initials'].initial = instance.user.get_initials()
+            self.base_fields['group'].initial = instance.event.__str__()
             if hasattr(instance, 'theory_exam') and instance.theory_exam:
                 self.base_fields['theory_score'].initial = "<b>%d</b> / %d (min %d)" % \
                     (instance.theory_exam.cur_score, instance.theory_exam.max_score, instance.event.theoryexam.min_score)
