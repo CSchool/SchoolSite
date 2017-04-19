@@ -75,7 +75,7 @@ def json_relatives_choice(request):
             else:
                 raise PermissionDenied
 
-            if not req.user.personal or not other.personal:
+            if not request.user.personal or not other.personal:
                 raise PermissionDenied
 
             parents_group = _('Parents')
