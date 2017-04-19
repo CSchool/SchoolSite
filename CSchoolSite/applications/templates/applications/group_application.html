@@ -7,6 +7,19 @@
     <h3 class="page-header text-center">
         {% trans 'Application to' %} &quot;{{ group.name }}&quot;
     </h3>
+    {% if attachments %}
+        <h4>{% trans 'Download' %}</h4>
+        <ul>
+        {% for attach in attachments %}
+            <li>
+                <a href="{{ attach.get_url }}">
+                    {% bootstrap_icon 'download' %}
+                    {{ attach.name }}
+                </a>
+            </li>
+        {% endfor %}
+        </ul>
+    {% endif %}
     {% if confirm_submit %}
     <div class="alert alert-warning" role="alert">
         {% bootstrap_icon 'alert' %}

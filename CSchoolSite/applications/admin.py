@@ -4,13 +4,10 @@ from django.utils.translation import ugettext_lazy as _
 from tinymce.widgets import AdminTinyMCE
 
 from applications.models import Period, Event, EventApplication, PracticeExam, PracticeExamApplication, \
-    PracticeExamRun
+    PracticeExamRun, PeriodAttachment
 from applications.models import PracticeExamProblem
 from applications.models import TheoryExam, TheoryExamQuestion, TheoryExamQuestionOption
 from applications.forms import EventApplicationAdminForm, PracticeExamRunAdminForm
-
-
-admin.site.register(Period)
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -54,6 +51,19 @@ class EventApplicationAdmin(admin.ModelAdmin):
 admin.site.register(EventApplication, EventApplicationAdmin)
 admin.site.register(PracticeExam)
 admin.site.register(PracticeExamProblem)
+
+
+class PeriodAttachmentInline(admin.TabularInline):
+    model = PeriodAttachment
+
+
+class PeriodAdmin(admin.ModelAdmin):
+    inlines = [
+        PeriodAttachmentInline
+    ]
+
+
+admin.site.register(Period, PeriodAdmin)
 
 
 class TheoryExamQuestionOptionInline(admin.TabularInline):

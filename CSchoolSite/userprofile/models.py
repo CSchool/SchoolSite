@@ -1,4 +1,4 @@
-from datetime import datetime
+from django.utils import timezone
 
 from django.contrib.auth.models import User, AbstractUser
 from django.db import models
@@ -40,14 +40,14 @@ class User(AbstractUser):
             return False
         if period:
             return period.registration_open
-        return bool(Period.objects.filter(registration_begin__lt=datetime.now(), registration_end__gt=datetime.now()))
+        return bool(Period.objects.filter(registration_begin__lt=timezone.now(), registration_end__gt=timezone.now()))
 
     def is_eligible_for_application_viewing(self):
         if not self.is_authenticated():
             return False
         if not self.personal:
             return False
-        return bool(Period.objects.filter(registration_begin__lt=datetime.now(), registration_end__gt=datetime.now()))
+        return bool(Period.objects.filter(registration_begin__lt=timezone.now(), registration_end__gt=timezone.now()))
 
     @property
     def is_parent(self):

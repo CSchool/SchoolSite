@@ -8,6 +8,7 @@ $(document).ready(function() {
         "language": {
             "url": langUrl,
         },
+        "searching": false,
         "columnDefs": [
             {"targets": [3, 4, 5], "visible": false},
             {"targets": [1, 2], "orderable": false},

@@ -1,3 +1,5 @@
+from django.urls import reverse
+
 import ejudge
 import uuid
 import os
@@ -7,7 +9,6 @@ from django.db import models
 from django.utils import timezone
 from django.utils.text import Truncator
 from django.utils.translation import ugettext_lazy as _
-from main.validators import PhoneValidator
 
 from CSchoolSite import settings
 
@@ -75,6 +76,28 @@ class Period(models.Model):
         return application.status, application.get_status_display(), application.id
 
 
+class PeriodAttachment(models.Model):
+    class Meta:
+        verbose_name = _('Attachment')
+        verbose_name_plural = _('Attachments')
+
+    def get_upload_path(self, filename):
+        return os.path.join('attachments', 'period_%d' % self.period.id, filename)
+
+    def get_url(self):
+        return reverse('applications_download_period_attachment', args=[self.id, os.path.basename(self.file.name)])
+
+    def get_name(self):
+        return os.path.basename(self.file.name)
+
+    name = models.CharField(max_length=250, verbose_name=_('Name'))
+    file = models.FileField(verbose_name=_('File'), upload_to=get_upload_path)
+    period = models.ForeignKey('Period', on_delete=models.CASCADE, verbose_name=_('Period'))
+
+    def __str__(self):
+        return self.period.name + ' - ' + self.name
+
+
 class Event(models.Model):
     class Meta:
         verbose_name = _('Event')
@@ -84,10 +107,10 @@ class Event(models.Model):
     period = models.ForeignKey('Period', on_delete=models.CASCADE, verbose_name=_('Period'))
     users = models.ManyToManyField(settings.AUTH_USER_MODEL, through='EventApplication', through_fields=('event', 'user'))
     description = models.TextField(verbose_name=_('Description'))
-    #begin = models.DateTimeField(verbose_name=_('Event begins'))
-    #end = models.DateTimeField(verbose_name=_('Event ends'))
-    #registration_begin = models.DateTimeField(verbose_name=_('Registration begins'))
-    #registration_end = models.DateTimeField(verbose_name=_('Registration ends'))
+    # begin = models.DateTimeField(verbose_name=_('Event begins'))
+    # end = models.DateTimeField(verbose_name=_('Event ends'))
+    # registration_begin = models.DateTimeField(verbose_name=_('Registration begins'))
+    # registration_end = models.DateTimeField(verbose_name=_('Registration ends'))
     category = models.CharField(max_length=100, verbose_name=_('Category'), blank=True, default='')
     is_open = models.BooleanField(verbose_name=_('Registration open'))
     limit = models.IntegerField(verbose_name=_('Participants limit'))
@@ -485,16 +508,6 @@ class TheoryExamApplication(models.Model):
     @property
     def max_score(self):
         return self.questions.aggregate(models.Sum('score'))['score__sum']
-
-class PersonalDataDoc(models.FileField):
-
-    def __init__(self, *args, **kwargs):
-        super(PersonalDataDoc, self).__init__(*args, **kwargs)
-        self.my_url = kwargs.get('my_url')
-
-    @property
-    def url(self):
-        return
 
 
 class EventApplication(models.Model):

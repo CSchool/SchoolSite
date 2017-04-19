@@ -31,6 +31,8 @@ urlpatterns = [
         views.group_application_delete, name='applications_delete'),
     url(r'^id(?P<application_id>[0-9]+)/statement/(?P<problem_id>[0-9]+)/(?P<filename>.+)',
         views.group_application_view_statement, name='applications_view_statement'),
+    url(r'^attach(?P<attachment_id>[0-9]+)/(?P<filename>.+)',
+        views.period_download_attachment, name='applications_download_period_attachment'),
 
     url(r'^periods/id(?P<period_id>[0-9]+)/enrolled/datatables/$', EnrolledTable.as_view(),
         name='applications_enrolled_table'),

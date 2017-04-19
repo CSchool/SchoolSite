@@ -33,7 +33,7 @@
                     <a href="{% url 'news_post' post.id %}">{% trans 'Read more' %}</a>
                 {% endifnotequal %}
                 <span class="pull-right">
-                    <small>{% bootstrap_icon 'user' %} {{ post.user.get_full_name }}</small>
+                    <small>{% bootstrap_icon 'user' %} {{ post.user.get_full_name|default:post.user.get_aliased_username }}</small>
                 </span>
             </div>
         </div>

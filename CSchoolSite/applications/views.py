@@ -12,7 +12,7 @@ from django.views.decorators.http import require_POST
 from applications.forms import CreateApplicationForm, EventApplicationGenericForm, TextDisplayWidget, \
     EventApplicationRenderForm, EventApplicationPrivForm, EventApplicationVoucherForm
 from applications.models import Period, Event, PracticeExamApplication, EventApplication, PracticeExamRun, \
-    TheoryExamApplication, TheoryExamApplicationQuestion, TheoryExamQuestion, PracticeExamProblem
+    TheoryExamApplication, TheoryExamApplicationQuestion, TheoryExamQuestion, PracticeExamProblem, PeriodAttachment
 from applications.decorators import study_group_application
 from userprofile.models import Relationship, User
 
@@ -288,7 +288,8 @@ def group_application(req, application_id):
         "parent_priv": parent_priv,
         "child_priv": child_priv,
         "priv": priv,
-        "personal_data_doc_name": os.path.basename(application.personal_data_doc.name)
+        "personal_data_doc_name": os.path.basename(application.personal_data_doc.name),
+        "attachments": PeriodAttachment.objects.filter(period=group.period).order_by('id').all()
     })
 
 
@@ -367,6 +368,25 @@ def group_application_view_statement(req, application_id, problem_id, filename):
     content = f.read()
     f.close()
     return HttpResponse(content, content_type=mime_type)
+
+
+def period_download_attachment(req, attachment_id, filename):
+    try:
+        attachment = PeriodAttachment.objects.get(id=attachment_id)
+    except PeriodAttachment.DoesNotExist:
+        raise Http404
+    if os.path.basename(attachment.file.name) != filename:
+        raise Http404
+    mime = mimetypes.MimeTypes()
+    mime_type = mime.guess_type(attachment.file.path)[0]
+    f = attachment.file.file
+    f.open()
+    content = f.read()
+    f.close()
+    response = HttpResponse(content, content_type=mime_type)
+    response['Content-Disposition'] = 'attachment; filename=%s' % filename
+    return response
+
 
 @login_required
 def group_application_doc(req, application_id, filename):
