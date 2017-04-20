@@ -72,8 +72,8 @@ class PossibleRelativesTable(BaseDatatableView):
 
 
 class RelationshipTable(BaseDatatableView):
-    columns = ['relative', 'status', 'request', 'modified']
-    order_columns = ['relative', 'status', 'request', '']
+    columns = ['relative', 'request', 'request', 'modified']
+    order_columns = ['relative', 'request', 'request', '']
 
     def get_initial_queryset(self):
         user = self.request.user
@@ -88,7 +88,7 @@ class RelationshipTable(BaseDatatableView):
                 return "{} ({})".format(relative.username, relative.get_initials())
             else:
                 return relative.username
-        elif column == 'status':
+        elif column == 'request':
             if row.relative == user:
                 # parents know their children
                 return _('Child')
@@ -105,9 +105,10 @@ class RelationshipTable(BaseDatatableView):
                     return ''
             else:
                 # view profile or nothing
-                if row.relative == user and is_group_member(row.relative, _('Parents')):
-                    return 'View profile'
-                else:
-                    return ''
+                # if row.relative == user and is_group_member(row.relative, _('Parents')):
+                #     return 'View profile'
+                # else:
+                #     return ''
+                return ''
         else:
             return super(RelationshipTable, self).render_column(row, column)

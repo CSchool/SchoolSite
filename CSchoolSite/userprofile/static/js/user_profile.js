@@ -7,7 +7,6 @@ $(document).ready(function () {
         "processing": true,
         "serverSide": true,
         "ajax": dataUrl,
-        "searching": false,
         "language": {
             "url": langUrl
         },
