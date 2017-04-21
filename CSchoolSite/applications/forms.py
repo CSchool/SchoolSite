@@ -3,6 +3,7 @@ import os
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import reverse
+from django.contrib.admin.widgets import AdminDateWidget
 
 from applications.models import EventApplication, PracticeExamRun
 
@@ -24,21 +25,40 @@ class CreateApplicationForm(forms.Form):
 class EventApplicationGenericForm(forms.ModelForm):
     class Meta:
         model = EventApplication
-        fields = ('student_inititals', 'grade', 'address', 'school', 'organization',
+        fields = ('student_inititals', 'grade', 'address', 'school', 'birthday', 'organization',
                   'parent_phone_numbers', 'personal_laptop', 'voucher_parent', 'personal_data_doc')
 
+    FIELDS = ('grade', 'address', 'school', 'organization', 'parent_phone_numbers',
+              'personal_laptop', 'voucher_parent')
+
     student_inititals = forms.CharField(required=False, label=_('Student\'s initials'), widget=TextDisplayWidget())
+    birthday = forms.DateField(required=True, label=_('birthday'),
+                               widget=forms.DateInput(attrs={'class': 'datepicker'}))
 
     def __init__(self, *args, **kwargs):
         instance = kwargs.get('instance')
         if instance:
             self.base_fields['student_inititals'].initial = instance.user.get_initials()
+            self.base_fields['birthday'].initial = instance.user.birthday
+
+            for field in EventApplicationGenericForm.FIELDS:
+                self.base_fields[field].initial = getattr(instance, field, None)
+
         forms.ModelForm.__init__(self, *args, **kwargs)
+
+    def save(self, commit=True):
+        instance = super(EventApplicationGenericForm, self).save(commit=False)
+        instance.user.birthday = self.cleaned_data['birthday']
+        instance.user.save()
+        if commit:
+            instance.save()
+        return instance
+
 
 
 class EventApplicationPrivForm(EventApplicationGenericForm):
     class Meta(EventApplicationGenericForm.Meta):
-        fields = ('student_inititals', 'grade', 'address', 'school', 'organization',
+        fields = ('student_inititals', 'grade', 'address', 'school', 'birthday', 'organization',
                   'parent_phone_numbers', 'personal_laptop', 'voucher_parent', 'personal_data_doc', 'voucher_id')
 
     voucher_id = forms.CharField(required=True, label=_('Voucher ID'))
@@ -50,6 +70,7 @@ class EventApplicationVoucherForm(forms.ModelForm):
         fields = ('voucher_id',)
 
     voucher_id = forms.CharField(required=True, label=_('Voucher ID'))
+
 
 class EventApplicationRenderForm(EventApplicationGenericForm):
     class Meta(EventApplicationGenericForm.Meta):
@@ -66,7 +87,8 @@ class EventApplicationAdminForm(forms.ModelForm):
     class Meta:
         model = EventApplication
         fields = ('student_initials', 'group', 'grade', 'address',
-                  'school', 'organization', 'parent_phone_numbers', 'personal_data_doc_link', 'personal_laptop',
+                  'school', 'birthday', 'organization', 'parent_phone_numbers',
+                  'personal_data_doc_link', 'personal_laptop',
                   'theory_score', 'practice_score', 'status', 'submitted_at',
                   'issued_at', 'issued_by')
 
@@ -74,6 +96,7 @@ class EventApplicationAdminForm(forms.ModelForm):
     group = forms.CharField(disabled=True, widget=TextDisplayWidget(), label=_('Group'))
     theory_score = forms.CharField(disabled=True, widget=TextDisplayWidget(), label=_('Theory score'))
     practice_score = forms.CharField(disabled=True, widget=TextDisplayWidget(), label=_('Practice score'))
+    birthday = forms.DateField(required=False, label=_('birthday'), widget=AdminDateWidget())
     personal_data_doc_link = forms.CharField(disabled=True, widget=TextDisplayWidget(),
                                              label=_('Personal data processing agreement'))
 
@@ -89,6 +112,7 @@ class EventApplicationAdminForm(forms.ModelForm):
                 self.base_fields['personal_data_doc_link'].initial = _('Not yet uploaded')
             self.base_fields['student_initials'].initial = instance.user.get_initials()
             self.base_fields['group'].initial = instance.event.__str__()
+            self.base_fields['birthday'].initial = instance.user.birthday
             if hasattr(instance, 'theory_exam') and instance.theory_exam:
                 self.base_fields['theory_score'].initial = "<b>%d</b> / %d (min %d)" % \
                     (instance.theory_exam.cur_score, instance.theory_exam.max_score, instance.event.theoryexam.min_score)
@@ -100,6 +124,14 @@ class EventApplicationAdminForm(forms.ModelForm):
             else:
                 self.base_fields['practice_score'].initial = _('Unavailable')
         forms.ModelForm.__init__(self, *args, **kwargs)
+
+    def save(self, commit=True):
+        instance = super(EventApplicationAdminForm, self).save(commit=False)
+        instance.user.birthday = self.cleaned_data['birthday']
+        instance.user.save()
+        if commit:
+            instance.save()
+        return instance
 
 
 class PracticeExamRunAdminForm(forms.ModelForm):

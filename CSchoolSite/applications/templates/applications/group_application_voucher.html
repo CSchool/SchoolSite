@@ -30,6 +30,8 @@
                             {% else %}
                                 <i>{% trans 'Not yet uploaded' %}</i>
                             {% endif %}
+                        {% elif field.name == 'birthday' %}
+                            {{ field.value }}
                         {% else %}
                             {{ field|linebreaksbr }}
                         {% endif %}</td>
