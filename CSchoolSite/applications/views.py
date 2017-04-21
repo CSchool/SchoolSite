@@ -7,6 +7,7 @@ from django.core.exceptions import PermissionDenied
 from django.core.files.storage import FileSystemStorage
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect, reverse
+from django.utils.encoding import smart_str
 from django.views.decorators.http import require_POST
 
 from applications.forms import CreateApplicationForm, EventApplicationGenericForm, TextDisplayWidget, \
@@ -15,6 +16,7 @@ from applications.models import Period, Event, PracticeExamApplication, EventApp
     TheoryExamApplication, TheoryExamApplicationQuestion, TheoryExamQuestion, PracticeExamProblem, PeriodAttachment
 from applications.decorators import study_group_application
 from userprofile.models import Relationship, User
+from CSchoolSite.settings import FILESERVE_MEDIA_URL, FILESERVE_METHOD
 
 import ejudge
 
@@ -340,6 +342,26 @@ def group_application_edit_info(req, application_id):
     })
 
 
+def file_response(file):
+    mime = mimetypes.MimeTypes()
+    mime_type = mime.guess_type(file.path)[0]
+    if FILESERVE_METHOD == "django":
+        f = file.file
+        f.open()
+        content = f.read()
+        f.close()
+        response = HttpResponse(content, content_type=mime_type)
+    elif FILESERVE_METHOD == "xsendfile":
+        response = HttpResponse(content_type=mime_type)
+        response['X-Sendfile'] = smart_str(file.path)
+        response['Content-Length'] = file.size
+    elif FILESERVE_METHOD == "nginx":
+        response = HttpResponse(content_type=mime_type)
+        response['X-Accel-Redirect'] = smart_str(os.path.join(FILESERVE_MEDIA_URL, file.name))
+        response['Content-Length'] = file.size
+    return response
+
+
 @login_required
 def group_application_view_statement(req, application_id, problem_id, filename):
     try:
@@ -361,13 +383,7 @@ def group_application_view_statement(req, application_id, problem_id, filename):
         raise Http404
     if filename != os.path.basename(problem.statement.name):
         raise Http404
-    mime = mimetypes.MimeTypes()
-    mime_type = mime.guess_type(problem.statement.path)[0]
-    f = problem.statement.file
-    f.open()
-    content = f.read()
-    f.close()
-    return HttpResponse(content, content_type=mime_type)
+    return file_response(problem.statement)
 
 
 def period_download_attachment(req, attachment_id, filename):
@@ -377,13 +393,7 @@ def period_download_attachment(req, attachment_id, filename):
         raise Http404
     if os.path.basename(attachment.file.name) != filename:
         raise Http404
-    mime = mimetypes.MimeTypes()
-    mime_type = mime.guess_type(attachment.file.path)[0]
-    f = attachment.file.file
-    f.open()
-    content = f.read()
-    f.close()
-    response = HttpResponse(content, content_type=mime_type)
+    response = file_response(attachment.file)
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
     return response
 
