@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-20 14:43+0300\n"
+"POT-Creation-Date: 2017-04-21 20:21+0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -45,74 +45,79 @@ msgstr "Пометить выбранные заявки как обучающи
 msgid "Applications"
 msgstr "Заявки"
 
-#: applications/forms.py:13
+#: applications/forms.py:14
 msgid "Yes"
 msgstr "Да"
 
-#: applications/forms.py:13
+#: applications/forms.py:14
 msgid "No"
 msgstr "Нет"
 
-#: applications/forms.py:15
+#: applications/forms.py:16
 #: userprofile/templates/userprofile/user_profile.html:26
 #: userprofile/templates/userprofile/user_profile.html:30
 #: userprofile/templates/userprofile/user_profile.html:34
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: applications/forms.py:30 applications/forms.py:73
+#: applications/forms.py:34 applications/forms.py:95
 msgid "Student's initials"
 msgstr "ФИО ученика"
 
-#: applications/forms.py:44 applications/forms.py:52 applications/forms.py:61
+#: applications/forms.py:35 applications/forms.py:99 userprofile/models.py:17
+#: userprofile/templates/userprofile/relatives_choice.html:23
+msgid "birthday"
+msgstr "Дата рождения"
+
+#: applications/forms.py:64 applications/forms.py:72 applications/forms.py:82
 #: applications/models.py:535
 msgid "Voucher ID"
 msgstr "Номер путёвки"
 
-#: applications/forms.py:62
+#: applications/forms.py:83
 msgid "Confirm participation"
 msgstr "Подтвердить участие"
 
-#: applications/forms.py:74
+#: applications/forms.py:96
 #: applications/templates/applications/view_enrolled.html:14
 msgid "Group"
 msgstr "Группа"
 
-#: applications/forms.py:75
+#: applications/forms.py:97
 msgid "Theory score"
 msgstr "Балл за теорию"
 
-#: applications/forms.py:76
+#: applications/forms.py:98
 msgid "Practice score"
 msgstr "Балл за практику"
 
-#: applications/forms.py:78 applications/models.py:530
+#: applications/forms.py:101 applications/models.py:530
 #: applications/templates/applications/group_application_edit_info.html:17
 msgid "Personal data processing agreement"
 msgstr "Соглашение на обработку персональных данных"
 
-#: applications/forms.py:89
+#: applications/forms.py:112
 #: applications/templates/applications/group_application.html:139
 #: applications/templates/applications/group_application_voucher.html:31
 msgid "Not yet uploaded"
 msgstr "Не загружено"
 
-#: applications/forms.py:96 applications/forms.py:101
+#: applications/forms.py:120 applications/forms.py:125
 msgid "Unavailable"
 msgstr "Недоступно"
 
-#: applications/forms.py:110
+#: applications/forms.py:142
 #: applications/templates/applications/group_application_practice_exam.html:36
 #: applications/templates/applications/group_application_practice_exam.html:60
 msgid "Language"
 msgstr "Язык"
 
-#: applications/forms.py:111
+#: applications/forms.py:143
 #: applications/templates/applications/group_application_practice_exam.html:63
 msgid "Report"
 msgstr "Вердикт"
 
-#: applications/forms.py:112
+#: applications/forms.py:144
 #: applications/templates/applications/group_application_practice_exam.html:61
 msgid "Size"
 msgstr "Размер"
@@ -377,7 +382,7 @@ msgstr "Класс в этом учебном году"
 
 #: applications/models.py:523
 msgid "Home address"
-msgstr "Домашний адрес"
+msgstr "Адрес прописки"
 
 #: applications/models.py:525
 msgid "School"
@@ -798,11 +803,11 @@ msgstr "Сохранить ответ"
 msgid "Application info"
 msgstr "Информация о заявке"
 
-#: applications/templates/applications/group_application_voucher.html:50
+#: applications/templates/applications/group_application_voucher.html:52
 msgid "Back"
 msgstr "Назад"
 
-#: applications/templates/applications/group_application_voucher.html:53
+#: applications/templates/applications/group_application_voucher.html:55
 msgid "Issue voucher"
 msgstr "Оформить путёвку"
 
@@ -1192,11 +1197,6 @@ msgstr "Пригласительный код"
 #: userprofile/models.py:16
 msgid "patronymic"
 msgstr "Отчество"
-
-#: userprofile/models.py:17
-#: userprofile/templates/userprofile/relatives_choice.html:23
-msgid "birthday"
-msgstr "Дата рождения"
 
 #: userprofile/models.py:18
 msgid "phone"
