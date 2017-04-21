@@ -413,13 +413,7 @@ def group_application_doc(req, application_id, filename):
         raise Http404
     if os.path.basename(application.personal_data_doc.name) != filename:
         raise Http404
-    mime = mimetypes.MimeTypes()
-    mime_type = mime.guess_type(application.personal_data_doc.path)[0]
-    f = application.personal_data_doc.file
-    f.open()
-    content = f.read()
-    f.close()
-    return HttpResponse(content, content_type=mime_type)
+    return file_response(application.personal_data_doc)
 
 
 
