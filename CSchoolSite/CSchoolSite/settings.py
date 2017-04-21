@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = ')1ji)&$y2qxf3!d(_$9vauea=35-6yb=x1(-1h%cx+)(zflku4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = psettings.DEBUG
 
 if DEBUG:
     ALLOWED_HOSTS = ['192.168.30.10', '127.0.0.1', 'localhost'] # need for vagrant
@@ -169,21 +169,28 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = psettings.STATIC_URL
 
 # media files
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+MEDIA_URL = psettings.MEDIA_URL
 
 # registration
 
 LOGIN_REDIRECT_URL = 'index'
 
 # ejudge integration
+
 EJUDGE_CONTEST_ID = psettings.EJUDGE_CONTEST_ID
 EJUDGE_USER_LOGIN = psettings.EJUDGE_USER_LOGIN
 EJUDGE_USER_PASSWORD = psettings.EJUDGE_USER_PASSWORD
-EJUDGE_BIN = '/home/ejudge/inst-ejudge/bin'
+EJUDGE_BIN = psettings.EJUDGE_BIN
 EJUDGE_SESSION_TIMEOUT = 43200 # ejudge sets expiry to 24 hours, half that time just in case
 EJUDGE_CONTESTS_CMD_PATH = os.path.join(EJUDGE_BIN, 'ejudge-contests-cmd')
+
+# file serving
+
+FILESERVE_METHOD = psettings.FILESERVE_METHOD
+FILESERVE_MEDIA_URL = psettings.FILESERVE_MEDIA_URL
+
