@@ -70,7 +70,8 @@ class Period(models.Model):
 
     def get_application_status(self, user):
         try:
-            application = EventApplication.objects.filter(user=user, event__period=self).get()
+            application = EventApplication.objects.get(user=user, event__period=self,
+                                                       event__type=Event.CLASS_GROUP)
         except EventApplication.DoesNotExist:
             return "NA", "Not applicable", None
         return application.status, application.get_status_display(), application.id
@@ -221,7 +222,8 @@ class PracticeExamApplication(models.Model):
     @staticmethod
     def generate_for_user(user, practice_exam):
         try:
-            application = EventApplication.objects.get(user=user, event=practice_exam.event)
+            application = EventApplication.objects.get(user=user, event=practice_exam.event,
+                                                       event__type=Event.CLASS_GROUP)
         except EventApplication.DoesNotExist:
             application = EventApplication()
             application.user = user
@@ -431,7 +433,8 @@ class TheoryExamApplication(models.Model):
     @staticmethod
     def generate_for_user(user, theory_exam):
         try:
-            application = EventApplication.objects.get(user=user, event=theory_exam.event)
+            application = EventApplication.objects.get(user=user, event=theory_exam.event,
+                                                       event__type=Event.CLASS_GROUP)
         except EventApplication.DoesNotExist:
             application = EventApplication()
             application.user = user

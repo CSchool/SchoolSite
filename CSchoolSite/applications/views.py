@@ -1,13 +1,10 @@
 import tempfile
-import mimetypes
 import os
 
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
-from django.core.files.storage import FileSystemStorage
 from django.http import Http404, HttpResponse
 from django.shortcuts import render, redirect, reverse
-from django.utils.encoding import smart_str
 from django.views.decorators.http import require_POST
 
 from applications.forms import CreateApplicationForm, EventApplicationGenericForm, TextDisplayWidget, \
@@ -16,8 +13,7 @@ from applications.models import Period, Event, PracticeExamApplication, EventApp
     TheoryExamApplication, TheoryExamApplicationQuestion, TheoryExamQuestion, PracticeExamProblem, PeriodAttachment
 from applications.decorators import study_group_application
 from userprofile.models import Relationship, User
-from CSchoolSite.settings import FILESERVE_MEDIA_URL, FILESERVE_METHOD
-
+from main.helpers import file_response
 import ejudge
 
 
@@ -28,6 +24,7 @@ def view_enrolled(req, period_id):
         raise Http404
     applications = EventApplication.objects\
         .filter(event__period=period)\
+        .filter(event__type=Event.CLASS_GROUP)\
         .filter(status__in=EventApplication.ENROLLED_STATUSES)
     if req.user.is_authenticated and req.user.is_education_committee:
         applications = applications.order_by('user__last_name', 'user__first_name')
@@ -37,6 +34,7 @@ def view_enrolled(req, period_id):
         "period": period,
         "applications": applications
     })
+
 
 def choose_period(req):
     periods = []
@@ -51,6 +49,7 @@ def choose_period(req):
             children = Relationship.objects.filter(relative=req.user, request=Relationship.APPROVED).all()
             assoc = EventApplication.objects\
                 .filter(user_id__in=map(lambda x: x.child.id, children))\
+                .filter(event__type=Event.CLASS_GROUP)\
                 .filter(event__period_id__in=map(lambda x: x['period'].id, periods))\
                 .all()
             for ea in assoc:
@@ -70,6 +69,7 @@ def choose_period(req):
     return render(req, "applications/choose_period.html", {
         "periods": periods
     })
+
 
 @login_required
 @study_group_application
@@ -153,7 +153,7 @@ def create_application(req):
         if req.POST.get('move'):
             # move application
             try:
-                ea = EventApplication.objects.filter(event__period=period, user=user).get()
+                ea = EventApplication.objects.filter(event__period=period, user=user, event__type=Event.CLASS_GROUP).get()
             except EventApplication.DoesNotExist:
                 raise PermissionDenied
             if hasattr(ea, 'theory_exam') and ea.theory_exam:
@@ -169,9 +169,9 @@ def create_application(req):
             ea.save()
         else:
             try:
-                ea = EventApplication.objects.get(user=user, event=group)
+                ea = EventApplication.objects.get(user=user, event=group, event__type=Event.CLASS_GROUP)
             except EventApplication.DoesNotExist:
-                ea = EventApplication.objects.create(user=user, event=group)
+                ea = EventApplication.objects.create(user=user, event=group, event__type=Event.CLASS_GROUP)
                 ea.save()
         if hasattr(group, 'practiceexam'):
             PracticeExamApplication.generate_for_user(user, group.practiceexam).save()
@@ -340,26 +340,6 @@ def group_application_edit_info(req, application_id):
         "uploaded": uploaded,
         "render_file": render_file
     })
-
-
-def file_response(file):
-    mime = mimetypes.MimeTypes()
-    mime_type = mime.guess_type(file.path)[0]
-    if FILESERVE_METHOD == "django":
-        f = file.file
-        f.open()
-        content = f.read()
-        f.close()
-        response = HttpResponse(content, content_type=mime_type)
-    elif FILESERVE_METHOD == "xsendfile":
-        response = HttpResponse(content_type=mime_type)
-        response['X-Sendfile'] = smart_str(file.path)
-        response['Content-Length'] = file.size
-    elif FILESERVE_METHOD == "nginx":
-        response = HttpResponse(content_type=mime_type)
-        response['X-Accel-Redirect'] = smart_str(os.path.join(FILESERVE_MEDIA_URL, file.name))
-        response['Content-Length'] = file.size
-    return response
 
 
 @login_required

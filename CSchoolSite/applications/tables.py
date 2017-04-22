@@ -2,7 +2,8 @@ from django.http import Http404
 from django.urls import reverse
 from django_datatables_view.base_datatable_view import BaseDatatableView
 
-from applications.models import EventApplication, Period
+from applications.models import EventApplication, Period, Event
+
 
 class EnrolledTable(BaseDatatableView):
     max_display_length = 200
@@ -18,6 +19,7 @@ class EnrolledTable(BaseDatatableView):
             raise Http404
         applications = EventApplication.objects \
             .filter(event__period=period) \
+            .filter(event__type=Event.CLASS_GROUP) \
             .filter(status__in=EventApplication.ENROLLED_STATUSES)
         if user.is_authenticated and user.is_education_committee:
             applications = applications.order_by('user__last_name', 'user__first_name')
