@@ -169,9 +169,9 @@ def create_application(req):
             ea.save()
         else:
             try:
-                ea = EventApplication.objects.get(user=user, event=group, event__type=Event.CLASS_GROUP)
+                ea = EventApplication.objects.get(user=user, event=group)
             except EventApplication.DoesNotExist:
-                ea = EventApplication.objects.create(user=user, event=group, event__type=Event.CLASS_GROUP)
+                ea = EventApplication.objects.create(user=user, event=group)
                 ea.save()
         if hasattr(group, 'practiceexam'):
             PracticeExamApplication.generate_for_user(user, group.practiceexam).save()
