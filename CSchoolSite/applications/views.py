@@ -374,7 +374,7 @@ def period_download_attachment(req, attachment_id, filename):
     if os.path.basename(attachment.file.name) != filename:
         raise Http404
     response = file_response(attachment.file)
-    response['Content-Disposition'] = 'attachment; filename=%s' % filename
+    response['Content-Disposition'] = 'attachment'
     return response
 
 
