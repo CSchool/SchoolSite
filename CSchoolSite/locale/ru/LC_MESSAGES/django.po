@@ -730,7 +730,7 @@ msgstr "Решения"
 
 #: applications/templates/applications/group_application.html:284
 msgid "Delete application"
-msgstr "Удалить заявку"
+msgstr "Отменить заявку"
 
 #: applications/templates/applications/group_application_edit_info.html:27
 msgid "Uploaded"

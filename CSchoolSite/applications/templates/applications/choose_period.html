@@ -44,7 +44,7 @@
                                         {% if period.children %}
                                         <li class="dropdown-header">{% trans 'Did not apply' %}</li>
                                         {% for child in period.children %}
-                                            <li><a href="{% url 'applications_choose_group' period.period.id child.username %}">
+                                            <li><a href="{% url 'applications_choose_group' period.period.id child.id %}">
                                                 {% bootstrap_icon 'plus' %}
                                                 {{ child.get_initials }} &raquo;
                                             </a></li>

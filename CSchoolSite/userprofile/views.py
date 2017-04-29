@@ -4,6 +4,7 @@ import random
 
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
 from django.http import HttpResponseRedirect
@@ -40,6 +41,10 @@ def profile(request):
             rel.child = request.user
         elif rel.relative is None:
             rel.relative = request.user
+            if not request.user.is_parent:
+                Group.objects.get(name=_('Parents')).user_set.add(request.user)
+            if request.user.is_student:
+                Group.objects.get(name=_('Students')).user_set.remove(request.user)
         else:
             return redirect(reverse('user_profile'))
         rel.request = Relationship.APPROVED

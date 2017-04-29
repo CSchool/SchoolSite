@@ -73,10 +73,10 @@ def choose_period(req):
 
 @login_required
 @study_group_application
-def choose_group(req, username, period_id):
+def choose_group(req, user_id, period_id):
     try:
         period = Period.objects.get(id=period_id)
-        user = User.objects.get(username=username)
+        user = User.objects.get(id=user_id)
     except Exception:
         raise Http404
     if not req.user.is_eligible_for_application(period):
@@ -94,7 +94,7 @@ def choose_group(req, username, period_id):
         "period": period,
         "categories": sorted(list(categories.values()), key=lambda x: x['name']),
         "move": False,
-        "username": username
+        "username": user.username
     })
 
 
