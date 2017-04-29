@@ -13,10 +13,14 @@ from django.utils.crypto import get_random_string
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.timezone import utc
 from django.utils.translation import ugettext as _
+from django.contrib.auth.views import LoginView
 
-from userprofile.forms import UserForm
+from userprofile.forms import UserForm, ExtendedAuthenticationForm
 from userprofile.utils import is_group_member
 from userprofile.models import User, Relationship
+
+class ExtendedLoginView(LoginView):
+    authentication_form = ExtendedAuthenticationForm
 
 @login_required
 def profile(request):
@@ -44,6 +48,10 @@ def profile(request):
         rel.save()
         return redirect(reverse('user_profile'))
     return render(request, 'userprofile/user_profile.html', {"user": request.user})
+
+
+def login(request, *args, **kwargs):
+    return ExtendedLoginView.as_view(**kwargs)(request, *args, **kwargs)
 
 
 def logout(req):

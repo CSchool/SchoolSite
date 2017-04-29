@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-04-29 12:28+0300\n"
+"POT-Creation-Date: 2017-04-29 13:17+0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -54,9 +54,9 @@ msgid "No"
 msgstr "Нет"
 
 #: applications/forms.py:16
-#: userprofile/templates/userprofile/user_profile.html:77
-#: userprofile/templates/userprofile/user_profile.html:81
-#: userprofile/templates/userprofile/user_profile.html:85
+#: userprofile/templates/userprofile/user_profile.html:79
+#: userprofile/templates/userprofile/user_profile.html:83
+#: userprofile/templates/userprofile/user_profile.html:87
 msgid "Unknown"
 msgstr "Неизвестно"
 
@@ -548,6 +548,7 @@ msgstr ""
 
 #: applications/templates/applications/confirm_group.html:24
 #: applications/templates/applications/group_application.html:35
+#: userprofile/templates/userprofile/user_profile.html:57
 msgid "Cancel"
 msgstr "Отмена"
 
@@ -588,7 +589,7 @@ msgstr ""
 #: applications/templates/applications/group_application.html:37
 #: applications/templates/applications/group_application_edit_info.html:40
 #: applications/templates/applications/group_application_practice_exam.html:49
-#: userprofile/templates/userprofile/user_profile.html:57
+#: userprofile/templates/userprofile/user_profile.html:59
 msgid "Submit"
 msgstr "Отправить"
 
@@ -820,7 +821,7 @@ msgstr "Зачисленные в %(period)s"
 
 #: applications/templates/applications/view_enrolled.html:13
 #: userprofile/templates/userprofile/relatives_choice.html:22
-#: userprofile/templates/userprofile/user_profile.html:72
+#: userprofile/templates/userprofile/user_profile.html:74
 msgid "Initials"
 msgstr "ФИО"
 
@@ -840,7 +841,7 @@ msgstr "Вернуться на сайт"
 #: templates/registration/password_change_form.html:5
 #: templates/registration/password_change_form.html:8
 #: templates/registration/password_change_form.html:15
-#: userprofile/templates/userprofile/user_profile.html:92
+#: userprofile/templates/userprofile/user_profile.html:94
 msgid "Change password"
 msgstr "Изменить пароль"
 
@@ -1157,7 +1158,7 @@ msgid "Important dates"
 msgstr "Важные даты"
 
 #: userprofile/admin.py:55
-#: userprofile/templates/userprofile/user_profile.html:104
+#: userprofile/templates/userprofile/user_profile.html:106
 msgid "Relative"
 msgstr "Родственник"
 
@@ -1181,15 +1182,27 @@ msgstr "Родители"
 msgid "Profiles_and_groups"
 msgstr "Профили и группы"
 
-#: userprofile/forms.py:45
+#: userprofile/forms.py:37
+msgid "Username or email"
+msgstr "Имя пользователя или адрес электронной почты"
+
+#: userprofile/forms.py:54
+msgid "Email"
+msgstr "Адрес электронной почты"
+
+#: userprofile/forms.py:55
 msgid "First name"
 msgstr "Имя"
 
-#: userprofile/forms.py:46
+#: userprofile/forms.py:56
 msgid "Last name"
 msgstr "Фамилия"
 
-#: userprofile/forms.py:67
+#: userprofile/forms.py:61
+msgid "This email address is already registered"
+msgstr "Этот адрес уже занят"
+
+#: userprofile/forms.py:90
 msgid "Invitation code"
 msgstr "Пригласительный код"
 
@@ -1222,7 +1235,7 @@ msgid "Family relative"
 msgstr "Родственник"
 
 #: userprofile/models.py:68
-#: userprofile/templates/userprofile/user_profile.html:99
+#: userprofile/templates/userprofile/user_profile.html:101
 msgid "Family relatives"
 msgstr "Родственники"
 
@@ -1273,12 +1286,11 @@ msgid "Username"
 msgstr "Имя пользователя"
 
 #: userprofile/templates/userprofile/relatives_choice.html:24
-#: userprofile/templates/userprofile/user_profile.html:106
+#: userprofile/templates/userprofile/user_profile.html:108
 msgid "Action"
 msgstr "Действие"
 
 #: userprofile/templates/userprofile/user_profile.html:6
-#: userprofile/templates/userprofile/user_profile.html:67
 #, python-format
 msgid "Profile of user \"%(username)s\""
 msgstr "Профиль пользователя \"%(username)s\""
@@ -1292,52 +1304,51 @@ msgid "This code will be valid for"
 msgstr "Этот код истечёт через"
 
 #: userprofile/templates/userprofile/user_profile.html:30
-#: userprofile/templates/userprofile/user_profile.html:55
 msgid "Ok"
 msgstr "Ок"
 
-#: userprofile/templates/userprofile/user_profile.html:45
-#: userprofile/templates/userprofile/user_profile.html:49
+#: userprofile/templates/userprofile/user_profile.html:46
+#: userprofile/templates/userprofile/user_profile.html:51
 msgid "Enter code"
 msgstr "Введите код"
 
-#: userprofile/templates/userprofile/user_profile.html:48
+#: userprofile/templates/userprofile/user_profile.html:49
 msgid "Enter code from your relative"
 msgstr "Введите код, полученный от вашего родственника"
 
-#: userprofile/templates/userprofile/user_profile.html:76
+#: userprofile/templates/userprofile/user_profile.html:78
 msgid "user_profile_birthday"
 msgstr "Дата рождения"
 
-#: userprofile/templates/userprofile/user_profile.html:80
+#: userprofile/templates/userprofile/user_profile.html:82
 msgid "user_profile_email"
 msgstr "E-mail"
 
-#: userprofile/templates/userprofile/user_profile.html:84
+#: userprofile/templates/userprofile/user_profile.html:86
 msgid "user_profile_phone"
 msgstr "Телефон"
 
-#: userprofile/templates/userprofile/user_profile.html:93
+#: userprofile/templates/userprofile/user_profile.html:95
 msgid "user_profile_edit_profile"
 msgstr "Изменить профиль"
 
-#: userprofile/templates/userprofile/user_profile.html:105
+#: userprofile/templates/userprofile/user_profile.html:107
 msgid "Who"
 msgstr "Кто"
 
-#: userprofile/templates/userprofile/user_profile.html:115
+#: userprofile/templates/userprofile/user_profile.html:117
 msgid "Add relatives"
 msgstr "Добавить родственников"
 
-#: userprofile/templates/userprofile/user_profile.html:118
+#: userprofile/templates/userprofile/user_profile.html:120
 msgid "Add a child"
 msgstr "Добавить ребёнка"
 
-#: userprofile/templates/userprofile/user_profile.html:119
+#: userprofile/templates/userprofile/user_profile.html:121
 msgid "Add a parent"
 msgstr "Добавить родителя"
 
-#: userprofile/templates/userprofile/user_profile.html:121
+#: userprofile/templates/userprofile/user_profile.html:123
 msgid "I have an invitation code"
 msgstr "У меня есть код от родственника"
 
@@ -1350,11 +1361,11 @@ msgstr "Редактирование профиля пользователя \"%
 msgid "Edit profile"
 msgstr "Редактировать профиль"
 
-#: userprofile/views.py:103
+#: userprofile/views.py:132
 msgid "will be your child"
 msgstr "будет считаться вашим ребёнком"
 
-#: userprofile/views.py:105
+#: userprofile/views.py:134
 msgid "will be your parent"
 msgstr "будет считаться вашим родителем"
 

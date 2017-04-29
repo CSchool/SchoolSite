@@ -13,7 +13,7 @@ class ExtendedRegistrationView(RegistrationView):
 
 
 urlpatterns = [
-    url(r'^login/$', auth_views.login, name='login'),
+    url(r'^login/$', views.login, name='login'),
     url(r'^password_change/$', auth_views.password_change, name='password_change'),
     url(r'^password_change/done/$', auth_views.password_change_done, name='password_change_done'),
     url(r'^password_reset/$', auth_views.password_reset, name='password_reset'),

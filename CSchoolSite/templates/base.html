@@ -54,7 +54,7 @@
                             {% if user.alias %}
                                 <b>{{ user.alias }}</b>
                             {% else %}
-                                {{ user.username }}
+                                {{ user.get_full_name }}
                             {% endif %}
                         {% else %}
                             {% trans 'Guest' %}

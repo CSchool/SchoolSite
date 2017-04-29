@@ -1,5 +1,6 @@
 from django.forms import ModelForm, DateInput, models, Form
 from registration.forms import RegistrationForm
+from django.contrib.auth.forms import AuthenticationForm, UsernameField
 
 from .models import User
 from django import forms
@@ -29,21 +30,43 @@ class AdminUserChangeForm(UserChangeForm):
         fields = '__all__'
 
 
+class ExtendedAuthenticationForm(AuthenticationForm):
+    username = UsernameField(
+        max_length=254,
+        widget=forms.TextInput(attrs={'autofocus': True}),
+        label=_('Username or email')
+    )
+
+
 class ExtendedRegistrationForm(RegistrationForm):
     class Meta(UserCreationForm.Meta):
         model = User
         fields = [
-            User.USERNAME_FIELD,
+            # User.USERNAME_FIELD,
+            'email',
             'last_name',
             'first_name',
             'patronymic',
-            'email',
             'password1',
             'password2'
         ]
 
+    email = forms.EmailField(required=True, label=_('Email'))
     first_name = forms.CharField(widget=forms.TextInput(), label=_('First name'))
     last_name = forms.CharField(widget=forms.TextInput(), label=_('Last name'))
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if email and User.objects.filter(email=email).exists():
+            raise forms.ValidationError(_('This email address is already registered'))
+        return email
+
+    def save(self, commit=True):
+        instance = super(ExtendedRegistrationForm, self).save(commit=False)
+        instance.username = instance.email
+        if commit:
+            instance.save()
+        return instance
 
 
 class UserForm(ModelForm):
