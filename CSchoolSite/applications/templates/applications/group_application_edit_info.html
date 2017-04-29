@@ -35,6 +35,16 @@
         </div>
     </div>
     {% endif %}
+    {% if personal_data_attachments %}
+        <p>
+        {% for attach in personal_data_attachments %}
+            <a href="{{ attach.get_url }}">
+                {% bootstrap_icon 'download' %}
+                {{ attach.name }}
+            </a><br />
+        {% endfor %}
+        </p>
+    {% endif %}
     {% buttons %}
         {% if application.modifiable %}
         <button type="submit" class="btn btn-lg btn-primary btn-block">{% trans 'Submit' %}</button>

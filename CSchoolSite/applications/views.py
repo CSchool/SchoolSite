@@ -333,12 +333,15 @@ def group_application_edit_info(req, application_id):
             for key in form.fields.keys():
                 form.fields[key].widget = TextDisplayWidget()
                 form.fields[key].help_text = None
+    personal_data_attachments = PeriodAttachment.objects.filter(period=group.period,
+                                                               type=PeriodAttachment.AGREEMENT).all()
     return render(req, "applications/group_application_edit_info.html", {
         "group": group,
         "application": application,
         "form": form,
         "uploaded": uploaded,
-        "render_file": render_file
+        "render_file": render_file,
+        "personal_data_attachments": personal_data_attachments
     })
 
 

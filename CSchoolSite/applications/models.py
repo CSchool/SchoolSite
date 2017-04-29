@@ -91,6 +91,17 @@ class PeriodAttachment(models.Model):
     def get_name(self):
         return os.path.basename(self.file.name)
 
+    AGREEMENT = 'AG'
+    OTHER = 'OT'
+
+    ATTACHMENT_TYPE_CHOICES = (
+        (AGREEMENT, _('Personal data processing agreement')),
+        (OTHER, _('Other'))
+    )
+
+    type = models.CharField(max_length=2, choices=ATTACHMENT_TYPE_CHOICES,
+                            default=OTHER, verbose_name=_('Attachment type'))
+
     name = models.CharField(max_length=250, verbose_name=_('Name'))
     file = models.FileField(verbose_name=_('File'), upload_to=get_upload_path)
     period = models.ForeignKey('Period', on_delete=models.CASCADE, verbose_name=_('Period'))

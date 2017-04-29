@@ -55,6 +55,7 @@ admin.site.register(PracticeExamProblem)
 
 class PeriodAttachmentInline(admin.TabularInline):
     model = PeriodAttachment
+    fields = ('name', 'file', 'type')
 
 
 class PeriodAdmin(admin.ModelAdmin):

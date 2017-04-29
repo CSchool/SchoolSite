@@ -11,7 +11,6 @@ from applications.models import Period
 from userprofile.utils import is_group_member
 
 
-
 class User(AbstractUser):
     patronymic = models.CharField(_('patronymic'), max_length=30, null=True, blank=True, default='')
     birthday = models.DateField(_('birthday'), null=True, blank=True)
