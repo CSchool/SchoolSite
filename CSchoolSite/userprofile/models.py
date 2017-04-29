@@ -68,11 +68,14 @@ class Relationship(models.Model):
         verbose_name_plural = _('Family relatives')
 
     relative = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="related_user",
-                                 null=True, default=None, verbose_name=_('Parent'))
+                                 null=True, default=None, blank=True, verbose_name=_('Parent'))
     child = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="child_user", null=True,
-                              default=None, verbose_name=_('Child'))
+                              default=None, blank=True, verbose_name=_('Child'))
     invited_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="invited_user",
-                                     null=True, default=None, verbose_name=_('Invited user'))
+                                     null=True, default=None, blank=True, verbose_name=_('Invited user'))
+
+    confirmation_code = models.CharField(db_index=True, max_length=8, default=None, null=True, verbose_name=_('Confirmation code'))
+    valid_until = models.DateTimeField(db_index=True, default=None, null=True, verbose_name=_('Valid until'))
 
     WAITING = 'WT'
     APPROVED = 'AP'

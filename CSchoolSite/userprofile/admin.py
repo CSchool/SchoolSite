@@ -40,20 +40,26 @@ admin.site.register(User, UserAdmin)
 
 
 class RelationshipAdmin(admin.ModelAdmin):
-    list_display = ('id', 'get_relative_link', 'get_child_link', 'invited_user', 'request')
+    list_display = ('id', 'get_relative_link', 'get_child_link', 'invited_user', 'request', 'confirmation_code', 'valid_until')
     search_fields = ('id', 'relative', 'child', 'invited_user', 'status', 'request')
 
     def get_relative_link(self, object):
-        link = urlresolvers.reverse('admin:userprofile_user_change', args=[object.relative.id])
-        return '<a href={}>{}</a>'.format(link, object.relative.username)
+        if object.relative:
+            link = urlresolvers.reverse('admin:userprofile_user_change', args=[object.relative.id])
+            return '<a href={}>{}</a>'.format(link, object.relative.username)
+        else:
+            return '&mdash;'
 
     get_relative_link.allow_tags = True
     get_relative_link.admin_order_field = 'relative'
     get_relative_link.short_description = _('Relative')
 
     def get_child_link(self, object):
-        link = urlresolvers.reverse('admin:userprofile_user_change', args=[object.child.id])
-        return '<a href={}>{}</a>'.format(link, object.child.username)
+        if object.child:
+            link = urlresolvers.reverse('admin:userprofile_user_change', args=[object.child.id])
+            return '<a href={}>{}</a>'.format(link, object.child.username)
+        else:
+            return '&mdash;'
 
     get_child_link.allow_tags = True
     get_child_link.admin_order_field = 'child'

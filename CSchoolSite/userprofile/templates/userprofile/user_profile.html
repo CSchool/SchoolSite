@@ -11,6 +11,59 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/dataTables.bootstrap.css' %}" />
 {% endblock %}
 
+{% block modals %}
+    <div class="modal fade" id="addRelativeModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="addRelativeModalTitle"></h4>
+                </div>
+                <div class="modal-body" id="addRelativeModalContent">
+                    <p>{% trans 'To add your relative, go to their profile and redeem this code' %}:</p>
+                    <h2 id="addRelativeCode"></h2>
+                    <p>{% trans 'This code will be valid for' %} <span id="addRelativeCodeTime"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Ok' %}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="redeemCodeModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="redeem_relationship_code" value="True" />
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">{% trans 'Enter code' %}</h4>
+                </div>
+                <div class="modal-body" id="addRelativeModalContent">
+                    <p>{% trans 'Enter code from your relative' %}:</p>
+                    <input name="code" id="redeemCodeInput" type="text" class="form-control" autocomplete="off"
+                           placeholder="{% trans 'Enter code' %}" />
+                    <p id="redeemCodeInfo" style="display: none">
+                        <b id="redeemCodeInitials"></b> <span id="redeemCodeNotice"></span>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}</button>
+                    <button type="submit" id="redeemCodeSubmit"
+                            class="btn btn-primary" disabled>{% trans 'Submit' %}</button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
 {% block content %}
     <div class="panel panel-info">
         <div class="panel-heading">{% blocktrans with username=user.username %}Profile of user "{{ username }}"{% endblocktrans %}</div>
@@ -51,8 +104,7 @@
                 <thead>
                     <tr>
                         <th>{% trans 'Relative' %}</th>
-                        <th>{% trans 'Relationship status' %}</th>
-                        <th>{% trans 'Relationship request' %}</th>
+                        <th>{% trans 'Who' %}</th>
                         <th>{% trans 'Action' %}</th>
                     </tr>
                 </thead>
@@ -60,7 +112,17 @@
         </div>
         <div class="panel-footer clearfix">
             <div class="pull-right">
-                <a href="{% url 'user_profile_relatives_choice' %}" class="btn btn-success">{% bootstrap_icon 'plus' %} {% trans 'Select relatives' %}</a>
+                <div class="btn-group">
+                    <button class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                        {% bootstrap_icon 'plus' %} {% trans 'Add relatives' %} <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" id="addChildButton">{% trans 'Add a child' %}</a></li>
+                        <li><a href="#" id="addParentButton">{% trans 'Add a parent' %}</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="#" id="redeemCodeButton">{% trans 'I have an invitation code' %}</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
@@ -72,6 +134,8 @@
     <script>
         var dataUrl = "{% url 'relationship_table' %}";
         var langUrl = "{% static 'DataTablesRussian.json' %}";
+        var codeUrl = "{% url 'get_relationship_code' %}";
+        var infoUrl = "{% url 'relationship_code_info' %}";
     </script>
     <script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/user_profile.js' %}"></script>
