@@ -76,8 +76,8 @@ class UserForm(ModelForm):
         widgets = {'birthday': DateInput(attrs={'class': 'datepicker'})}
 
     email = forms.EmailField(required=True)
-    first_name = forms.CharField(required=True)
-    last_name = forms.CharField(required=True)
+    first_name = forms.CharField(required=True, label=_('First name'))
+    last_name = forms.CharField(required=True, label=_('Last name'))
 
 
 class RelationshipAcceptanceForm(Form):
