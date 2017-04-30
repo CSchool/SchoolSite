@@ -172,7 +172,10 @@ def create_application(req):
                 ea = EventApplication.objects.get(user=user, event=group)
             except EventApplication.DoesNotExist:
                 ea = EventApplication.objects.create(user=user, event=group)
-                ea.save()
+            ea.voucher_parent = req.user.get_initials()
+            if req.user.phone:
+                ea.parent_phone_numbers = "{} - {}".format(req.user.get_initials(), req.user.phone)
+            ea.save()
         if hasattr(group, 'practiceexam'):
             PracticeExamApplication.generate_for_user(user, group.practiceexam).save()
         if hasattr(group, 'theoryexam'):

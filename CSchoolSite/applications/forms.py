@@ -87,7 +87,7 @@ class EventApplicationAdminForm(forms.ModelForm):
     class Meta:
         model = EventApplication
         fields = ('student_initials', 'group', 'grade', 'address',
-                  'school', 'birthday', 'organization', 'parent_phone_numbers',
+                  'school', 'birthday', 'organization', 'parent_phone_numbers', 'voucher_parent',
                   'personal_data_doc_link', 'personal_laptop',
                   'theory_score', 'practice_score', 'status', 'submitted_at',
                   'issued_at', 'issued_by')
