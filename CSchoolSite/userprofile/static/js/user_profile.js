@@ -10,6 +10,7 @@ $(document).ready(function () {
         "language": {
             "url": langUrl
         },
+        "searching": false,
          columnDefs: [
             {width: "10%", orderable: false, searchable: false, targets: 2},
             {orderable: false, searchable: false, targets: 1},
