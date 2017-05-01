@@ -616,8 +616,9 @@ class EventApplication(models.Model):
 
         def notify(msg, id=None):
             from telegram.bot import TelegramBot
-            if self.user.telegram_id is not None:
-                TelegramBot.sendMessage(id or self.user.telegram_id, msg, parse_mode="Markdown")
+            id = id or self.user.telegram_id
+            if id is not None:
+                TelegramBot.sendMessage(id, msg, parse_mode="Markdown")
 
         if self.status != EventApplication.TESTING and self.submitted_at is None:
             self.submitted_at = timezone.now()
