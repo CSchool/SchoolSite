@@ -13,3 +13,4 @@ jsonfield==2.0.1
 pyparsing==2.2.0
 pytz==2017.2
 six==1.10.0
+telepot==10.5
