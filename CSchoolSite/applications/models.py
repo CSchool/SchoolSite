@@ -593,21 +593,52 @@ class EventApplication(models.Model):
     def __str__(self):
         return self.user.get_full_name() + " - " + self.event.__str__()
 
+    def __init__(self, *args, **kwargs):
+        super(EventApplication, self).__init__(*args, **kwargs)
+        self.__original_status = self.status
+
     @property
     def enrolled_color(self):
-        if self.status == EventApplication.ACCEPTED:
-            return 'warning'
         if self.status in (EventApplication.FAILED, EventApplication.DISQUALIFIED):
             return 'danger'
+        if self.status == EventApplication.ENROLLED:
+            return 'warning'
         if self.status in EventApplication.ENROLLED_STATUSES:
             return 'success'
         return 'danger'
 
     def save(self, *args, **kwargs):
+        try:
+            from telegram.bot import HOST
+        except ImportError:
+            HOST = ''
+        def notify(*args, **kwargs):
+            from telegram.bot import TelegramBot
+            if self.user.telegram_id is not None:
+                TelegramBot.sendMessage(self.user.telegram_id, *args, **kwargs)
+
         if self.status != EventApplication.TESTING and self.submitted_at is None:
             self.submitted_at = timezone.now()
         if self.status == EventApplication.ISSUED and self.issued_at is None:
             self.issued_at = timezone.now()
+        if self.status != self.__original_status:
+            if self.status == EventApplication.ENROLLED:
+                notify('''
+*Поздравляем!*
+Вы зачислены в группу {group}. Теперь вам необходимо оплатить путёвку.
+[Страница заявки]({link})
+'''.format(group=self.event.name,
+           link=HOST + reverse('applications_group_application', args=[self.id])),
+                       parse_mode='Markdown')
+
+            if self.status == EventApplication.ISSUED:
+                notify('''
+*Путёвка одобрена*
+Ваша путёвка в {period} была одобрена.
+[Страница заявки]({link})
+'''.format(period=self.event.period.name,
+           link=HOST + reverse('applications_group_application', args=[self.id])),
+                       parse_mode='Markdown')
         super(EventApplication, self).save(*args, **kwargs)
 
     @property

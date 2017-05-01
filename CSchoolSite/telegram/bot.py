@@ -7,6 +7,7 @@ from userprofile.models import User
 
 TOKEN_PATH = '/etc/cschoolsite_telegram_token'
 TOKEN = 'NOT APPLICABLE'
+HOST = 'https://olimp-nw.ru'
 
 try:
     with open(TOKEN_PATH, 'r') as f:
