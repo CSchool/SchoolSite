@@ -42,6 +42,12 @@ def handle(msg):
 '''.format(get_link(chat_id)), parse_mode='Markdown')
         return
 
+    if chat_type != 'private':
+        TelegramBot.sendMessage(chat_id, '''
+Этот бот пока работает только в личных чатах
+''')
+        return
+
     if content_type == 'text':
         t = msg['text']
         if t == '/help':

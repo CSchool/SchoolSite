@@ -86,6 +86,16 @@
                         <td>{% trans "user_profile_phone" %}:</td>
                         <td>{% if user.phone %}{{ user.phone }}{% else %}<i>{% trans 'Unknown' %}</i>{% endif %}</td>
                     </tr>
+                    <tr>
+                        <td>{% trans "Telegram account" %}:</td>
+                        <td>
+                            {% if user.telegram_id %}
+                                @{{ user.telegram_usernmae }}
+                            {% else %}
+                                <i><a href="//t.me/OlimpNwBot">{% trans 'Connect' %}</a></i>
+                            {% endif %}
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-01 10:38+0300\n"
+"POT-Creation-Date: 2017-05-01 15:45+0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -873,7 +873,7 @@ msgstr "Вернуться на сайт"
 #: templates/registration/password_change_form.html:5
 #: templates/registration/password_change_form.html:8
 #: templates/registration/password_change_form.html:15
-#: userprofile/templates/userprofile/user_profile.html:94
+#: userprofile/templates/userprofile/user_profile.html:104
 msgid "Change password"
 msgstr "Изменить пароль"
 
@@ -1190,24 +1190,24 @@ msgid "Important dates"
 msgstr "Важные даты"
 
 #: userprofile/admin.py:55
-#: userprofile/templates/userprofile/user_profile.html:106
+#: userprofile/templates/userprofile/user_profile.html:116
 msgid "Relative"
 msgstr "Родственник"
 
-#: userprofile/admin.py:66 userprofile/models.py:72 userprofile/tables.py:30
+#: userprofile/admin.py:66 userprofile/models.py:75 userprofile/tables.py:30
 msgid "Child"
 msgstr "Ребёнок"
 
-#: userprofile/apps.py:33 userprofile/models.py:61
+#: userprofile/apps.py:33 userprofile/models.py:64
 msgid "Education committee"
 msgstr "Комитет образования"
 
-#: userprofile/apps.py:35 userprofile/apps.py:53 userprofile/models.py:57
+#: userprofile/apps.py:35 userprofile/apps.py:53 userprofile/models.py:60
 #: userprofile/views.py:47
 msgid "Students"
 msgstr "Ученики"
 
-#: userprofile/apps.py:36 userprofile/models.py:53 userprofile/views.py:45
+#: userprofile/apps.py:36 userprofile/models.py:56 userprofile/views.py:45
 msgid "Parents"
 msgstr "Родители"
 
@@ -1263,48 +1263,48 @@ msgstr "Псевдоним"
 msgid "Use contents of this field instead of username"
 msgstr "Это поле будет отображаться вместо имени пользователя"
 
-#: userprofile/models.py:66
+#: userprofile/models.py:69
 msgid "Family relative"
 msgstr "Родственник"
 
-#: userprofile/models.py:67
-#: userprofile/templates/userprofile/user_profile.html:101
+#: userprofile/models.py:70
+#: userprofile/templates/userprofile/user_profile.html:111
 msgid "Family relatives"
 msgstr "Родственники"
 
-#: userprofile/models.py:70 userprofile/tables.py:32
+#: userprofile/models.py:73 userprofile/tables.py:32
 msgid "Parent"
 msgstr "Родитель"
 
-#: userprofile/models.py:74
+#: userprofile/models.py:77
 msgid "Invited user"
 msgstr "Пригласивший пользователь"
 
-#: userprofile/models.py:76
+#: userprofile/models.py:79
 msgid "Confirmation code"
 msgstr "Код подтверждения"
 
-#: userprofile/models.py:77
+#: userprofile/models.py:80
 msgid "Valid until"
 msgstr "Действителен до"
 
-#: userprofile/models.py:84
+#: userprofile/models.py:87
 msgid "Waiting"
 msgstr "Ожидание"
 
-#: userprofile/models.py:85
+#: userprofile/models.py:88
 msgid "Approved"
 msgstr "Одобрено"
 
-#: userprofile/models.py:86
+#: userprofile/models.py:89
 msgid "Declined"
 msgstr "Отклонено"
 
-#: userprofile/models.py:90
+#: userprofile/models.py:93
 msgid "Relationship request"
 msgstr "Запрос родства"
 
-#: userprofile/models.py:93
+#: userprofile/models.py:96
 #, python-format
 msgid "Relationship #%(id)s"
 msgstr "Отношение #%(id)s"
@@ -1319,7 +1319,7 @@ msgid "Username"
 msgstr "Имя пользователя"
 
 #: userprofile/templates/userprofile/relatives_choice.html:24
-#: userprofile/templates/userprofile/user_profile.html:108
+#: userprofile/templates/userprofile/user_profile.html:118
 msgid "Action"
 msgstr "Действие"
 
@@ -1361,27 +1361,35 @@ msgstr "E-mail"
 msgid "user_profile_phone"
 msgstr "Телефон"
 
+#: userprofile/templates/userprofile/user_profile.html:90
+msgid "Telegram account"
+msgstr "Аккаунт Telegram"
+
 #: userprofile/templates/userprofile/user_profile.html:95
+msgid "Connect"
+msgstr "Подключить"
+
+#: userprofile/templates/userprofile/user_profile.html:105
 msgid "user_profile_edit_profile"
 msgstr "Изменить профиль"
 
-#: userprofile/templates/userprofile/user_profile.html:107
+#: userprofile/templates/userprofile/user_profile.html:117
 msgid "Who"
 msgstr "Кто"
 
-#: userprofile/templates/userprofile/user_profile.html:117
+#: userprofile/templates/userprofile/user_profile.html:127
 msgid "Add relatives"
 msgstr "Добавить родственников"
 
-#: userprofile/templates/userprofile/user_profile.html:120
+#: userprofile/templates/userprofile/user_profile.html:130
 msgid "Add a child"
 msgstr "Добавить ребёнка"
 
-#: userprofile/templates/userprofile/user_profile.html:121
+#: userprofile/templates/userprofile/user_profile.html:131
 msgid "Add a parent"
 msgstr "Добавить родителя"
 
-#: userprofile/templates/userprofile/user_profile.html:123
+#: userprofile/templates/userprofile/user_profile.html:133
 msgid "I have an invitation code"
 msgstr "У меня есть код от родственника"
 
