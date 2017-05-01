@@ -2,6 +2,7 @@ import telepot
 import hashlib
 
 from django.urls import reverse
+from CSchoolSite.settings import SECRET_KEY
 
 from userprofile.models import User
 
@@ -20,7 +21,7 @@ TelegramBot = telepot.Bot(TOKEN)
 
 def digest(id):
     m = hashlib.sha256()
-    m.update(TOKEN.encode())
+    m.update(SECRET_KEY.encode())
     m.update(str(id).encode())
     return m.hexdigest()[:16]
 
