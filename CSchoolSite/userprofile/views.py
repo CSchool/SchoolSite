@@ -27,6 +27,15 @@ class ExtendedLoginView(LoginView):
 def profile(request):
     if not request.user.personal:
         raise PermissionDenied
+    if request.POST.get('delete_relation'):
+        relation_id = request.POST.get('delete_relation')
+        try:
+            rel = Relationship.objects.get(id=relation_id)
+        except Relationship.DoesNotExist:
+            return redirect(reverse('user_profile'))
+        if rel.child == request.user or rel.parent == request.user:
+            rel.delete()
+        return redirect(reverse('user_profile'))
     if request.POST.get('redeem_relationship_code'):
         code = request.POST.get('code')
         now = datetime.datetime.utcnow().replace(tzinfo=utc)

@@ -3,6 +3,7 @@ from django.db.models import Q
 from django.urls import reverse
 from django_datatables_view.base_datatable_view import BaseDatatableView
 from django.utils.translation import ugettext_lazy as _
+from django.middleware.csrf import get_token
 
 from userprofile.models import Relationship, User
 from userprofile.utils import is_group_member
@@ -45,6 +46,15 @@ class RelationshipTable(BaseDatatableView):
             #     #     return 'View profile'
             #     # else:
             #     #     return ''
-            return ''
+            return '''
+<form method="POST">
+<input type="hidden" name="csrfmiddlewaretoken" value="{csrf}" />
+<input type="hidden" name="delete_relation" value="{id}" />
+<button type="submit" class="btn btn-danger btn-xs">
+<span class="glyphicon glyphicon-remove"></span>
+{delete}
+</button>
+</form>
+'''.format(delete=_('Delete'), csrf=get_token(self.request), id=row.id)
         else:
             return super(RelationshipTable, self).render_column(row, column)

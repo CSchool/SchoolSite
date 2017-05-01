@@ -608,37 +608,61 @@ class EventApplication(models.Model):
         return 'danger'
 
     def save(self, *args, **kwargs):
+        from userprofile.models import Relationship
         try:
             from telegram.bot import HOST
         except ImportError:
             HOST = ''
-        def notify(*args, **kwargs):
+
+        def notify(msg, id=None):
             from telegram.bot import TelegramBot
             if self.user.telegram_id is not None:
-                TelegramBot.sendMessage(self.user.telegram_id, *args, **kwargs)
+                TelegramBot.sendMessage(id or self.user.telegram_id, msg, parse_mode="Markdown")
 
         if self.status != EventApplication.TESTING and self.submitted_at is None:
             self.submitted_at = timezone.now()
         if self.status == EventApplication.ISSUED and self.issued_at is None:
             self.issued_at = timezone.now()
         if self.status != self.__original_status:
+
             if self.status == EventApplication.ENROLLED:
+                # notify student
                 notify('''
 *Поздравляем!*
-Вы зачислены в группу {group}. Теперь вам необходимо оплатить путёвку.
+Вы зачислены в группу {group}. Теперь необходимо оплатить путёвку.
 [Страница заявки]({link})
 '''.format(group=self.event.name,
-           link=HOST + reverse('applications_group_application', args=[self.id])),
-                       parse_mode='Markdown')
+           link=HOST + reverse('applications_group_application', args=[self.id])))
+
+                # notify parents
+                for rel in Relationship.objects.filter(child=self.user, request=Relationship.APPROVED)\
+                        .exclude(relative__telegram_id__isnull=True):
+                    notify('''
+*Поздравляем!*
+{child} зачислен(а) в {group}. Теперь необходимо оплатить путёвку.
+[Страница заявки]({link})
+'''.format(group=self.event.name, child=self.user.get_full_name(),
+           link=HOST + reverse('applications_group_application', args=[self.id])), rel.relative.telegram_id)
 
             if self.status == EventApplication.ISSUED:
+                # notify student
                 notify('''
 *Путёвка одобрена*
 Ваша путёвка в {period} была одобрена.
 [Страница заявки]({link})
 '''.format(period=self.event.period.name,
-           link=HOST + reverse('applications_group_application', args=[self.id])),
-                       parse_mode='Markdown')
+           link=HOST + reverse('applications_group_application', args=[self.id])))
+
+                # notify parents
+                for rel in Relationship.objects.filter(child=self.user, request=Relationship.APPROVED)\
+                        .exclude(relative__telegram_id__isnull=True):
+                    notify('''
+*Путёвка одобрена*
+{child}: Путёвка в {period} была одобрена.
+[Страница заявки]({link})
+'''.format(period=self.event.period.name, child=self.user.get_full_name(),
+           link=HOST + reverse('applications_group_application', args=[self.id])), rel.relative.telegram_id)
+
         super(EventApplication, self).save(*args, **kwargs)
 
     @property
