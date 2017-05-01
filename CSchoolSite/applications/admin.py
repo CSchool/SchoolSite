@@ -50,7 +50,12 @@ class EventApplicationAdmin(admin.ModelAdmin):
 
 admin.site.register(EventApplication, EventApplicationAdmin)
 admin.site.register(PracticeExam)
-admin.site.register(PracticeExamProblem)
+
+class PracticeExamProblemAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'exam')
+    list_filter = ('exam',)
+
+admin.site.register(PracticeExamProblem, PracticeExamProblemAdmin)
 
 
 class PeriodAttachmentInline(admin.TabularInline):
@@ -72,6 +77,8 @@ class TheoryExamQuestionOptionInline(admin.TabularInline):
 
 
 class TheoryExamQuestionAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'exam')
+    list_filter = ('exam',)
     inlines = [
         TheoryExamQuestionOptionInline
     ]
