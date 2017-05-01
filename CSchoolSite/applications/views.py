@@ -240,15 +240,13 @@ def group_application(req, application_id):
 
     confirm_submit = False
     if req.POST.get('confirm_submit') is not None:
-        if application.modifiable and parent_priv:
+        if application.modifiable:
             confirm_submit = True
 
     if req.POST.get('confirm_application_submit') is not None:
         if not application.modifiable:
             raise PermissionDenied
         if not application.is_general_filled:
-            raise PermissionDenied
-        if not parent_priv:
             raise PermissionDenied
         passed = True
         if theory_exam:

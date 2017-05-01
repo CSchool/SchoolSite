@@ -41,13 +41,22 @@
     {% endif %}
     {% if application.status == application.TESTING_FAILED %}
         <div class="alert alert-danger" role="alert">
-        <b>{% trans 'You failed testing' %}</b><br />
-        {% blocktrans %}
-            You didn't meet requirements for application to this group.
-            Don't worry, perhaps you are not yet ready. You can
-        {% endblocktrans %}
-        <b><a href="{% url 'applications_move_group' application.id %}">
-        {% blocktrans %}move your application to an easier group{% endblocktrans %}</a></b>.
+        {% if parent_priv %}
+            <b>{% trans 'Your child has failed testing' %}</b><br />
+            {% blocktrans %}
+                Your child didn't meet requirements for application to this group. You can
+            {% endblocktrans %}
+            <b><a href="{% url 'applications_move_group' application.id %}">
+            {% blocktrans %}move this application to an easier group{% endblocktrans %}</a></b>.
+            </div>
+        {% else %}
+            <b>{% trans 'You have failed testing' %}</b><br />
+            {% blocktrans %}
+                You didn't meet requirements for application to this group.
+                Don't worry, perhaps you are not yet ready. You can ask your
+                parents to move your application to an easier group.
+            {% endblocktrans %}
+        {% endif %}
         </div>
     {% endif %}
     {% if application.status == application.ACCEPTED %}
@@ -274,8 +283,9 @@
     </div>
     {% endif %}
 
-    {% if parent_priv %}
+    {% if parent_priv or child_priv and application.modifiable and not confirm_submit %}
         <hr />
+        {% if parent_priv %}
         <div class="col-md-4">
             <form action="{% url 'applications_delete_confirmation' application.id %}" method="POST">
                 {% csrf_token %}
@@ -285,18 +295,21 @@
                 </button>
             </form>
         </div>
+        {% endif %}
         {% if application.modifiable and not confirm_submit %}
-            <div class="col-md-4 col-md-offset-4">
-                <form method="POST">
-                    {% csrf_token %}
-                    <input type="hidden" name="confirm_submit" value="True" />
-                    <button type="submit" class="btn btn-block btn-lg btn-success"
-                        {% if not application.is_general_filled %} disabled="disabled"{% endif %}>
-                        {% bootstrap_icon 'ok' %}
-                        {% trans 'Submit application' %}
-                    </button>
-                </form>
-            </div>
+            {% if parent_priv or child_priv %}
+                <div class="col-md-4 col-md-offset-4">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="confirm_submit" value="True" />
+                        <button type="submit" class="btn btn-block btn-lg btn-success"
+                            {% if not application.is_general_filled %} disabled="disabled"{% endif %}>
+                            {% bootstrap_icon 'ok' %}
+                            {% trans 'Submit application for review' %}
+                        </button>
+                    </form>
+                </div>
+            {% endif %}
         {% endif %}
     {% endif %}
 {% endblock %}

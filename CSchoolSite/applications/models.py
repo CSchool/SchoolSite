@@ -578,7 +578,7 @@ class EventApplication(models.Model):
     )
 
     ENROLLED_STATUSES = (
-        ACCEPTED,
+        # ACCEPTED, TODO: Determine if we need to show ACCEPTED in enrolled table
         ENROLLED,
         ISSUED,
         STUDYING,
