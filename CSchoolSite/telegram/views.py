@@ -11,6 +11,8 @@ from telegram.bot import TelegramBot, digest
 def auth_view(req, chat_id, checksum):
     if checksum != digest(chat_id):
         raise PermissionDenied
+    if req.user.telegram_id is not None:
+        raise PermissionDenied
     req.user.telegram_id = int(chat_id)
     req.user.save()
     TelegramBot.sendMessage(int(chat_id), "Добро пожаловать, {}!".format(req.user.get_full_name()))
