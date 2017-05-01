@@ -23,6 +23,9 @@ class User(AbstractUser):
     alias = models.CharField(_('Alias'), max_length=250, null=True, blank=True, default='',
                              help_text=_('Use contents of this field instead of username'))
 
+    telegram_id = models.BigIntegerField(null=True, blank=True, default=None, unique=True)
+    telegram_username = models.CharField(max_length=256, default=None, unique=True, blank=True, null=True)
+
     def get_initials(self):
         full_name = '%s %s %s' % (self.last_name or '', self.first_name or '', self.patronymic or '')
         return full_name.strip()
