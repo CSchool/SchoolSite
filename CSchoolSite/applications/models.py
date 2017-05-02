@@ -11,7 +11,7 @@ from django.utils.text import Truncator
 from django.utils.translation import ugettext_lazy as _
 
 from CSchoolSite import settings
-from CSchoolSite.main.helpers import notify, read_template
+from main.helpers import notify, read_template
 
 
 def get_file_path(prefix):
