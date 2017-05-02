@@ -89,7 +89,7 @@ class EventApplicationAdminForm(forms.ModelForm):
         fields = ('student_initials', 'group', 'grade', 'address',
                   'school', 'birthday', 'organization', 'parent_phone_numbers', 'voucher_parent',
                   'personal_data_doc_link', 'personal_laptop',
-                  'theory_score', 'practice_score', 'status', 'submitted_at',
+                  'theory_score', 'practice_score', 'status', 'denial_reason', 'submitted_at',
                   'issued_at', 'issued_by')
 
     student_initials = forms.CharField(disabled=True, widget=TextDisplayWidget(), label=_('Student\'s initials'))

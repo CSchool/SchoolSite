@@ -1,5 +1,6 @@
 import mimetypes
 import os.path
+import datetime
 
 from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseServerError
@@ -52,6 +53,14 @@ def notify_email(user, subject, msg):
     try:
         from mistune import markdown
         html = markdown(msg)
+        # add footer
+        date = datetime.datetime.now().strftime('%c')
+        html += '''
+<hr /><br />
+Это уведомление было отправлено автоматически <br />
+Системное время: {date} <br />
+Пожалуйста, не отвечайте на это письмо <br />
+'''.format(date=date)
         if user.email:
             send_mail(subject, msg, None, recipient_list=[user.email], html_message=html)
     except:

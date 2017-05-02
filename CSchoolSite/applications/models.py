@@ -559,6 +559,7 @@ class EventApplication(models.Model):
     TESTING = 'TG'
     ACCEPTED = 'AC'
     TESTING_FAILED = 'TF'
+    DENIED = 'DE'
     ENROLLED = 'ER'
     ISSUED = 'IS'
     STUDYING = 'ST'
@@ -570,6 +571,7 @@ class EventApplication(models.Model):
         (TESTING, _('Testing')),
         (ACCEPTED, _('Accepted')),
         (TESTING_FAILED, _('Testing failed')),
+        (DENIED, _('Denied')),
         (ENROLLED, _('Enrolled')),
         (ISSUED, _('Issued')),
         (STUDYING, _('Studying')),
@@ -590,6 +592,8 @@ class EventApplication(models.Model):
 
     status = models.CharField(max_length=2, choices=EVENT_APPLICATION_STATUS_CHOICES,
                               default=TESTING, verbose_name=_('Application status'))
+
+    denial_reason = models.TextField(null=True, blank=True, verbose_name=_('Reason for denial'))
 
     def __str__(self):
         return self.user.get_full_name() + " - " + self.event.__str__()
@@ -620,38 +624,62 @@ class EventApplication(models.Model):
         if self.status == EventApplication.ISSUED and self.issued_at is None:
             self.issued_at = timezone.now()
         if self.status != self.__original_status:
+            link = HOST + reverse('applications_group_application', args=[self.id])
+            if self.status == EventApplication.DENIED:
+                # notify student
+                notify(self.user, 'В зачислении отказано', read_template('applications/notifications/denied_student.md')
+                       .format(
+                    group=self.event.name,
+                    reason=self.denial_reason,
+                    link=link
+                ))
+
+                for rel in Relationship.objects.filter(child=self.user, request=Relationship.APPROVED) \
+                        .exclude(relative__telegram_id__isnull=True):
+                    notify(rel.relative, 'В зачислении отказано',
+                           read_template('applications/notifications/denied_parent.md')
+                           .format(
+                               group=self.event.name,
+                               reason=self.denial_reason,
+                               child=self.user.get_full_name(),
+                               link=link
+                           ))
 
             if self.status == EventApplication.ENROLLED:
                 # notify student
                 notify(self.user, 'Зачисление в группу', read_template('applications/notifications/enrolled_student.md')
                        .format(
-                       group=self.event.name,
-                       link=HOST + reverse('applications_group_application', args=[self.id])))
+                   group=self.event.name,
+                   link=link
+                ))
 
                 # notify parents
                 for rel in Relationship.objects.filter(child=self.user, request=Relationship.APPROVED)\
                         .exclude(relative__telegram_id__isnull=True):
                     notify(rel.relative, 'Зачисление в группу', read_template('applications/notifications/enrolled_parent.md')
-                        .format(
+                           .format(
                         group=self.event.name,
                         child=self.user.get_full_name(),
-                        link=HOST + reverse('applications_group_application', args=[self.id])))
+                        link=link
+                    ))
 
             if self.status == EventApplication.ISSUED:
                 # notify student
                 notify(self.user, 'Одобрение путёвки', read_template('applications/notifications/issued_student.md')
-                    .format(
+                       .format(
                     period=self.event.period.name,
-                    link=HOST + reverse('applications_group_application', args=[self.id])))
+                    link=link
+                ))
 
                 # notify parents
                 for rel in Relationship.objects.filter(child=self.user, request=Relationship.APPROVED)\
                         .exclude(relative__telegram_id__isnull=True):
                     notify(rel.relative, 'Одобрение путёвки', read_template('applications/notifications/issued_parent.md')
-                        .format(
+                           .format(
                         period=self.event.period.name,
                         child=self.user.get_full_name(),
-                        link=HOST + reverse('applications_group_application', args=[self.id])))
+                        link=link
+                    ))
 
         super(EventApplication, self).save(*args, **kwargs)
 

@@ -13,6 +13,7 @@ from .models import User, Relationship
 class UserAdmin(BaseUserAdmin):
     form = AdminUserChangeForm
     add_form = AdminUserAddForm
+    readonly_fields = ('telegram_username',)
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         (_('Personal info'), {'fields': (
@@ -22,7 +23,8 @@ class UserAdmin(BaseUserAdmin):
             'birthday',
             'email',
             'phone',
-            'alias'
+            'alias',
+            'telegram_username'
         )}),
         (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser', 'personal',
                                        'groups', 'user_permissions')}),

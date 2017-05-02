@@ -39,6 +39,12 @@
         </form>
     </div>
     {% endif %}
+    {% if application.status == application.DENIED %}
+        <div class="alert alert-danger" role="alert">
+        <b>{% trans 'Denied' %}:</b><br />
+        <span style="white-space: pre-wrap">{{ application.denial_reason }}</span>
+        </div>
+    {% endif %}
     {% if application.status == application.TESTING_FAILED %}
         <div class="alert alert-danger" role="alert">
         {% if parent_priv %}
@@ -61,7 +67,7 @@
     {% endif %}
     {% if application.status == application.ACCEPTED %}
         <div class="alert alert-success" role="alert">
-        <b>{% trans 'Congratulations' %}</b><br />
+        <b>{% trans 'Accepted' %}</b><br />
         {% blocktrans with period=group.period.name%}
             This application to {{ period }} was accepted!
             Soon, teacher will review this application and contact you if necessary.
