@@ -11,6 +11,7 @@ from django.utils.text import Truncator
 from django.utils.translation import ugettext_lazy as _
 
 from CSchoolSite import settings
+from CSchoolSite.main.helpers import notify, read_template
 
 
 def get_file_path(prefix):
@@ -610,15 +611,9 @@ class EventApplication(models.Model):
     def save(self, *args, **kwargs):
         from userprofile.models import Relationship
         try:
-            from telegram.bot import HOST
+            from main.helpers import HOST
         except ImportError:
             HOST = ''
-
-        def notify(msg, id=None):
-            from telegram.bot import TelegramBot
-            id = id or self.user.telegram_id
-            if id is not None:
-                TelegramBot.sendMessage(id, msg, parse_mode="Markdown")
 
         if self.status != EventApplication.TESTING and self.submitted_at is None:
             self.submitted_at = timezone.now()
@@ -628,41 +623,35 @@ class EventApplication(models.Model):
 
             if self.status == EventApplication.ENROLLED:
                 # notify student
-                notify('''
-*Поздравляем!*
-Вы зачислены в группу {group}. Теперь необходимо оплатить путёвку.
-[Страница заявки]({link})
-'''.format(group=self.event.name,
-           link=HOST + reverse('applications_group_application', args=[self.id])))
+                notify(self.user, 'Зачисление в группу', read_template('applications/notifications/enrolled_student.md')
+                       .format(
+                       group=self.event.name,
+                       link=HOST + reverse('applications_group_application', args=[self.id])))
 
                 # notify parents
                 for rel in Relationship.objects.filter(child=self.user, request=Relationship.APPROVED)\
                         .exclude(relative__telegram_id__isnull=True):
-                    notify('''
-*Поздравляем!*
-{child} зачислен(а) в {group}. Теперь необходимо оплатить путёвку.
-[Страница заявки]({link})
-'''.format(group=self.event.name, child=self.user.get_full_name(),
-           link=HOST + reverse('applications_group_application', args=[self.id])), rel.relative.telegram_id)
+                    notify(rel.relative, 'Зачисление в группу', read_template('applications/notifications/enrolled_parent.md')
+                        .format(
+                        group=self.event.name,
+                        child=self.user.get_full_name(),
+                        link=HOST + reverse('applications_group_application', args=[self.id])))
 
             if self.status == EventApplication.ISSUED:
                 # notify student
-                notify('''
-*Путёвка одобрена*
-Ваша путёвка в {period} была одобрена.
-[Страница заявки]({link})
-'''.format(period=self.event.period.name,
-           link=HOST + reverse('applications_group_application', args=[self.id])))
+                notify(self.user, 'Одобрение путёвки', read_template('applications/notifications/issued_student.md')
+                    .format(
+                    period=self.event.period.name,
+                    link=HOST + reverse('applications_group_application', args=[self.id])))
 
                 # notify parents
                 for rel in Relationship.objects.filter(child=self.user, request=Relationship.APPROVED)\
                         .exclude(relative__telegram_id__isnull=True):
-                    notify('''
-*Путёвка одобрена*
-{child}: Путёвка в {period} была одобрена.
-[Страница заявки]({link})
-'''.format(period=self.event.period.name, child=self.user.get_full_name(),
-           link=HOST + reverse('applications_group_application', args=[self.id])), rel.relative.telegram_id)
+                    notify(rel.relative, 'Одобрение путёвки', read_template('applications/notifications/issued_parent.md')
+                        .format(
+                        period=self.event.period.name,
+                        child=self.user.get_full_name(),
+                        link=HOST + reverse('applications_group_application', args=[self.id])))
 
         super(EventApplication, self).save(*args, **kwargs)
 

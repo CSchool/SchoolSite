@@ -1,9 +1,22 @@
 import mimetypes
 import os.path
 
+from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseServerError
 
 from CSchoolSite.settings import FILESERVE_MEDIA_URL, FILESERVE_METHOD
+
+HOST = 'https://olimp-nw.ru'
+try:
+    from telegram.bot import HOST
+except ImportError:
+    try:
+        from CSchoolSite.settings import HOST
+    except ImportError:
+        try:
+            from CSchoolSite.personalsettings import HOST
+        except ImportError:
+            pass
 
 
 def file_response(file):
@@ -26,3 +39,31 @@ def file_response(file):
     else:
         raise HttpResponseServerError
     return response
+
+
+def notify_telegram(user, msg):
+    from telegram.bot import TelegramBot
+    id = user.telegram_id
+    if id is not None:
+        TelegramBot.sendMessage(id, msg, parse_mode="Markdown")
+
+
+def notify_email(user, subject, msg):
+    try:
+        from mistune import markdown
+        html = markdown(msg)
+        if user.email:
+            send_mail(subject, msg, None, recipient_list=[user.email], html_message=html)
+    except:
+        pass
+
+
+def notify(user, subject, msg):
+    notify_email(user, subject, msg)
+    notify_telegram(user, msg)
+
+
+def read_template(name):
+    from CSchoolSite.settings import BASE_DIR
+    with open(os.path.join(BASE_DIR, name)) as f:
+        return f.read()
