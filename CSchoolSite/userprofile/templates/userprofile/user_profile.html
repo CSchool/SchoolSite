@@ -92,7 +92,7 @@
                             {% if user.telegram_id %}
                                 @{{ user.telegram_username }}
                             {% else %}
-                                <i><a href="//t.me/OlimpNwBot">{% trans 'Connect' %}</a></i>
+                                <i><a href="//t.me/OlimpNwBot?start={{ user.get_telegram_deeplink }}">{% trans 'Connect' %}</a></i>
                             {% endif %}
                         </td>
                     </tr>

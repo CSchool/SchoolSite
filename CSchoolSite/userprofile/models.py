@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User, AbstractUser
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.core import signing
 
 from CSchoolSite import settings
 from main.validators import PhoneValidator
@@ -50,6 +51,10 @@ class User(AbstractUser):
         if not self.personal:
             return False
         return bool(Period.objects.filter(registration_begin__lt=timezone.now(), registration_end__gt=timezone.now()))
+
+    def get_telegram_deeplink(self):
+        signer = signing.Signer(salt='telegram_deeplink')
+        return signer.sign(str(self.id))
 
     @property
     def is_parent(self):

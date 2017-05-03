@@ -2,6 +2,7 @@ import telepot
 import hashlib
 
 from django.urls import reverse
+from django.core import signing
 from CSchoolSite.settings import SECRET_KEY
 
 from userprofile.models import User
@@ -24,6 +25,15 @@ def digest(id):
     m.update(SECRET_KEY.encode())
     m.update(str(id).encode())
     return m.hexdigest()[:16]
+
+
+def decode_deeplink(code):
+    signer = signing.Signer(salt='telegram_deeplink')
+    try:
+        uid = signer.unsign(code)
+        return User.objects.get(id=uid)
+    except:
+        return None
 
 
 def get_link(chat_id):
@@ -52,6 +62,22 @@ def handle(msg):
 
     if content_type == 'text':
         t = msg['text']
+        sp = t.split()
+        if len(sp) > 0 and sp[0] == '/start':
+            if len(sp) > 1:
+                arg = sp[1]
+            else:
+                arg = None
+            user = decode_deeplink(arg)
+            if user:
+                user.telegram_id = chat_id
+                chat = TelegramBot.getChat(chat_id)
+                user.telegram_username = chat.get('username')
+                user.save()
+                TelegramBot.sendMessage(chat_id, '''
+Привет, {name}!
+'''.format(user.get_full_name()))
+                return
         if t == '/help':
             TelegramBot.sendMessage(chat_id, '''
 *Список команд*
