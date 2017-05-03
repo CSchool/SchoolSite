@@ -67,9 +67,24 @@ def notify_email(user, subject, msg):
         pass
 
 
+def notify_insite(user, subject, msg):
+    try:
+        from mistune import markdown
+        html = markdown(msg)
+    except:
+        return
+    from main.models import Notification
+    n = Notification()
+    n.user = user
+    n.title = subject
+    n.body = html
+    n.save()
+
+
 def notify(user, subject, msg):
     notify_email(user, subject, msg)
     notify_telegram(user, msg)
+    notify_insite(user, subject, msg)
 
 
 def read_template(name):

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-03 11:29+0300\n"
+"POT-Creation-Date: 2017-05-03 21:37+0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -930,7 +930,7 @@ msgstr "Формат номера телефона: +7 (123) 456-78-90"
 msgid "Dashboard"
 msgstr "Панель управления"
 
-#: news/apps.py:7 news/templates/news/posts.html:4
+#: news/apps.py:7 news/templates/news/posts.html:5
 msgid "News"
 msgstr "Новости"
 
@@ -966,9 +966,13 @@ msgstr "Добавлено"
 msgid "Modified at"
 msgstr "Изменено"
 
-#: news/templates/news/posts.html:33
+#: news/templates/news/posts.html:39
 msgid "Read more"
 msgstr "Показать больше"
+
+#: news/templates/news/posts.html:48
+msgid "Dismiss"
+msgstr "Скрыть"
 
 #: templates/403.html:6
 msgid "403 Error - Access denied!"
@@ -1186,37 +1190,36 @@ msgid "Registration"
 msgstr "Регистрация"
 
 # django.contrib.auth translations
-#: userprofile/admin.py:19
+#: userprofile/admin.py:20
 msgid "Personal info"
 msgstr "Персональная информация"
 
-#: userprofile/admin.py:29
+#: userprofile/admin.py:30
 msgid "Permissions"
 msgstr "Права доступа"
 
-#: userprofile/admin.py:31
+#: userprofile/admin.py:32
 msgid "Important dates"
 msgstr "Важные даты"
 
-#: userprofile/admin.py:57
+#: userprofile/admin.py:58
 #: userprofile/templates/userprofile/user_profile.html:121
 msgid "Relative"
 msgstr "Родственник"
 
-#: userprofile/admin.py:68 userprofile/models.py:84 userprofile/tables.py:31
+#: userprofile/admin.py:69 userprofile/models.py:91 userprofile/tables.py:31
 msgid "Child"
 msgstr "Ребёнок"
 
-#: userprofile/apps.py:33 userprofile/models.py:73
+#: userprofile/apps.py:33 userprofile/models.py:80
 msgid "Education committee"
 msgstr "Комитет образования"
 
-#: userprofile/apps.py:35 userprofile/apps.py:53 userprofile/models.py:69
-#: userprofile/views.py:56
+#: userprofile/apps.py:35 userprofile/apps.py:53 userprofile/views.py:56
 msgid "Students"
 msgstr "Ученики"
 
-#: userprofile/apps.py:36 userprofile/models.py:65 userprofile/views.py:54
+#: userprofile/apps.py:36 userprofile/views.py:54
 msgid "Parents"
 msgstr "Родители"
 
@@ -1224,27 +1227,23 @@ msgstr "Родители"
 msgid "Profiles_and_groups"
 msgstr "Профили и группы"
 
-#: userprofile/forms.py:37
-msgid "Username or email"
-msgstr "Имя пользователя или адрес электронной почты"
-
-#: userprofile/forms.py:54
+#: userprofile/forms.py:38 userprofile/forms.py:55
 msgid "Email"
 msgstr "Адрес электронной почты"
 
-#: userprofile/forms.py:55 userprofile/forms.py:79
+#: userprofile/forms.py:56 userprofile/forms.py:80
 msgid "First name"
 msgstr "Имя"
 
-#: userprofile/forms.py:56 userprofile/forms.py:80
+#: userprofile/forms.py:57 userprofile/forms.py:81
 msgid "Last name"
 msgstr "Фамилия"
 
-#: userprofile/forms.py:61
+#: userprofile/forms.py:62
 msgid "This email address is already registered"
 msgstr "Этот адрес уже занят"
 
-#: userprofile/forms.py:90
+#: userprofile/forms.py:98
 msgid "Invitation code"
 msgstr "Пригласительный код"
 
@@ -1272,48 +1271,48 @@ msgstr "Псевдоним"
 msgid "Use contents of this field instead of username"
 msgstr "Это поле будет отображаться вместо имени пользователя"
 
-#: userprofile/models.py:78
+#: userprofile/models.py:85
 msgid "Family relative"
 msgstr "Родственник"
 
-#: userprofile/models.py:79
+#: userprofile/models.py:86
 #: userprofile/templates/userprofile/user_profile.html:116
 msgid "Family relatives"
 msgstr "Родственники"
 
-#: userprofile/models.py:82 userprofile/tables.py:33
+#: userprofile/models.py:89 userprofile/tables.py:33
 msgid "Parent"
 msgstr "Родитель"
 
-#: userprofile/models.py:86
+#: userprofile/models.py:93
 msgid "Invited user"
 msgstr "Пригласивший пользователь"
 
-#: userprofile/models.py:88
+#: userprofile/models.py:95
 msgid "Confirmation code"
 msgstr "Код подтверждения"
 
-#: userprofile/models.py:89
+#: userprofile/models.py:96
 msgid "Valid until"
 msgstr "Действителен до"
 
-#: userprofile/models.py:96
+#: userprofile/models.py:103
 msgid "Waiting"
 msgstr "Ожидание"
 
-#: userprofile/models.py:97
+#: userprofile/models.py:104
 msgid "Approved"
 msgstr "Одобрено"
 
-#: userprofile/models.py:98
+#: userprofile/models.py:105
 msgid "Declined"
 msgstr "Отклонено"
 
-#: userprofile/models.py:102
+#: userprofile/models.py:109
 msgid "Relationship request"
 msgstr "Запрос родства"
 
-#: userprofile/models.py:105
+#: userprofile/models.py:112
 #, python-format
 msgid "Relationship #%(id)s"
 msgstr "Отношение #%(id)s"
@@ -1426,6 +1425,9 @@ msgstr "будет считаться вашим ребёнком"
 #: userprofile/views.py:148
 msgid "will be your parent"
 msgstr "будет считаться вашим родителем"
+
+#~ msgid "Username or email"
+#~ msgstr "Имя пользователя или адрес электронной почты"
 
 #~ msgid "Relationship clarification"
 #~ msgstr "Уточнение родства"

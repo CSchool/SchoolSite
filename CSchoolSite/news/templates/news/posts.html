@@ -1,17 +1,22 @@
 {% extends "base.html" %}
 {% load bootstrap3 %}
+{% load static %}
 {% load i18n %}
 {% block page_title %}{% trans 'News' %}{% endblock %}
 {% block content %}
     <div class="postlist">
     {% for post in news.object_list %}
-        <div class="panel">
+        <div class="panel"{% if post.notification %} id="notification-{{ post.id }}"{% endif %}>
             <div class="panel-heading">
                 <div class="text-center">
                     <div class="row">
                         <div class="col-sm-9">
                             <h3 class="pull-left">
-                                <a href="{% url 'news_post' post.id %}">{{ post.title }}</a>
+                                {% if post.news %}
+                                    <a href="{% url 'news_post' post.id %}">{{ post.title }}</a>
+                                {% else %}
+                                    <span class="text-success">{{ post.title }}</span>
+                                {% endif %}
                             </h3>
                         </div>
                         <div class="col-sm-3">
@@ -27,17 +32,30 @@
             </div>
 
             <div class="panel-body">
-                {{ post.body|safe|truncatewords_html:"50"|linebreaks }}
+                {% if post.news %}
+                    {{ post.body|safe|truncatewords_html:"50"|linebreaks }}
 
-                {% ifnotequal post.body|truncatewords_html:"50"|length post.body|truncatewords_html:"51"|length %}
-                    <a href="{% url 'news_post' post.id %}">{% trans 'Read more' %}</a>
-                {% endifnotequal %}
-                <span class="pull-right">
-                    <small>{% bootstrap_icon 'user' %} {{ post.user.get_full_name|default:post.user.get_aliased_username }}</small>
-                </span>
+                    {% ifnotequal post.body|truncatewords_html:"50"|length post.body|truncatewords_html:"51"|length %}
+                        <a href="{% url 'news_post' post.id %}">{% trans 'Read more' %}</a>
+                    {% endifnotequal %}
+                    <span class="pull-right small">
+                        {% bootstrap_icon 'user' %} {{ post.user.get_full_name|default:post.user.get_aliased_username }}
+                    </span>
+                {% else %}
+                    {{ post.body|safe }}
+                    <a href="#" class="pull-right text-danger small" onclick="dismiss({{ post.id }})">
+                        {% bootstrap_icon 'remove' %}
+                        {% trans 'Dismiss' %}
+                    </a>
+                {% endif %}
             </div>
         </div>
     {% endfor %}
     {% bootstrap_pagination news %}
     </div>
+{% endblock %}
+{% block scripts %}
+    {{ block.super }}
+
+    <script type="text/javascript" src="{% static 'js/news.js' %}"></script>
 {% endblock %}

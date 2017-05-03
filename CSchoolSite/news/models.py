@@ -18,6 +18,8 @@ class NewsPost(models.Model):
     created = models.DateTimeField(editable=False, verbose_name=_('Posted at'))
     modified = models.DateTimeField(verbose_name=_('Modified at'))
 
+    TYPE = 'NEWSPOST'
+
     def __str__(self):
         return "%r" % self.title
 
