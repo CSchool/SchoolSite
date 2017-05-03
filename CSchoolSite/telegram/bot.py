@@ -43,17 +43,6 @@ def get_link(chat_id):
 def handle(msg):
     content_type, chat_type, chat_id = telepot.glance(msg)
 
-    # first, determine who is sending this message
-    try:
-        user = User.objects.get(telegram_id=chat_id)
-    except User.DoesNotExist:
-        TelegramBot.sendMessage(chat_id, '''
-Для использования бота сайта olimp-nw.ru, вам необходимо привязать ваш Telegram аккаунт.
-
-Для этого пройдите по [ссылке]({})
-'''.format(get_link(chat_id)), parse_mode='Markdown')
-        return
-
     if chat_type != 'private':
         TelegramBot.sendMessage(chat_id, '''
 Этот бот пока работает только в личных чатах
@@ -77,7 +66,18 @@ def handle(msg):
                 TelegramBot.sendMessage(chat_id, '''
 Привет, {name}!
 '''.format(user.get_full_name()))
-                return
+            return
+
+        try:
+            user = User.objects.get(telegram_id=chat_id)
+        except User.DoesNotExist:
+            TelegramBot.sendMessage(chat_id, '''
+Для использования бота сайта {host}, вам необходимо привязать ваш Telegram аккаунт.
+
+Для этого пройдите по [ссылке]({link})
+        '''.format(link=get_link(chat_id), host=HOST), parse_mode='Markdown')
+            return
+
         if t == '/help':
             TelegramBot.sendMessage(chat_id, '''
 *Список команд*
