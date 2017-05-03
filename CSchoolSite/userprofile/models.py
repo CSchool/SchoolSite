@@ -10,6 +10,7 @@ from main.validators import PhoneValidator
 
 from applications.models import Period
 from userprofile.utils import is_group_member
+from django.utils import baseconv
 
 
 class User(AbstractUser):
@@ -53,8 +54,11 @@ class User(AbstractUser):
         return bool(Period.objects.filter(registration_begin__lt=timezone.now(), registration_end__gt=timezone.now()))
 
     def get_telegram_deeplink(self):
-        signer = signing.Signer(salt='telegram_deeplink')
-        return signer.sign(str(self.id))
+        try:
+            from telegram.bot import digest
+            return '{}_{}'.format(self.id, digest(self.id))
+        except:
+            return ''
 
     @property
     def is_parent(self):

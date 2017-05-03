@@ -27,11 +27,12 @@ def digest(id):
     return m.hexdigest()[:16]
 
 
-def decode_deeplink(code):
-    signer = signing.Signer(salt='telegram_deeplink')
+def decode_deeplink(arg):
     try:
-        uid = signer.unsign(code)
-        return User.objects.get(id=uid)
+        sp = arg.split('_')
+        assert len(sp) == 2
+        assert digest(sp[0]) == sp[1]
+        return User.objects.get(id=sp[0])
     except:
         return None
 
