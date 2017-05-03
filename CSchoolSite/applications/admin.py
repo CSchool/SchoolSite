@@ -20,8 +20,8 @@ admin.site.register(Event, EventAdmin)
 
 class EventApplicationAdmin(admin.ModelAdmin):
     form = EventApplicationAdminForm
-    list_display = ('__str__', 'get_period_name', 'status')
-    list_filter = ('event__period__name', 'status')
+    list_display = ('__str__', 'get_period_name', 'status', 'submitted_at')
+    list_filter = ('event__period__name', 'status', 'submitted_at')
     actions = ('make_accepted', 'make_enrolled', 'make_issued', 'make_studying')
 
     def has_add_permission(self, request):

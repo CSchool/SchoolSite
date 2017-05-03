@@ -6,6 +6,7 @@ from .models import User
 from django import forms
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.validators import UnicodeUsernameValidator
 
 
 class AdminUserAddForm(UserCreationForm):
@@ -34,7 +35,7 @@ class ExtendedAuthenticationForm(AuthenticationForm):
     username = UsernameField(
         max_length=254,
         widget=forms.TextInput(attrs={'autofocus': True}),
-        label=_('Username or email')
+        label=_('Email')
     )
 
 
@@ -51,7 +52,7 @@ class ExtendedRegistrationForm(RegistrationForm):
             'password2'
         ]
 
-    email = forms.EmailField(required=True, label=_('Email'))
+    email = forms.EmailField(required=True, label=_('Email'), max_length=250)
     first_name = forms.CharField(widget=forms.TextInput(), label=_('First name'))
     last_name = forms.CharField(widget=forms.TextInput(), label=_('Last name'))
 
@@ -75,9 +76,16 @@ class UserForm(ModelForm):
         fields = ['last_name', 'first_name', 'patronymic', 'birthday', 'email', 'phone']
         widgets = {'birthday': DateInput(attrs={'class': 'datepicker'})}
 
-    email = forms.EmailField(required=True)
+    email = forms.EmailField(required=True, max_length=250)
     first_name = forms.CharField(required=True, label=_('First name'))
     last_name = forms.CharField(required=True, label=_('Last name'))
+
+    def save(self, commit=True):
+        instance = super(UserForm, self).save(commit=False)
+        instance.username = instance.email
+        if commit:
+            instance.save()
+        return instance
 
 
 class RelationshipAcceptanceForm(Form):

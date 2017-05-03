@@ -11,6 +11,7 @@ from .models import User, Relationship
 
 
 class UserAdmin(BaseUserAdmin):
+    list_display = ('username', 'first_name', 'last_name', 'is_staff')
     form = AdminUserChangeForm
     add_form = AdminUserAddForm
     readonly_fields = ('telegram_username',)
