@@ -66,7 +66,7 @@ def handle(msg):
                 TelegramBot.sendMessage(chat_id, '''
 Привет, {name}!
 '''.format(user.get_full_name()))
-            return
+                return
 
         try:
             user = User.objects.get(telegram_id=chat_id)
