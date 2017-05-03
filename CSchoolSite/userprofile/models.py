@@ -62,11 +62,18 @@ class User(AbstractUser):
 
     @property
     def is_parent(self):
-        return is_group_member(self, _('Parents'))
+        if hasattr(self, '_cached_is_parent'):
+            return getattr(self, '_cached_is_parent', False)
+        else:
+            res = Relationship.objects.filter(relative=self, request=Relationship.APPROVED).exists()
+            setattr(self, '_cached_is_parent', res)
+            return res
+        # return is_group_member(self, _('Parents'))
 
     @property
     def is_student(self):
-        return is_group_member(self, _('Students'))
+        return not self.is_parent and not self.is_education_committee
+        # return is_group_member(self, _('Students'))
 
     @property
     def is_education_committee(self):
