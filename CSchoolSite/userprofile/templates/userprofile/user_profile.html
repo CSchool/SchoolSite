@@ -91,6 +91,11 @@
                         <td>
                             {% if user.telegram_id %}
                                 @{{ user.telegram_username }}
+                                <a href="{% url 'telegram_unlink' %}">
+                                    <span class="small text-danger">
+                                        {% trans 'Unlink' %}
+                                    </span>
+                                </a>
                             {% else %}
                                 <i><a href="https://telegram.me/OlimpNwBot?start={{ user.get_telegram_deeplink }}">{% trans 'Connect' %}</a></i>
                             {% endif %}

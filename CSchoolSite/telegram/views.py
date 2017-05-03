@@ -20,3 +20,11 @@ def auth_view(req, chat_id, checksum):
     req.user.save()
     TelegramBot.sendMessage(int(chat_id), "Добро пожаловать, {}!".format(req.user.get_full_name()))
     return redirect(reverse('index'))
+
+
+@login_required
+def unlink_view(req):
+    req.user.telegram_id = None
+    req.user.telegram_username = None
+    req.user.save()
+    return redirect(reverse('index'))

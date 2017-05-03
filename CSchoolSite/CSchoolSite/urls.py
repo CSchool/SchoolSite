@@ -38,5 +38,7 @@ try:
     import telegram.views
     urlpatterns.append(url(r'^telegram_auth/(?P<chat_id>[0-9]+)_(?P<checksum>[0-9a-f]+)',
                            telegram.views.auth_view, name='telegram_auth'))
+    urlpatterns.append(url(r'^telegram_unlink',
+                           telegram.views.unlink_view, name='telegram_unlink'))
 except ImportError:
     pass

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-02 21:09+0300\n"
+"POT-Creation-Date: 2017-05-03 11:29+0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -64,7 +64,7 @@ msgstr "Неизвестно"
 msgid "Student's initials"
 msgstr "ФИО ученика"
 
-#: applications/forms.py:35 applications/forms.py:99 userprofile/models.py:16
+#: applications/forms.py:35 applications/forms.py:99 userprofile/models.py:18
 #: userprofile/templates/userprofile/relatives_choice.html:23
 msgid "birthday"
 msgstr "Дата рождения"
@@ -882,7 +882,7 @@ msgstr "Вернуться на сайт"
 #: templates/registration/password_change_form.html:5
 #: templates/registration/password_change_form.html:8
 #: templates/registration/password_change_form.html:15
-#: userprofile/templates/userprofile/user_profile.html:104
+#: userprofile/templates/userprofile/user_profile.html:109
 msgid "Change password"
 msgstr "Изменить пароль"
 
@@ -922,7 +922,7 @@ msgstr "Гугл-группа \"django-users\""
 msgid "Django irc channel"
 msgstr "IRC канал Django"
 
-#: main/validators.py:7 userprofile/models.py:18
+#: main/validators.py:7 userprofile/models.py:20
 msgid "The format of phone numbers is +7 (123) 456-78-90"
 msgstr "Формат номера телефона: +7 (123) 456-78-90"
 
@@ -1199,24 +1199,24 @@ msgid "Important dates"
 msgstr "Важные даты"
 
 #: userprofile/admin.py:57
-#: userprofile/templates/userprofile/user_profile.html:116
+#: userprofile/templates/userprofile/user_profile.html:121
 msgid "Relative"
 msgstr "Родственник"
 
-#: userprofile/admin.py:68 userprofile/models.py:75 userprofile/tables.py:31
+#: userprofile/admin.py:68 userprofile/models.py:84 userprofile/tables.py:31
 msgid "Child"
 msgstr "Ребёнок"
 
-#: userprofile/apps.py:33 userprofile/models.py:64
+#: userprofile/apps.py:33 userprofile/models.py:73
 msgid "Education committee"
 msgstr "Комитет образования"
 
-#: userprofile/apps.py:35 userprofile/apps.py:53 userprofile/models.py:60
+#: userprofile/apps.py:35 userprofile/apps.py:53 userprofile/models.py:69
 #: userprofile/views.py:56
 msgid "Students"
 msgstr "Ученики"
 
-#: userprofile/apps.py:36 userprofile/models.py:56 userprofile/views.py:54
+#: userprofile/apps.py:36 userprofile/models.py:65 userprofile/views.py:54
 msgid "Parents"
 msgstr "Родители"
 
@@ -1248,72 +1248,72 @@ msgstr "Этот адрес уже занят"
 msgid "Invitation code"
 msgstr "Пригласительный код"
 
-#: userprofile/models.py:15
+#: userprofile/models.py:17
 msgid "patronymic"
 msgstr "Отчество"
 
-#: userprofile/models.py:17
+#: userprofile/models.py:19
 msgid "phone"
 msgstr "Номер телефона"
 
-#: userprofile/models.py:20
+#: userprofile/models.py:22
 msgid "Account is personal"
 msgstr "Это личный аккаунт"
 
-#: userprofile/models.py:21
+#: userprofile/models.py:23
 msgid "Enable user profile and social/personal actions"
 msgstr "Разрешить доступ к профилю, родственникам и подаче заявок"
 
-#: userprofile/models.py:23
+#: userprofile/models.py:25
 msgid "Alias"
 msgstr "Псевдоним"
 
-#: userprofile/models.py:24
+#: userprofile/models.py:26
 msgid "Use contents of this field instead of username"
 msgstr "Это поле будет отображаться вместо имени пользователя"
 
-#: userprofile/models.py:69
+#: userprofile/models.py:78
 msgid "Family relative"
 msgstr "Родственник"
 
-#: userprofile/models.py:70
-#: userprofile/templates/userprofile/user_profile.html:111
+#: userprofile/models.py:79
+#: userprofile/templates/userprofile/user_profile.html:116
 msgid "Family relatives"
 msgstr "Родственники"
 
-#: userprofile/models.py:73 userprofile/tables.py:33
+#: userprofile/models.py:82 userprofile/tables.py:33
 msgid "Parent"
 msgstr "Родитель"
 
-#: userprofile/models.py:77
+#: userprofile/models.py:86
 msgid "Invited user"
 msgstr "Пригласивший пользователь"
 
-#: userprofile/models.py:79
+#: userprofile/models.py:88
 msgid "Confirmation code"
 msgstr "Код подтверждения"
 
-#: userprofile/models.py:80
+#: userprofile/models.py:89
 msgid "Valid until"
 msgstr "Действителен до"
 
-#: userprofile/models.py:87
+#: userprofile/models.py:96
 msgid "Waiting"
 msgstr "Ожидание"
 
-#: userprofile/models.py:88
+#: userprofile/models.py:97
 msgid "Approved"
 msgstr "Одобрено"
 
-#: userprofile/models.py:89
+#: userprofile/models.py:98
 msgid "Declined"
 msgstr "Отклонено"
 
-#: userprofile/models.py:93
+#: userprofile/models.py:102
 msgid "Relationship request"
 msgstr "Запрос родства"
 
-#: userprofile/models.py:96
+#: userprofile/models.py:105
 #, python-format
 msgid "Relationship #%(id)s"
 msgstr "Отношение #%(id)s"
@@ -1332,7 +1332,7 @@ msgid "Username"
 msgstr "Имя пользователя"
 
 #: userprofile/templates/userprofile/relatives_choice.html:24
-#: userprofile/templates/userprofile/user_profile.html:118
+#: userprofile/templates/userprofile/user_profile.html:123
 msgid "Action"
 msgstr "Действие"
 
@@ -1378,31 +1378,35 @@ msgstr "Телефон"
 msgid "Telegram account"
 msgstr "Аккаунт Telegram"
 
-#: userprofile/templates/userprofile/user_profile.html:95
+#: userprofile/templates/userprofile/user_profile.html:96
+msgid "Unlink"
+msgstr "Отвязать"
+
+#: userprofile/templates/userprofile/user_profile.html:100
 msgid "Connect"
 msgstr "Подключить"
 
-#: userprofile/templates/userprofile/user_profile.html:105
+#: userprofile/templates/userprofile/user_profile.html:110
 msgid "user_profile_edit_profile"
 msgstr "Изменить профиль"
 
-#: userprofile/templates/userprofile/user_profile.html:117
+#: userprofile/templates/userprofile/user_profile.html:122
 msgid "Who"
 msgstr "Кто"
 
-#: userprofile/templates/userprofile/user_profile.html:127
+#: userprofile/templates/userprofile/user_profile.html:132
 msgid "Add relatives"
 msgstr "Добавить родственников"
 
-#: userprofile/templates/userprofile/user_profile.html:130
+#: userprofile/templates/userprofile/user_profile.html:135
 msgid "Add a child"
 msgstr "Добавить ребёнка"
 
-#: userprofile/templates/userprofile/user_profile.html:131
+#: userprofile/templates/userprofile/user_profile.html:136
 msgid "Add a parent"
 msgstr "Добавить родителя"
 
-#: userprofile/templates/userprofile/user_profile.html:133
+#: userprofile/templates/userprofile/user_profile.html:138
 msgid "I have an invitation code"
 msgstr "У меня есть код от родственника"
 
