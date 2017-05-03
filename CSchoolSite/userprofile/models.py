@@ -85,8 +85,8 @@ class Relationship(models.Model):
     invited_user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="invited_user",
                                      null=True, default=None, blank=True, verbose_name=_('Invited user'))
 
-    confirmation_code = models.CharField(db_index=True, max_length=8, default=None, null=True, verbose_name=_('Confirmation code'))
-    valid_until = models.DateTimeField(db_index=True, default=None, null=True, verbose_name=_('Valid until'))
+    confirmation_code = models.CharField(db_index=True, max_length=8, blank=True, default=None, null=True, verbose_name=_('Confirmation code'))
+    valid_until = models.DateTimeField(db_index=True, default=None, blank=True, null=True, verbose_name=_('Valid until'))
 
     WAITING = 'WT'
     APPROVED = 'AP'

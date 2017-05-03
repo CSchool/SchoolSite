@@ -8,16 +8,17 @@ $(document).ready(function() {
         "language": {
             "url": langUrl,
         },
-        "searching": false,
+        "searching": true,
         "columnDefs": [
             {"targets": [3, 4, 5], "visible": false},
             {"targets": [1, 2], "orderable": false},
-            {"targets": "_all", "visible": true}
+            {"targets": "_all", "visible": true, "searching": true}
         ],
         "createdRow": function(row, data, index) {
             $(row).addClass(data[3]);
         },
         "initComplete": function () {
+            $('#enrolledTable_filter').hide()
             function add_select(ct, cs) {
                 var select = $('<select class="form-control"><option value=""><b>--- ' + ct.header().innerText + ' ---</b></option></select>')
                     .appendTo($(ct.header()).empty())
@@ -26,8 +27,11 @@ $(document).ready(function() {
                             $(this).val()
                         );
 
+                        window.cs = cs;
+                        window.val = val;
+
                         cs
-                            .search(val ? val : '', false, false)
+                            .search(val ? val : '', false, false, false)
                             .draw();
                     });
 
@@ -35,7 +39,12 @@ $(document).ready(function() {
                     return [e, cs.data()[i]]
                 });
 
-                d.unique().sort().each(function (d) {
+                var flags = [];
+
+                d.sort().each(function (d) {
+                    if (flags[d[1]])
+                        return;
+                    flags[d[1]] = true;
                     select.append('<option value="' + d[1] + '">' + d[0] + '</option>')
                 });
             }
