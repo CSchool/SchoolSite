@@ -740,6 +740,9 @@ class EventApplication(models.Model):
                         child=self.user.get_full_name(),
                         link=link
                     ))
+        
+        self.__original_status = self.status
+        self.__original_filled = self.is_general_filled
 
         super(EventApplication, self).save(*args, **kwargs)
 
