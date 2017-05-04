@@ -15,3 +15,4 @@ pytz==2017.2
 six==1.10.0
 telepot==10.5
 mistune==0.7.4
+celery==4.0.2

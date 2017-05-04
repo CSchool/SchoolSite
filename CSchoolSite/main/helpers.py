@@ -42,14 +42,13 @@ def file_response(file):
     return response
 
 
-def notify_telegram(user, msg):
+def notify_telegram(id, msg):
     from telegram.bot import TelegramBot
-    id = user.telegram_id
     if id is not None:
         TelegramBot.sendMessage(id, msg, parse_mode="Markdown")
 
 
-def notify_email(user, subject, msg):
+def notify_email(email, subject, msg):
     try:
         from mistune import markdown
         html = markdown(msg)
@@ -61,8 +60,8 @@ def notify_email(user, subject, msg):
 Системное время: {date} <br />
 Пожалуйста, не отвечайте на это письмо <br />
 '''.format(date=date)
-        if user.email:
-            send_mail(subject, msg, None, recipient_list=[user.email], html_message=html)
+        if email:
+            send_mail(subject, msg, None, recipient_list=[email], html_message=html)
     except:
         pass
 
@@ -84,12 +83,14 @@ def notify_insite(user, subject, msg):
     return notification
 
 
-def notify(user, subject, msg, queue=True):
-    if queue:
-        notify_insite(user, subject, msg)
-    else:
-        notify_email(user, subject, msg)
-        notify_telegram(user, msg)
+def notify(user, subject, msg, async=True):
+    notify_insite(user, subject, msg)
+    if async:
+        from main.celery import notify_async
+        notify_async.delay(user.telegram_id, user.email, subject, msg)
+        return
+    notify_email(user.email, subject, msg)
+    notify_telegram(user.telegram_id, msg)
 
 
 def read_template(name):
