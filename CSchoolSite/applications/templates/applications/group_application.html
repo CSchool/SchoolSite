@@ -177,9 +177,7 @@
             <b>{% blocktrans %}Some actions are disabled{% endblocktrans %}.</b><br />
             {% blocktrans %}Fill out information to continue{% endblocktrans %}.
         </div>
-    {% endif %}
-
-    {% if application.testing_required and application.status == application.TESTING %}
+    {% elif application.testing_required and application.status == application.TESTING %}
         {% if child_priv %}
         <div class="alert alert-warning">
             <b>{% blocktrans %}Information is filled{% endblocktrans %}.</b><br />
