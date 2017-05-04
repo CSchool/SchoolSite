@@ -284,7 +284,7 @@ def group_application(req, application_id):
     if parent_priv and application.testing_required:
         submit_priv = False
 
-    delete_priv = application.has_delete_privileges(req.user)
+    delete_priv = application.has_delete_privileges(req.user) and not confirm_submit
 
     return render(req, "applications/group_application.html", {
         "group": group,
