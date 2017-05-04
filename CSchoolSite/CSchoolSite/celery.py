@@ -1,4 +1,6 @@
 from celery import Celery
+import django
+django.setup()
 from main.helpers import notify_telegram, notify_email
 
 capp = Celery('tasks', broker='amqp://cschool:cschool@localhost:5672//', backend='rpc://')
