@@ -10,6 +10,8 @@ class Notification(models.Model):
     body = models.TextField()
     created = models.DateTimeField()
 
+    queued = models.BooleanField(blank=True, default=False, db_index=True)
+
     TYPE = 'NOTIFICATION'
 
     def save(self, *args, **kwargs):

@@ -72,19 +72,23 @@ def notify_insite(user, subject, msg):
         from mistune import markdown
         html = markdown(msg)
     except:
-        return
+        return None
     from main.models import Notification
-    n = Notification()
-    n.user = user
-    n.title = subject
-    n.body = html
-    n.save()
+    notification = Notification()
+    notification.user = user
+    notification.title = subject
+    notification.body = html
+    notification.queued = True
+    notification.save()
+    return notification
 
 
-def notify(user, subject, msg):
-    notify_email(user, subject, msg)
-    notify_telegram(user, msg)
-    notify_insite(user, subject, msg)
+def notify(user, subject, msg, queue=True):
+    if queue:
+        notify_insite(user, subject, msg)
+    else:
+        notify_email(user, subject, msg)
+        notify_telegram(user, msg)
 
 
 def read_template(name):

@@ -6,6 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from main.models import Notification
 from news.models import NewsPost
 
+
 @csrf_exempt
 def index(req, page="1"):
     if req.POST.get('dismiss'):
