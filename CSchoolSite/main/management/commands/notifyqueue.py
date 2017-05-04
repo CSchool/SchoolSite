@@ -23,7 +23,6 @@ class Command(BaseCommand):
                 notification = queue.get()
                 notification.queued = False
                 notification.save()
-                notify(notification.user, notification.title, notification.body, queue=False)
+                notify(notification.user, notification.title, notification.text, queue=False)
 
-            time.sleep(1) # Sleep for evading limits (mail, telegram etc)
-
+            time.sleep(1)  # Sleep for evading limits (mail, telegram etc)

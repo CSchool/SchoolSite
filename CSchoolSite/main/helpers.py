@@ -78,6 +78,7 @@ def notify_insite(user, subject, msg):
     notification.user = user
     notification.title = subject
     notification.body = html
+    notification.text = msg
     notification.queued = True
     notification.save()
     return notification
