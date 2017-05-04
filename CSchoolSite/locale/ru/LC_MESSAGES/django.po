@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-03 21:37+0300\n"
+"POT-Creation-Date: 2017-05-04 19:33+0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -19,106 +19,106 @@ msgstr ""
 "%100>=11 && n%100<=14)? 2 : 3);\n"
 "X-Generator: Poedit 1.8.7.1\n"
 
-#: applications/admin.py:32 applications/models.py:27
+#: applications/admin.py:39 applications/models.py:27
 #: applications/models.py:108 applications/models.py:120
 #: applications/templates/applications/choose_period.html:13
 msgid "Period"
 msgstr "Учебный период"
 
-#: applications/admin.py:37
+#: applications/admin.py:44
 msgid "Mark selected applications as Accepted"
 msgstr "Принять выбранные заявки"
 
-#: applications/admin.py:41
+#: applications/admin.py:48
 msgid "Mark selected applications as Enrolled"
 msgstr "Зачислить выбранные заявки"
 
-#: applications/admin.py:45
+#: applications/admin.py:52
 msgid "Mark selected applications as Issued"
 msgstr "Пометить выбранные заявки как оформленные"
 
-#: applications/admin.py:49
+#: applications/admin.py:56
 msgid "Mark selected applications as Studying"
 msgstr "Пометить выбранные заявки как обучающиеся"
 
-#: applications/apps.py:7 templates/base.html:102
+#: applications/apps.py:7
 msgid "Applications"
 msgstr "Заявки"
 
-#: applications/forms.py:14
+#: applications/forms.py:15
 msgid "Yes"
 msgstr "Да"
 
-#: applications/forms.py:14
+#: applications/forms.py:15
 msgid "No"
 msgstr "Нет"
 
-#: applications/forms.py:16
+#: applications/forms.py:17
 #: userprofile/templates/userprofile/user_profile.html:79
 #: userprofile/templates/userprofile/user_profile.html:83
 #: userprofile/templates/userprofile/user_profile.html:87
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: applications/forms.py:34 applications/forms.py:95
+#: applications/forms.py:45 applications/forms.py:106
 msgid "Student's initials"
 msgstr "ФИО ученика"
 
-#: applications/forms.py:35 applications/forms.py:99 userprofile/models.py:18
+#: applications/forms.py:46 applications/forms.py:110 userprofile/models.py:18
 #: userprofile/templates/userprofile/relatives_choice.html:23
 msgid "birthday"
 msgstr "Дата рождения"
 
-#: applications/forms.py:64 applications/forms.py:72 applications/forms.py:82
-#: applications/models.py:550
+#: applications/forms.py:75 applications/forms.py:83 applications/forms.py:93
+#: applications/models.py:557
 msgid "Voucher ID"
 msgstr "Номер путёвки"
 
-#: applications/forms.py:83
+#: applications/forms.py:94
 msgid "Confirm participation"
 msgstr "Подтвердить участие"
 
-#: applications/forms.py:96
+#: applications/forms.py:107
 #: applications/templates/applications/view_enrolled.html:14
 msgid "Group"
 msgstr "Группа"
 
-#: applications/forms.py:97
+#: applications/forms.py:108
 msgid "Theory score"
 msgstr "Балл за теорию"
 
-#: applications/forms.py:98
+#: applications/forms.py:109
 msgid "Practice score"
 msgstr "Балл за практику"
 
-#: applications/forms.py:101 applications/models.py:99
-#: applications/models.py:545
+#: applications/forms.py:112 applications/models.py:99
+#: applications/models.py:552
 #: applications/templates/applications/group_application_edit_info.html:22
 msgid "Personal data processing agreement"
 msgstr "Соглашение на обработку персональных данных"
 
-#: applications/forms.py:112
-#: applications/templates/applications/group_application.html:154
+#: applications/forms.py:123
+#: applications/templates/applications/group_application.html:160
 #: applications/templates/applications/group_application_voucher.html:31
 msgid "Not yet uploaded"
 msgstr "Не загружено"
 
-#: applications/forms.py:120 applications/forms.py:125
+#: applications/forms.py:131 applications/forms.py:136
 msgid "Unavailable"
 msgstr "Недоступно"
 
-#: applications/forms.py:142
+#: applications/forms.py:153
 #: applications/templates/applications/group_application_practice_exam.html:36
 #: applications/templates/applications/group_application_practice_exam.html:60
 msgid "Language"
 msgstr "Язык"
 
-#: applications/forms.py:143
+#: applications/forms.py:154
 #: applications/templates/applications/group_application_practice_exam.html:63
 msgid "Report"
 msgstr "Вердикт"
 
-#: applications/forms.py:144
+#: applications/forms.py:155
 #: applications/templates/applications/group_application_practice_exam.html:61
 msgid "Size"
 msgstr "Размер"
@@ -135,7 +135,7 @@ msgid "view periods"
 msgstr "Просматривать учебные периоды"
 
 #: applications/models.py:33 applications/models.py:106
-#: applications/models.py:119 applications/models.py:348
+#: applications/models.py:119 applications/models.py:355
 msgid "Name"
 msgstr "Название"
 
@@ -204,278 +204,274 @@ msgstr "Максимальное количество участников"
 msgid "Relative difficulty"
 msgstr "Относительная сложность"
 
-#: applications/models.py:138
+#: applications/models.py:133
+msgid "Coordinators"
+msgstr "Координаторы"
+
+#: applications/models.py:141
 msgid "Class group"
 msgstr "Учебная группа"
 
-#: applications/models.py:139
+#: applications/models.py:142
 msgid "Camp group"
 msgstr "Отряд"
 
-#: applications/models.py:140
+#: applications/models.py:143
 msgid "Tournament"
 msgstr "Турнир"
 
-#: applications/models.py:143
+#: applications/models.py:146
 msgid "Event type"
 msgstr "Тип события"
 
-#: applications/models.py:157
-#: applications/templates/applications/group_application.html:264
+#: applications/models.py:164
+#: applications/templates/applications/group_application.html:288
 msgid "Practice exam"
 msgstr "Практический экзамен"
 
-#: applications/models.py:158
+#: applications/models.py:165
 msgid "Practice exams"
 msgstr "Практические экзамены"
 
-#: applications/models.py:160
+#: applications/models.py:167
 msgid "Random problems"
 msgstr "Случайные задачи"
 
-#: applications/models.py:161
+#: applications/models.py:168
 msgid "Slot problems"
 msgstr "Вариантные задачи"
 
-#: applications/models.py:162 applications/models.py:336
+#: applications/models.py:169 applications/models.py:343
 msgid "Minimum total score"
 msgstr "Минимальный балл"
 
-#: applications/models.py:171
+#: applications/models.py:178
 msgid "Practice exam problem"
 msgstr "Задача практического экзамена"
 
-#: applications/models.py:172
+#: applications/models.py:179
 msgid "Practice exams problems"
 msgstr "Задачи практических экзаменов"
 
-#: applications/models.py:174
+#: applications/models.py:181
 msgid "Problem name"
 msgstr "Название задачи"
 
-#: applications/models.py:175
+#: applications/models.py:182
 msgid "Problem id"
 msgstr "ID задачи"
 
-#: applications/models.py:176
+#: applications/models.py:183
 msgid "Problem slot"
 msgstr "Вариант задачи"
 
-#: applications/models.py:177
+#: applications/models.py:184
 #: applications/templates/applications/group_application_practice_exam.html:25
 msgid "Statement"
 msgstr "Условие"
 
-#: applications/models.py:178
+#: applications/models.py:185
 msgid "Problem score"
 msgstr "Очки за решение"
 
-#: applications/models.py:192
+#: applications/models.py:199
 msgid "Practice exam run"
 msgstr "Посылка на практическом экзамене"
 
-#: applications/models.py:193
+#: applications/models.py:200
 msgid "Practice exams runs"
 msgstr "Посылки на практических экзаменах"
 
-#: applications/models.py:196
+#: applications/models.py:203
 msgid "Run ID"
 msgstr "ID посылки"
 
-#: applications/models.py:198 applications/models.py:552
+#: applications/models.py:205 applications/models.py:559
 msgid "Submitted at"
 msgstr "Отправлена"
 
-#: applications/models.py:331
-#: applications/templates/applications/group_application.html:207
+#: applications/models.py:338
+#: applications/templates/applications/group_application.html:231
 msgid "Theory exam"
 msgstr "Теоретический экзамен"
 
-#: applications/models.py:332
+#: applications/models.py:339
 msgid "Theory exams"
 msgstr "Теоретические экзамены"
 
-#: applications/models.py:334
+#: applications/models.py:341
 msgid "Random questions"
 msgstr "Случайные вопросы"
 
-#: applications/models.py:335
+#: applications/models.py:342
 msgid "Slot questions"
 msgstr "Вариантные вопросы"
 
-#: applications/models.py:345
+#: applications/models.py:352
 msgid "Theory exam question"
 msgstr "Вопрос на теоретическом экзамене"
 
-#: applications/models.py:346
+#: applications/models.py:353
 msgid "Theory exams questions"
 msgstr "Вопросы на теоретических экзаменах"
 
-#: applications/models.py:349
+#: applications/models.py:356
 msgid "Question"
 msgstr "Вопрос"
 
-#: applications/models.py:350 applications/models.py:380
-#: applications/models.py:384 applications/models.py:390
-#: applications/models.py:396
+#: applications/models.py:357 applications/models.py:387
+#: applications/models.py:391 applications/models.py:397
+#: applications/models.py:403
 msgid "Answer"
 msgstr "Ответ"
 
-#: applications/models.py:351
+#: applications/models.py:358
 msgid "Remove extra spaces from answer"
 msgstr "Удалять ненужные пробелы"
 
-#: applications/models.py:352
+#: applications/models.py:359
 msgid "Answer is case-sensitive"
 msgstr "Регистр букв имеет значение"
 
-#: applications/models.py:354
+#: applications/models.py:361
 msgid "Question slot"
 msgstr "Вариант вопроса"
 
-#: applications/models.py:355
+#: applications/models.py:362
 msgid "Score"
 msgstr "Балл"
 
-#: applications/models.py:364
+#: applications/models.py:371
 msgid "Integer number as an answer"
 msgstr "Целое число как ответ"
 
-#: applications/models.py:365
+#: applications/models.py:372
 msgid "String as an answer"
 msgstr "Строка как ответ"
 
-#: applications/models.py:366
+#: applications/models.py:373
 msgid "One option as an answer"
 msgstr "Один из перечисленных вариантов"
 
-#: applications/models.py:367
+#: applications/models.py:374
 msgid "Several options as an answer"
 msgstr "Несколько из перечисленных вариантов"
 
-#: applications/models.py:371
+#: applications/models.py:378
 msgid "Answer type"
 msgstr "Тип ответа"
 
-#: applications/models.py:403 applications/models.py:408
+#: applications/models.py:410 applications/models.py:415
 msgid "Possible answer"
 msgstr "Вариант ответа"
 
-#: applications/models.py:404
+#: applications/models.py:411
 msgid "Possible answers"
 msgstr "Варианты ответов"
 
-#: applications/models.py:409
+#: applications/models.py:416
 msgid "Short ID"
 msgstr "Короткий ID"
 
-#: applications/models.py:410
+#: applications/models.py:417
 msgid "This answer is correct"
 msgstr "Правильный ответ"
 
-#: applications/models.py:530
+#: applications/models.py:537
 msgid "Event application"
 msgstr "Заявка на событие"
 
-#: applications/models.py:531
+#: applications/models.py:538
 msgid "Event applications"
 msgstr "Заявки на события"
 
-#: applications/models.py:537
+#: applications/models.py:544
 msgid "Grade"
 msgstr "Класс"
 
-#: applications/models.py:537
+#: applications/models.py:544
 msgid "Current grade"
 msgstr "Класс в этом учебном году"
 
-#: applications/models.py:538
+#: applications/models.py:545
 msgid "Home address"
 msgstr "Адрес прописки"
 
-#: applications/models.py:540
-msgid "School"
-msgstr "Школа"
-
-#: applications/models.py:540
-msgid "e.g. School №42"
-msgstr "Например &quot;Школа №42&quot;"
-
-#: applications/models.py:542
+#: applications/models.py:549
 msgid "Organization"
 msgstr "Организация"
 
-#: applications/models.py:543
+#: applications/models.py:550
 msgid "Parents' phone numbers"
 msgstr "Телефоны родителей"
 
-#: applications/models.py:544
+#: applications/models.py:551
 msgid "Personal laptop will be used"
 msgstr "Будет использоваться свой ноутбук"
 
-#: applications/models.py:547
+#: applications/models.py:554
 msgid "Parent's full name"
 msgstr "ФИО родителя"
 
-#: applications/models.py:548
+#: applications/models.py:555
 msgid "Full name of the parent to whom the voucher is drawn up"
 msgstr "ФИО родителя, на которого будет оформляться путёвка"
 
-#: applications/models.py:554
+#: applications/models.py:561
 msgid "Issued at"
 msgstr "Оформлена"
 
-#: applications/models.py:555
+#: applications/models.py:562
 msgid "Issued by"
 msgstr "Кем оформлена"
 
-#: applications/models.py:571
+#: applications/models.py:578
 msgid "Testing"
 msgstr "Заявка пока не отправлена"
 
-#: applications/models.py:572
-#: applications/templates/applications/group_application.html:70
+#: applications/models.py:579
+#: applications/templates/applications/group_application.html:76
 msgid "Accepted"
 msgstr "Заявка принята к рассмотрению"
 
-#: applications/models.py:573
+#: applications/models.py:580
 msgid "Testing failed"
 msgstr "Тестирование провалено"
 
-#: applications/models.py:574
-#: applications/templates/applications/group_application.html:44
+#: applications/models.py:581
+#: applications/templates/applications/group_application.html:51
 msgid "Denied"
 msgstr "В зачислении отказано"
 
-#: applications/models.py:575
+#: applications/models.py:582
 msgid "Enrolled"
 msgstr "Зачислен(а)"
 
-#: applications/models.py:576
+#: applications/models.py:583
 msgid "Issued"
 msgstr "Путёвка оформлена"
 
-#: applications/models.py:577
+#: applications/models.py:584
 msgid "Studying"
 msgstr "Проходит обучение"
 
-#: applications/models.py:578
+#: applications/models.py:585
 msgid "Successed"
 msgstr "Обучение пройдено"
 
-#: applications/models.py:579
+#: applications/models.py:586
 msgid "Failed"
 msgstr "Обучение не окончено"
 
-#: applications/models.py:580
+#: applications/models.py:587
 msgid "Disqualified"
 msgstr "Исключён(а)"
 
-#: applications/models.py:594
+#: applications/models.py:601
 msgid "Application status"
 msgstr "Статус заявки"
 
-#: applications/models.py:596
+#: applications/models.py:603
 msgid "Reason for denial"
 msgstr "Причина отказа"
 
@@ -565,7 +561,7 @@ msgstr ""
 "другую, пока не отмените эту."
 
 #: applications/templates/applications/confirm_group.html:24
-#: applications/templates/applications/group_application.html:35
+#: applications/templates/applications/group_application.html:42
 #: userprofile/templates/userprofile/user_profile.html:57
 msgid "Cancel"
 msgstr "Отмена"
@@ -592,7 +588,7 @@ msgstr "Заявка в"
 msgid "Download"
 msgstr "Скачать"
 
-#: applications/templates/applications/group_application.html:27
+#: applications/templates/applications/group_application.html:28
 msgid ""
 "\n"
 "            Please check that everything is correct. You will not be able\n"
@@ -604,18 +600,30 @@ msgstr ""
 "            сможете редактировать заявку после отправки.\n"
 "        "
 
-#: applications/templates/applications/group_application.html:37
-#: applications/templates/applications/group_application_edit_info.html:50
+#: applications/templates/applications/group_application.html:33
+msgid ""
+"\n"
+"            Please check that everything is correct. You will not be able\n"
+"            to edit your application or send solutions after submitting.\n"
+"        "
+msgstr ""
+"\n"
+"            Пожалуйста, убедитесь, что всё в порядке. Вы не\n"
+"            сможете редактировать заявку или сдавать решения после "
+"отправки.\n"
+"        "
+
+#: applications/templates/applications/group_application.html:44
 #: applications/templates/applications/group_application_practice_exam.html:49
 #: userprofile/templates/userprofile/user_profile.html:59
 msgid "Submit"
 msgstr "Отправить"
 
-#: applications/templates/applications/group_application.html:51
+#: applications/templates/applications/group_application.html:58
 msgid "Your child has failed testing"
 msgstr "Ваш ребёнок провалил тестирование"
 
-#: applications/templates/applications/group_application.html:52
+#: applications/templates/applications/group_application.html:59
 msgid ""
 "\n"
 "                Your child didn't meet requirements for application to this "
@@ -628,15 +636,15 @@ msgstr ""
 "            Вы можете\n"
 "        "
 
-#: applications/templates/applications/group_application.html:56
+#: applications/templates/applications/group_application.html:63
 msgid "move this application to an easier group"
 msgstr "подать заявку в группу попроще"
 
-#: applications/templates/applications/group_application.html:59
+#: applications/templates/applications/group_application.html:65
 msgid "You have failed testing"
 msgstr "Вы провалили тестирование"
 
-#: applications/templates/applications/group_application.html:60
+#: applications/templates/applications/group_application.html:66
 msgid ""
 "\n"
 "                You didn't meet requirements for application to this group.\n"
@@ -652,7 +660,7 @@ msgstr ""
 "            попросить своих родителей подать заявку в группу попроще.\n"
 "        "
 
-#: applications/templates/applications/group_application.html:71
+#: applications/templates/applications/group_application.html:77
 #, python-format
 msgid ""
 "\n"
@@ -667,12 +675,12 @@ msgstr ""
 "свяжется с вами, если необходимо.\n"
 "        "
 
-#: applications/templates/applications/group_application.html:79
-#: applications/templates/applications/group_application.html:88
+#: applications/templates/applications/group_application.html:85
+#: applications/templates/applications/group_application.html:94
 msgid "Congratulations"
 msgstr "Поздравляем"
 
-#: applications/templates/applications/group_application.html:80
+#: applications/templates/applications/group_application.html:86
 #, python-format
 msgid ""
 "\n"
@@ -685,7 +693,7 @@ msgstr ""
 "            Пожалуйста, оформите путёвку в отделе летнего отдыха.\n"
 "        "
 
-#: applications/templates/applications/group_application.html:89
+#: applications/templates/applications/group_application.html:95
 #, python-format
 msgid ""
 "\n"
@@ -698,78 +706,112 @@ msgstr ""
 "            Ваша путёвка подтверждена.\n"
 "        "
 
-#: applications/templates/applications/group_application.html:101
+#: applications/templates/applications/group_application.html:107
 msgid "Tell us about your child"
 msgstr "Расскажите о своём ребёнке"
 
-#: applications/templates/applications/group_application.html:106
+#: applications/templates/applications/group_application.html:112
 msgid "Edit"
 msgstr "Редактировать"
 
-#: applications/templates/applications/group_application.html:111
+#: applications/templates/applications/group_application.html:117
 msgid "About this student"
 msgstr "Об этом ученике"
 
-#: applications/templates/applications/group_application.html:113
+#: applications/templates/applications/group_application.html:119
 msgid "About your child"
 msgstr "О вашем ребёнке"
 
-#: applications/templates/applications/group_application.html:115
+#: applications/templates/applications/group_application.html:121
 msgid "About yourself"
 msgstr "О себе"
 
-#: applications/templates/applications/group_application.html:120
+#: applications/templates/applications/group_application.html:126
 msgid "fill now"
 msgstr "заполните сейчас"
 
-#: applications/templates/applications/group_application.html:124
+#: applications/templates/applications/group_application.html:130
 msgid "filled"
 msgstr "заполнено"
 
-#: applications/templates/applications/group_application.html:131
+#: applications/templates/applications/group_application.html:137
 msgid "ask your parents to fill this now"
 msgstr "попросите родителей заполнить"
 
-#: applications/templates/applications/group_application.html:135
+#: applications/templates/applications/group_application.html:141
 msgid "filled by your parents"
 msgstr "заполнено вашими родителями"
 
-#: applications/templates/applications/group_application.html:172
+#: applications/templates/applications/group_application.html:177
 msgid "Some actions are disabled"
 msgstr "Некоторые действия недоступны"
 
-#: applications/templates/applications/group_application.html:173
-msgid "Fill out information about yourself to continue"
-msgstr "Заполните информацию о себе для продолжения"
+#: applications/templates/applications/group_application.html:178
+msgid "Fill out information to continue"
+msgstr "Заполните информацию для продолжения"
 
 #: applications/templates/applications/group_application.html:185
+#: applications/templates/applications/group_application.html:193
+msgid "Information is filled"
+msgstr "Информация заполнена"
+
+#: applications/templates/applications/group_application.html:186
+msgid ""
+"\n"
+"                Now you can proceed to solve entrance exam. It is not "
+"necessary to\n"
+"                solve all problems, but at least one.\n"
+"            "
+msgstr ""
+"\n"
+"                Вы теперь можете приступить к написанию вступительной "
+"работы\n"
+"                Решать все задачи не нужно, но нужно решить хотя бы одну.\n"
+"            "
+
+#: applications/templates/applications/group_application.html:194
+msgid ""
+"\n"
+"                Now your child can proceed to solve entrance exam. It is not "
+"necessary to\n"
+"                solve all problems, but at least one.\n"
+"            "
+msgstr ""
+"\n"
+"                Ваш ребёнок теперь может приступить к написанию "
+"вступительной работы\n"
+"                Решать все задачи не нужно, но нужно решить хотя бы одну.\n"
+"            "
+
+#: applications/templates/applications/group_application.html:209
 msgid "Answer questions"
 msgstr "Отвечать на вопросы"
 
-#: applications/templates/applications/group_application.html:190
+#: applications/templates/applications/group_application.html:214
 msgid "Answers"
 msgstr "Ответы"
 
-#: applications/templates/applications/group_application.html:212
-#: applications/templates/applications/group_application.html:216
-#: applications/templates/applications/group_application.html:269
-#: applications/templates/applications/group_application.html:273
+#: applications/templates/applications/group_application.html:236
+#: applications/templates/applications/group_application.html:240
+#: applications/templates/applications/group_application.html:293
+#: applications/templates/applications/group_application.html:297
 msgid "out of"
 msgstr "из"
 
-#: applications/templates/applications/group_application.html:242
+#: applications/templates/applications/group_application.html:266
+#: templates/base.html:102
 msgid "Solve problems"
 msgstr "Решать задачи"
 
-#: applications/templates/applications/group_application.html:247
+#: applications/templates/applications/group_application.html:271
 msgid "Solutions"
 msgstr "Решения"
 
-#: applications/templates/applications/group_application.html:300
+#: applications/templates/applications/group_application.html:324
 msgid "Delete application"
 msgstr "Отменить заявку"
 
-#: applications/templates/applications/group_application.html:314
+#: applications/templates/applications/group_application.html:337
 msgid "Submit application for review"
 msgstr "Отправить заявку на рассмотрение"
 
@@ -780,6 +822,14 @@ msgstr "Загруженный файл"
 #: applications/templates/applications/group_application_edit_info.html:30
 msgid "Reupload"
 msgstr "Загрузить другой файл"
+
+#: applications/templates/applications/group_application_edit_info.html:52
+msgid "Save"
+msgstr "Сохранить"
+
+#: applications/templates/applications/group_application_edit_info.html:54
+msgid "Next"
+msgstr "Далее"
 
 #: applications/templates/applications/group_application_practice_exam.html:11
 msgid "You need to write programs to solve these problems"
@@ -1207,19 +1257,19 @@ msgstr "Важные даты"
 msgid "Relative"
 msgstr "Родственник"
 
-#: userprofile/admin.py:69 userprofile/models.py:91 userprofile/tables.py:31
+#: userprofile/admin.py:69 userprofile/models.py:96 userprofile/tables.py:31
 msgid "Child"
 msgstr "Ребёнок"
 
-#: userprofile/apps.py:33 userprofile/models.py:80
+#: userprofile/apps.py:33 userprofile/models.py:85
 msgid "Education committee"
 msgstr "Комитет образования"
 
-#: userprofile/apps.py:35 userprofile/apps.py:53 userprofile/views.py:56
+#: userprofile/apps.py:35 userprofile/apps.py:53 userprofile/views.py:57
 msgid "Students"
 msgstr "Ученики"
 
-#: userprofile/apps.py:36 userprofile/views.py:54
+#: userprofile/apps.py:36 userprofile/views.py:55
 msgid "Parents"
 msgstr "Родители"
 
@@ -1271,48 +1321,48 @@ msgstr "Псевдоним"
 msgid "Use contents of this field instead of username"
 msgstr "Это поле будет отображаться вместо имени пользователя"
 
-#: userprofile/models.py:85
+#: userprofile/models.py:90
 msgid "Family relative"
 msgstr "Родственник"
 
-#: userprofile/models.py:86
+#: userprofile/models.py:91
 #: userprofile/templates/userprofile/user_profile.html:116
 msgid "Family relatives"
 msgstr "Родственники"
 
-#: userprofile/models.py:89 userprofile/tables.py:33
+#: userprofile/models.py:94 userprofile/tables.py:33
 msgid "Parent"
 msgstr "Родитель"
 
-#: userprofile/models.py:93
+#: userprofile/models.py:98
 msgid "Invited user"
 msgstr "Пригласивший пользователь"
 
-#: userprofile/models.py:95
+#: userprofile/models.py:100
 msgid "Confirmation code"
 msgstr "Код подтверждения"
 
-#: userprofile/models.py:96
+#: userprofile/models.py:101
 msgid "Valid until"
 msgstr "Действителен до"
 
-#: userprofile/models.py:103
+#: userprofile/models.py:108
 msgid "Waiting"
 msgstr "Ожидание"
 
-#: userprofile/models.py:104
+#: userprofile/models.py:109
 msgid "Approved"
 msgstr "Одобрено"
 
-#: userprofile/models.py:105
+#: userprofile/models.py:110
 msgid "Declined"
 msgstr "Отклонено"
 
-#: userprofile/models.py:109
+#: userprofile/models.py:114
 msgid "Relationship request"
 msgstr "Запрос родства"
 
-#: userprofile/models.py:112
+#: userprofile/models.py:117
 #, python-format
 msgid "Relationship #%(id)s"
 msgstr "Отношение #%(id)s"
@@ -1418,13 +1468,19 @@ msgstr "Редактирование профиля пользователя \"%
 msgid "Edit profile"
 msgstr "Редактировать профиль"
 
-#: userprofile/views.py:146
+#: userprofile/views.py:147
 msgid "will be your child"
 msgstr "будет считаться вашим ребёнком"
 
-#: userprofile/views.py:148
+#: userprofile/views.py:149
 msgid "will be your parent"
 msgstr "будет считаться вашим родителем"
+
+#~ msgid "School"
+#~ msgstr "Школа"
+
+#~ msgid "e.g. School №42"
+#~ msgstr "Например &quot;Школа №42&quot;"
 
 #~ msgid "Username or email"
 #~ msgstr "Имя пользователя или адрес электронной почты"

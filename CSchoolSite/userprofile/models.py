@@ -1,6 +1,6 @@
 from django.utils import timezone
 
-from django.contrib.auth.models import User, AbstractUser
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core import signing
@@ -28,12 +28,17 @@ class User(AbstractUser):
     telegram_id = models.BigIntegerField(null=True, blank=True, default=None, unique=True)
     telegram_username = models.CharField(max_length=256, default=None, unique=True, blank=True, null=True)
 
+    def __str__(self):
+        if not self.email:
+            return self.get_aliased_username()
+        return '{name} <{email}>'.format(name=self.get_aliased_username(), email=self.email)
+
     def get_initials(self):
         full_name = '%s %s %s' % (self.last_name or '', self.first_name or '', self.patronymic or '')
         return full_name.strip()
 
     def get_aliased_username(self):
-        return self.alias if self.alias else self.username
+        return self.alias if self.alias else self.get_initials()
 
     def is_eligible_for_application(self, period=None):
         if not self.is_authenticated():

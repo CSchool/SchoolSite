@@ -7,13 +7,20 @@ from applications.models import Period, Event, EventApplication, PracticeExam, P
     PracticeExamRun, PeriodAttachment
 from applications.models import PracticeExamProblem
 from applications.models import TheoryExam, TheoryExamQuestion, TheoryExamQuestionOption
-from applications.forms import EventApplicationAdminForm, PracticeExamRunAdminForm
+from applications.forms import EventApplicationAdminForm, PracticeExamRunAdminForm, EventAdminForm
+
+
+class EventCoordinatorInline(admin.TabularInline):
+    model = Event.coordinators.through
 
 
 class EventAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {'widget': AdminTinyMCE()},
     }
+    form = EventAdminForm
+    filter_horizontal = ('coordinators',)
+
 
 admin.site.register(Event, EventAdmin)
 

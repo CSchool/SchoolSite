@@ -129,6 +129,9 @@ class Event(models.Model):
     limit = models.IntegerField(verbose_name=_('Participants limit'))
     difficulty = models.IntegerField(verbose_name=_('Relative difficulty'), default=0)
 
+    coordinators = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='coordinated_events',
+                                          verbose_name=_('Coordinators'), blank=True)
+
     # Event type
     CLASS_GROUP = 'CL'
     CAMP_GROUP = 'CA'
@@ -150,6 +153,10 @@ class Event(models.Model):
         if self.registration_begin <= timezone.now() <= self.registration_end and self.is_open:
             return True
         return False
+
+    @property
+    def total_enrolled(self):
+        return EventApplication.objects.filter(status__in=EventApplication.ENROLLED_STATUSES).count()
 
 
 class PracticeExam(models.Model):
@@ -536,8 +543,8 @@ class EventApplication(models.Model):
     grade = models.IntegerField(choices=[(i, i) for i in range(1, 12)],
                                 null=True, verbose_name=_('Grade'), help_text=_("Current grade"))
     address = models.TextField(null=True, verbose_name=_('Home address'))
-    school = models.CharField(max_length=50, null=True,
-                              verbose_name=_('School'), help_text=_("e.g. School №42"))
+    # school = models.CharField(max_length=50, null=True,
+    #                          verbose_name=_('School'), help_text=_("e.g. School №42"))
 
     organization = models.CharField(max_length=250, null=True, blank=True, verbose_name=_('Organization'))
     parent_phone_numbers = models.TextField(null=True, blank=True, verbose_name=_("Parents' phone numbers"))
@@ -601,6 +608,7 @@ class EventApplication(models.Model):
     def __init__(self, *args, **kwargs):
         super(EventApplication, self).__init__(*args, **kwargs)
         self.__original_status = self.status
+        self.__original_filled = self.is_general_filled
 
     @property
     def enrolled_color(self):
@@ -611,6 +619,14 @@ class EventApplication(models.Model):
         if self.status in EventApplication.ENROLLED_STATUSES:
             return 'success'
         return 'danger'
+
+    @property
+    def testing_required(self):
+        if hasattr(self, 'practice_exam') and self.practice_exam:
+            return True
+        if hasattr(self, 'theory_exam') and self.theory_exam:
+            return True
+        return False
 
     def save(self, *args, **kwargs):
         from userprofile.models import Relationship
@@ -623,9 +639,52 @@ class EventApplication(models.Model):
             self.submitted_at = timezone.now()
         if self.status == EventApplication.ISSUED and self.issued_at is None:
             self.issued_at = timezone.now()
-        if self.status != self.__original_status:
+        if self.status == EventApplication.TESTING_FAILED:
+            self.denial_reason = 'Не решено достаточно задач для поступления'
+        if self.status != self.__original_status or self.is_general_filled != self.__original_filled:
             link = HOST + reverse('applications_group_application', args=[self.id])
-            if self.status == EventApplication.DENIED:
+            admin_link = HOST + reverse('admin:%s_%s_change' % (self._meta.app_label, self._meta.model_name), args=[self.id])
+            if self.is_general_filled != self.__original_filled and self.is_general_filled:
+                if self.testing_required:
+                    notify(self.user, 'Можно решать вступительную', read_template('applications/notifications/filled_student.md')
+                           .format(
+                        group=self.event.name,
+                        period=self.event.period.name,
+                        link=link,
+                    ))
+            elif self.status == EventApplication.ACCEPTED:
+                # notify coordinators
+                enrolled = self.event.total_enrolled
+                for user in self.event.coordinators.all():
+                    notify(user, 'Поступила новая заявка', read_template('applications/notifications/accepted_coordinator.md')
+                           .format(
+                        group=self.event.name,
+                        period=self.event.period.name,
+                        student=self.user.get_initials(),
+                        admin_link=admin_link,
+                        enrolled=enrolled,
+                        total=self.event.limit
+                    ))
+
+                # notify student
+                notify(self.user, 'Заявка принята на рассмотрение',
+                       read_template('applications/notifications/accepted_student.md')
+                       .format(
+                           period=self.event.period.name,
+                           link=link
+                       ))
+
+                # notify parents
+                for rel in Relationship.objects.filter(child=self.user, request=Relationship.APPROVED) \
+                        .exclude(relative__telegram_id__isnull=True):
+                    notify(rel.relative, 'Заявка принята на рассмотрение',
+                           read_template('applications/notifications/accepted_parent.md')
+                           .format(
+                               period=self.event.period.name,
+                               child=self.user.get_full_name(),
+                               link=link
+                           ))
+            elif self.status in [EventApplication.DENIED, EventApplication.TESTING_FAILED]:
                 # notify student
                 notify(self.user, 'В зачислении отказано', read_template('applications/notifications/denied_student.md')
                        .format(
@@ -634,6 +693,7 @@ class EventApplication(models.Model):
                     link=link
                 ))
 
+                # notify parents
                 for rel in Relationship.objects.filter(child=self.user, request=Relationship.APPROVED) \
                         .exclude(relative__telegram_id__isnull=True):
                     notify(rel.relative, 'В зачислении отказано',
@@ -645,7 +705,7 @@ class EventApplication(models.Model):
                                link=link
                            ))
 
-            if self.status == EventApplication.ENROLLED:
+            elif self.status == EventApplication.ENROLLED:
                 # notify student
                 notify(self.user, 'Зачисление в группу', read_template('applications/notifications/enrolled_student.md')
                        .format(
@@ -663,7 +723,7 @@ class EventApplication(models.Model):
                         link=link
                     ))
 
-            if self.status == EventApplication.ISSUED:
+            elif self.status == EventApplication.ISSUED:
                 # notify student
                 notify(self.user, 'Одобрение путёвки', read_template('applications/notifications/issued_student.md')
                        .format(
@@ -687,7 +747,6 @@ class EventApplication(models.Model):
     def is_general_filled(self):
         return self.grade is not None and \
                self.address is not None and \
-               self.school is not None and \
                self.personal_data_doc is not None
 
     @property
@@ -695,22 +754,23 @@ class EventApplication(models.Model):
         return self.status == EventApplication.TESTING
 
     def has_parent_privileges(self, user):
-        if user.is_staff:
-            return True
         from userprofile.models import Relationship
         return Relationship.objects.filter(relative=user, child=self.user, request=Relationship.APPROVED).exists()
 
     def has_child_privileges(self, user):
-        if user.is_staff:
-            return True
         return user == self.user
 
     def has_global_privileges(self, user):
-        if user.is_superuser:
+        if user.is_staff:
             return True
         if user.is_education_committee:
             return True
         return False
+
+    def has_delete_privileges(self, user):
+        if self.status in [EventApplication.TESTING_FAILED, EventApplication.DENIED]:
+            return True
+        return self.has_parent_privileges(user)
 
     def viewable(self, user):
         return self.has_global_privileges(user) or self.has_parent_privileges(user) or self.has_child_privileges(user)

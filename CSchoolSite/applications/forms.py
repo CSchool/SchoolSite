@@ -5,7 +5,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import reverse
 from django.contrib.admin.widgets import AdminDateWidget
 
-from applications.models import EventApplication, PracticeExamRun
+from applications.models import EventApplication, PracticeExamRun, Event
+from userprofile.models import User
 
 
 class TextDisplayWidget(forms.widgets.TextInput):
@@ -17,6 +18,16 @@ class TextDisplayWidget(forms.widgets.TextInput):
         return '<p>%s</p>' % value
 
 
+class EventAdminForm(forms.ModelForm):
+    class Meta:
+        model = Event
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        forms.ModelForm.__init__(self, *args, **kwargs)
+        self.fields['coordinators'].queryset = User.objects.filter(is_staff=True).all()
+
+
 class CreateApplicationForm(forms.Form):
     group_id = forms.IntegerField(required=True)
     username = forms.CharField(required=True)
@@ -25,10 +36,10 @@ class CreateApplicationForm(forms.Form):
 class EventApplicationGenericForm(forms.ModelForm):
     class Meta:
         model = EventApplication
-        fields = ('student_inititals', 'grade', 'address', 'school', 'birthday', 'organization',
+        fields = ('student_inititals', 'grade', 'address', 'birthday', 'organization',
                   'parent_phone_numbers', 'personal_laptop', 'voucher_parent', 'personal_data_doc')
 
-    FIELDS = ('grade', 'address', 'school', 'organization', 'parent_phone_numbers',
+    FIELDS = ('grade', 'address', 'organization', 'parent_phone_numbers',
               'personal_laptop', 'voucher_parent')
 
     student_inititals = forms.CharField(required=False, label=_('Student\'s initials'), widget=TextDisplayWidget())
@@ -58,7 +69,7 @@ class EventApplicationGenericForm(forms.ModelForm):
 
 class EventApplicationPrivForm(EventApplicationGenericForm):
     class Meta(EventApplicationGenericForm.Meta):
-        fields = ('student_inititals', 'grade', 'address', 'school', 'birthday', 'organization',
+        fields = ('student_inititals', 'grade', 'address', 'birthday', 'organization',
                   'parent_phone_numbers', 'personal_laptop', 'voucher_parent', 'personal_data_doc', 'voucher_id')
 
     voucher_id = forms.CharField(required=True, label=_('Voucher ID'))
@@ -87,7 +98,7 @@ class EventApplicationAdminForm(forms.ModelForm):
     class Meta:
         model = EventApplication
         fields = ('student_initials', 'group', 'grade', 'address',
-                  'school', 'birthday', 'organization', 'parent_phone_numbers', 'voucher_parent',
+                  'birthday', 'organization', 'parent_phone_numbers', 'voucher_parent',
                   'personal_data_doc_link', 'personal_laptop',
                   'theory_score', 'practice_score', 'status', 'denial_reason', 'submitted_at',
                   'issued_at', 'issued_by')

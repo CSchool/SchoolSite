@@ -4,6 +4,7 @@ from django.core.paginator import Paginator
 from django.views.decorators.csrf import csrf_exempt
 
 from main.models import Notification
+from main.helpers import get_sapp
 from news.models import NewsPost
 
 
@@ -40,7 +41,8 @@ def index(req, page="1"):
         raise Http404
     cur_page = paginator.page(page_id)
     return render(req, 'news/posts.html', {
-        "news": cur_page
+        "news": cur_page,
+        "sapp": get_sapp(req)
     })
 
 
@@ -50,5 +52,6 @@ def post(req, post_id):
     except NewsPost.DoesNotExist:
         raise Http404
     return render(req, 'news/post.html', {
-        "post": post
+        "post": post,
+        "sapp": get_sapp(req)
     })

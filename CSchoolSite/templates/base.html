@@ -95,10 +95,10 @@
                             {% bootstrap_icon 'plus' %}
                             {% trans 'Submit application' %}
                         </a>
-                    {% else %}
-                        <a href="{% url 'applications_choose_period' %}" class="btn btn-warning">
+                    {% elif sapp %}
+                        <a href="{% url 'applications_group_application' sapp.id %}" class="btn btn-success">
                             {% bootstrap_icon 'pencil' %}
-                            {% trans 'Applications' %}
+                            {% trans 'Solve problems' %} &mdash; {{ sapp.event.period.name }}
                         </a>
                     {% endif %}
                     </div>

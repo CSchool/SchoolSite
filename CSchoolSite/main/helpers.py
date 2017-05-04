@@ -96,3 +96,14 @@ def read_template(name):
     from CSchoolSite.settings import BASE_DIR
     with open(os.path.join(BASE_DIR, name)) as f:
         return f.read()
+
+
+def get_sapp(req):
+    if not req.user.is_authenticated:
+        return None
+    from applications.models import EventApplication
+    apps = EventApplication.objects.filter(user=req.user, status=EventApplication.TESTING)
+    for app in apps:
+        if app.testing_required and app.is_general_filled:
+            return app
+    return None

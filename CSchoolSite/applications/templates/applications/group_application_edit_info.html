@@ -47,7 +47,13 @@
     {% endif %}
     {% buttons %}
         {% if application.modifiable %}
-        <button type="submit" class="btn btn-lg btn-primary btn-block">{% trans 'Submit' %}</button>
+        <button type="submit" class="btn btn-lg btn-primary btn-block">
+            {% if application.testing_required %}
+                {% trans 'Save' %}
+            {% else %}
+                {% trans 'Next' %} &raquo;
+            {% endif %}
+        </button>
         {% endif %}
     {% endbuttons %}
     </form>

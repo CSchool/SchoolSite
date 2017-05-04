@@ -19,6 +19,7 @@ from django.contrib.auth.views import LoginView
 from userprofile.forms import UserForm, ExtendedAuthenticationForm
 from userprofile.utils import is_group_member
 from userprofile.models import User, Relationship
+from main.helpers import get_sapp
 
 class ExtendedLoginView(LoginView):
     authentication_form = ExtendedAuthenticationForm
@@ -61,7 +62,7 @@ def profile(request):
         rel.valid_until = None
         rel.save()
         return redirect(reverse('user_profile'))
-    return render(request, 'userprofile/user_profile.html', {"user": request.user})
+    return render(request, 'userprofile/user_profile.html', {"user": request.user, "sapp": get_sapp(request)})
 
 
 def login(request, *args, **kwargs):
@@ -84,7 +85,7 @@ def edit_profile(request):
             form.save()
             return HttpResponseRedirect(reverse('user_profile'))
 
-    return render(request, 'userprofile/user_profile_edit.html', {"form": form})
+    return render(request, 'userprofile/user_profile_edit.html', {"form": form, "sapp": get_sapp(request)})
 
 
 @csrf_exempt

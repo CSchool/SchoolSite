@@ -13,7 +13,7 @@ from applications.models import Period, Event, PracticeExamApplication, EventApp
     TheoryExamApplication, TheoryExamApplicationQuestion, TheoryExamQuestion, PracticeExamProblem, PeriodAttachment
 from applications.decorators import study_group_application
 from userprofile.models import Relationship, User
-from main.helpers import file_response
+from main.helpers import file_response, get_sapp
 import ejudge
 
 
@@ -32,7 +32,8 @@ def view_enrolled(req, period_id):
         applications = applications.order_by('event__difficulty', 'user__last_name', 'user__first_name')
     return render(req, "applications/view_enrolled.html", {
         "period": period,
-        "applications": applications
+        "applications": applications,
+        "sapp": get_sapp(req)
     })
 
 
@@ -237,9 +238,9 @@ def group_application(req, application_id):
     parent_priv = application.has_parent_privileges(req.user)
     child_priv = application.has_child_privileges(req.user)
     priv = application.has_global_privileges(req.user)
-
     confirm_submit = False
-    if req.POST.get('confirm_submit') is not None:
+
+    if req.POST.get('confirm_submit') is not None or 'c' in req.GET:
         if application.modifiable:
             confirm_submit = True
 
@@ -279,6 +280,12 @@ def group_application(req, application_id):
         theory_answered = theory_exam.answered_questions
         theory_total = theory_exam.total_questions
 
+    submit_priv = application.modifiable and not confirm_submit
+    if parent_priv and application.testing_required:
+        submit_priv = False
+
+    delete_priv = application.has_delete_privileges(req.user)
+
     return render(req, "applications/group_application.html", {
         "group": group,
         "application": application,
@@ -292,7 +299,9 @@ def group_application(req, application_id):
         "child_priv": child_priv,
         "priv": priv,
         "personal_data_doc_name": os.path.basename(application.personal_data_doc.name),
-        "attachments": PeriodAttachment.objects.filter(period=group.period).order_by('id').all()
+        "attachments": PeriodAttachment.objects.filter(period=group.period).order_by('id').all(),
+        "submit_priv": submit_priv,
+        "delete_priv": delete_priv
     })
 
 
@@ -309,8 +318,9 @@ def group_application_edit_info(req, application_id):
         raise Http404
     uploaded = None
     render_file = False
+    parent_priv = application.has_parent_privileges(req.user)
     if req.method == "POST":
-        if not application.modifiable:
+        if not application.modifiable or not parent_priv:
             raise PermissionDenied
         form = EventApplicationGenericForm(req.POST, req.FILES, instance=application)
         if form.is_valid():
@@ -323,6 +333,9 @@ def group_application_edit_info(req, application_id):
                     application.personal_data_doc.name = path
                 form.save()
                 application.save()
+                if not application.testing_required:
+                    # Redirect parent straight to confirm everything page
+                    return redirect(reverse('applications_group_application', args=[application.id]) + '?c')
                 return redirect(reverse('applications_group_application', args=[application.id]))
             else:
                 render_file = True # But why would it be invalid
@@ -530,7 +543,7 @@ def group_application_delete_confirmation(req, application_id):
         group = application.event
     except EventApplication.DoesNotExist:
         raise Http404
-    if not application.has_parent_privileges(req.user):
+    if not application.has_delete_privileges(req.user):
         raise PermissionDenied
     return render(req, "applications/confirm_application_delete.html", {
         "application": application,
@@ -549,7 +562,7 @@ def group_application_delete(req, application_id):
         group = application.event
     except EventApplication.DoesNotExist:
         raise Http404
-    if not application.has_parent_privileges(req.user):
+    if not application.has_delete_privileges(req.user):
         raise PermissionDenied
     application.delete()
     return redirect(reverse('index'))
