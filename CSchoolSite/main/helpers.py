@@ -1,6 +1,6 @@
+import datetime
 import mimetypes
 import os.path
-import datetime
 
 from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseServerError
@@ -86,9 +86,8 @@ def notify_insite(user, subject, msg):
 def notify(user, subject, msg, async=True):
     notify_insite(user, subject, msg)
     if async:
-        from main.celery import notify_async
-        notify_async.delay(user.telegram_id, user.email, subject, msg)
-        return
+        from CSchoolSite.celery import notify_async
+        return notify_async.delay(user.telegram_id, user.email, subject, msg)
     notify_email(user.email, subject, msg)
     notify_telegram(user.telegram_id, msg)
 
