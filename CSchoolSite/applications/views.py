@@ -241,7 +241,7 @@ def group_application(req, application_id):
     confirm_submit = False
 
     if req.POST.get('confirm_submit') is not None or 'c' in req.GET:
-        if application.modifiable:
+        if application.modifiable and application.is_general_filled:
             confirm_submit = True
 
     if req.POST.get('confirm_application_submit') is not None:

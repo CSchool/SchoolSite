@@ -177,14 +177,14 @@
             <b>{% blocktrans %}Some actions are disabled{% endblocktrans %}.</b><br />
             {% blocktrans %}Fill out information to continue{% endblocktrans %}.
         </div>
-    {% elif application.testing_required and application.status == application.TESTING %}
+    {% elif application.testing_required and application.status == application.TESTING and not confirm_submit %}
         {% if child_priv %}
         <div class="alert alert-warning">
             <b>{% blocktrans %}Information is filled{% endblocktrans %}.</b><br />
             {% blocktrans %}
                 Now you can proceed to solve entrance exam. It is not necessary to
                 solve all problems, but at least one.
-            {% endblocktrans %}.
+            {% endblocktrans %}
         </div>
         {% else %}
         <div class="alert alert-warning">
@@ -192,7 +192,7 @@
             {% blocktrans %}
                 Now your child can proceed to solve entrance exam. It is not necessary to
                 solve all problems, but at least one.
-            {% endblocktrans %}.
+            {% endblocktrans %}
         </div>
         {% endif %}
     {% endif %}
