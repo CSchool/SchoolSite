@@ -3,19 +3,10 @@ import hashlib
 
 from django.urls import reverse
 from django.core import signing
-from CSchoolSite.settings import SECRET_KEY
+from CSchoolSite.settings import SECRET_KEY, HOST
+from CSchoolSite.settings import TELEGRAM_TOKEN as TOKEN
 
 from userprofile.models import User
-
-TOKEN_PATH = '/etc/cschoolsite_telegram_token'
-TOKEN = 'NOT APPLICABLE'
-HOST = 'https://olimp-nw.ru'
-
-try:
-    with open(TOKEN_PATH, 'r') as f:
-        TOKEN = f.read().strip()
-except:
-    pass
 
 TelegramBot = telepot.Bot(TOKEN)
 

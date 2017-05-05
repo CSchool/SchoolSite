@@ -3,6 +3,10 @@
 {% load static %}
 {% load i18n %}
 
+{% block css %}
+    <link rel='stylesheet' type='text/css' href='{% static 'css/jquery-ui.all.css' %}' />
+{% endblock %}
+
 {% block page_title %}{% blocktrans with username=user.username %}Editing profile of "{{ username }}"{% endblocktrans %}{% endblock %}
 
 {% block content %}
@@ -19,21 +23,6 @@
 
 {% endblock %}
 
-{% block css %}
-    {{ block.super }}
-    <link rel='stylesheet' type='text/css' href='{% static 'css/jquery-ui.min.css' %}' />
-{% endblock %}
-
 {% block scripts %}
-    {{ block.super }}
-    <script type='text/javascript' src='{% static 'js/jquery-ui.min.js' %}'></script>
-
-    <script type='text/javascript'>
-        $( ".datepicker" ).datepicker({
-            dateFormat: 'dd.mm.yy',
-            changeYear: true,
-            changeMonth: true,
-            yearRange: "-100:+0"
-        });
-    </script>
+    <script type='text/javascript' src='{% static 'js/jquery-ui-datepicker.all.js' %}'></script>
 {% endblock %}

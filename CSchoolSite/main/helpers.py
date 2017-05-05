@@ -5,19 +5,7 @@ import os.path
 from django.core.mail import send_mail
 from django.http import HttpResponse, HttpResponseServerError
 
-from CSchoolSite.settings import FILESERVE_MEDIA_URL, FILESERVE_METHOD
-
-HOST = 'https://olimp-nw.ru'
-try:
-    from telegram.bot import HOST
-except ImportError:
-    try:
-        from CSchoolSite.settings import HOST
-    except ImportError:
-        try:
-            from CSchoolSite.personalsettings import HOST
-        except ImportError:
-            pass
+from CSchoolSite.settings import FILESERVE_MEDIA_URL, FILESERVE_METHOD, HOST
 
 
 def file_response(file):

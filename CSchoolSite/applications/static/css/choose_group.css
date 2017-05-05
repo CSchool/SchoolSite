@@ -1,0 +1,25 @@
+.row {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-wrap: wrap;
+}
+.row > [class*='col-'] {
+    display: flex;
+    flex-direction: column;
+}
+.panel {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+}
+.panel-title,.panel-footer {
+    flex: 0 1 auto;
+}
+.panel-body {
+    flex: 1 1 auto;
+}

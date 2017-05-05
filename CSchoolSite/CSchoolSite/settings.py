@@ -17,6 +17,8 @@ import CSchoolSite.personalsettings as psettings
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+HOST = 'https://olimp-nw.ru'
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
@@ -49,7 +51,6 @@ INSTALLED_APPS = [
     'bootstrap3',
     'registration',
     'tinymce',
-    'notifications',
 
     'main',
     'news',
@@ -189,3 +190,9 @@ EJUDGE_CONTESTS_CMD_PATH = os.path.join(EJUDGE_BIN, 'ejudge-contests-cmd')
 FILESERVE_METHOD = psettings.FILESERVE_METHOD
 FILESERVE_MEDIA_URL = psettings.FILESERVE_MEDIA_URL
 
+# telegram bot
+
+TELEGRAM_TOKEN = 'your-token-here'
+
+# celery
+BROKER_URL = 'amqp://cschool:cschool@localhost:5672//'

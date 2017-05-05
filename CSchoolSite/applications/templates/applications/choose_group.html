@@ -3,33 +3,7 @@
 {% block page_title %}{% trans 'Submit application to' %} {{ period.name }}{% endblock %}
 {% block submit_application_button %}{% endblock %}
 {% block css %}
-    <style type="text/css">
-.row {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  flex-wrap: wrap;
-}
-.row > [class*='col-'] {
-  display: flex;
-  flex-direction: column;
-}
-.panel {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -ms-flexbox;
-    display: flex;
-    flex-flow: column;
-    height: 100%;
-}
-.panel-title,.panel-footer {
-    flex: 0 1 auto;
-}
-.panel-body {
-    flex: 1 1 auto;
-}
-    </style>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/choose_group.all.css' %}" />
 {% endblock %}
 {% block content %}
 <h3 class="page-header text-center">

@@ -1,25 +1,16 @@
 {% load static %}
 {% load bootstrap3 %}
 {% load i18n %}
-{% load notifications_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{% block title %}{% block page_title %}{% trans 'Main page' %}{% endblock %} - {% trans 'Computer school' %}{% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}" />
-
     {% block css %}
-        <link rel="stylesheet" type="text/css" href="{% static 'css/notifications.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'css/default.all.css' %}" />
     {% endblock %}
-
-    <style type="text/css">
-        body {
-            padding-bottom: 16px;
-        }
-    </style>
-
 </head>
 <body>
     {% block modals %}{% endblock %}
@@ -37,14 +28,6 @@
 
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    {% comment %}
-                    {% if user.is_authenticated %}
-                    <li>
-                        {% notifications_unread as unread_count %}
-                        <a href="{% url 'notifications:all' %}" {% if unread_count %}class="badge-notify" data-badge="{{ unread_count }}"{% endif %}>{% bootstrap_icon 'envelope' %}</a>
-                    </li>
-                    {% endif %}
-                    {% endcomment %}
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                         {% if user.is_education_committee %}
@@ -65,7 +48,7 @@
                         <ul class="dropdown-menu">
                             {% if user.is_authenticated %}
                                 {% if user.is_staff %}
-                                    <li><a href="/admin">{% trans 'Administration' %}</a></li>
+                                    <li><a href="{% url 'admin:index' %}">{% trans 'Administration' %}</a></li>
                                 {% endif %}
                                 {% if user.personal %}
                                     <li><a href="{% url 'user_profile' %}">{% trans 'Profile' %}</a></li>
@@ -113,14 +96,8 @@
         {% endblock %}
     </div>
 
-    <script type="text/javascript" src="{% static 'js/jquery.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
-
-    <script type="text/javascript">
-        $('.dropdown-toggle').dropdown();
-    </script>
-
     {% block scripts %}
+        <script type="text/javascript" src="{% static 'js/default.all.js' %}"></script>
     {% endblock %}
 </body>
 </html>

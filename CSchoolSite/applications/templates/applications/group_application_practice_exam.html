@@ -96,11 +96,5 @@
     {% endfor %}
 {% endblock %}
 {% block scripts %}
-    <script type="text/javascript">
-        var $lang = jQuery('.compiler-select').on('change', function() {
-            window.localStorage['CSchoolSite_DEFAULT_COMPILER'] = this.value
-        });
-        if (window.localStorage['CSchoolSite_DEFAULT_COMPILER'])
-            $lang.val(window.localStorage['CSchoolSite_DEFAULT_COMPILER']);
-    </script>
+    <script type="text/javascript" src="{% static 'js/compiler.all.js' %}"></script>
 {% endblock %}

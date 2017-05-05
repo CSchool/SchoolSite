@@ -18,11 +18,9 @@
 </table>
 {% endblock %}
 {% block scripts %}
-    {{ block.super }}
-    <script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
     <script type="text/javascript">
         var dataUrl = "{% url 'applications_enrolled_table' period.id %}";
         var langUrl = "{% static 'DataTablesRussian.json' %}";
     </script>
-    <script type="text/javascript" src="{% static 'js/enrolled.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/enrolled.all.js' %}"></script>
 {% endblock %}

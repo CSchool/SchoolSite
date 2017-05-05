@@ -6,9 +6,7 @@
 {% block page_title %}{% trans 'Choose your relatives' %}{% endblock %}
 
 {% block css %}
-    {{ block.super }}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/dataTables.bootstrap.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/relatives_choice.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/relatives_choice.all.css' %}" />
 {% endblock %}
 
 {% block content %}
@@ -31,16 +29,11 @@
 {% endblock %}
 
 {% block scripts %}
-    {{ block.super }}
-
-    <script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
-
     <script>
         var dataUrl = "{% url 'possible_relatives_table' %}";
         var requestUrl = "{% url 'json_relatives_choice' %}";
         var langUrl = "{% static 'DataTablesRussian.json' %}";
     </script>
-
-    <script type="text/javascript" src="{% static 'js/relatives_choice.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/relatives_choice.all.js' %}"></script>
 {% endblock %}
 

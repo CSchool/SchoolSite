@@ -6,9 +6,7 @@
 {% block page_title %}{% blocktrans with username=user.username %}Profile of user "{{ username }}"{% endblocktrans %}{% endblock %}
 
 {% block css %}
-    {{ block.super }}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/user_profile.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/dataTables.bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/user_profile.all.css' %}" />
 {% endblock %}
 
 {% block modals %}
@@ -145,13 +143,11 @@
 {% endblock %}
 
 {% block scripts %}
-    {{ block.super }}
     <script>
         var dataUrl = "{% url 'relationship_table' %}";
         var langUrl = "{% static 'DataTablesRussian.json' %}";
         var codeUrl = "{% url 'get_relationship_code' %}";
         var infoUrl = "{% url 'relationship_code_info' %}";
     </script>
-    <script type="text/javascript" src="{% static 'js/datatables.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/user_profile.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/user_profile.all.js' %}"></script>
 {% endblock %}
