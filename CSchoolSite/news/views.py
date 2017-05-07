@@ -21,7 +21,7 @@ def index(req, page="1"):
     except ValueError:
         raise Http404
     posts = list(NewsPost.objects.all())
-    if req.user.is_authenticated:
+    if req.user.is_authenticated and req.user.notify_onsite:
         notifications = list(Notification.objects.filter(user=req.user).all())
     else:
         notifications = []
