@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-07 18:52+0300\n"
+"POT-Creation-Date: 2017-05-07 19:15+0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -65,7 +65,6 @@ msgid "Student's initials"
 msgstr "ФИО ученика"
 
 #: applications/forms.py:46 applications/forms.py:110 userprofile/models.py:18
-#: userprofile/templates/userprofile/relatives_choice.html:21
 msgid "birthday"
 msgstr "Дата рождения"
 
@@ -912,7 +911,6 @@ msgid "Enrolled to %(period)s"
 msgstr "Зачисленные в %(period)s"
 
 #: applications/templates/applications/view_enrolled.html:13
-#: userprofile/templates/userprofile/relatives_choice.html:20
 #: userprofile/templates/userprofile/user_profile.html:72
 msgid "Initials"
 msgstr "ФИО"
@@ -1258,7 +1256,7 @@ msgstr "Получать уведомления по электронной по
 msgid "Send notifications via Telegram bot"
 msgstr "Получать уведомления с помощью Telegram-бота"
 
-#: userprofile/forms.py:154
+#: userprofile/forms.py:156
 msgid "Invitation code"
 msgstr "Пригласительный код"
 
@@ -1336,24 +1334,9 @@ msgstr "Отношение #%(id)s"
 msgid "Delete"
 msgstr "Удалить"
 
-#: userprofile/templates/userprofile/relatives_choice.html:6
-#: userprofile/templates/userprofile/relatives_choice.html:14
-msgid "Choose your relatives"
-msgstr "Выберите родственников"
-
-#: userprofile/templates/userprofile/relatives_choice.html:19
-msgid "Username"
-msgstr "Имя пользователя"
-
-#: userprofile/templates/userprofile/relatives_choice.html:22
-#: userprofile/templates/userprofile/user_profile.html:125
-msgid "Action"
-msgstr "Действие"
-
 #: userprofile/templates/userprofile/user_profile.html:6
-#, python-format
-msgid "Profile of user \"%(username)s\""
-msgstr "Профиль пользователя \"%(username)s\""
+msgid "User profile"
+msgstr "Профиль пользователя"
 
 #: userprofile/templates/userprofile/user_profile.html:23
 msgid "To add your relative, go to their profile and redeem this code"
@@ -1408,6 +1391,10 @@ msgstr "Изменить профиль"
 msgid "Who"
 msgstr "Кто"
 
+#: userprofile/templates/userprofile/user_profile.html:125
+msgid "Action"
+msgstr "Действие"
+
 #: userprofile/templates/userprofile/user_profile.html:134
 msgid "Add relatives"
 msgstr "Добавить родственников"
@@ -1425,9 +1412,8 @@ msgid "I have an invitation code"
 msgstr "У меня есть код от родственника"
 
 #: userprofile/templates/userprofile/user_profile_edit.html:10
-#, python-format
-msgid "Editing profile of \"%(username)s\""
-msgstr "Редактирование профиля пользователя \"%(username)s\""
+msgid "Editing profile"
+msgstr "Редактирование профиля"
 
 #: userprofile/templates/userprofile/user_profile_edit.html:15
 msgid "Edit profile"
@@ -1444,6 +1430,18 @@ msgstr "будет считаться вашим ребёнком"
 #: userprofile/views.py:151
 msgid "will be your parent"
 msgstr "будет считаться вашим родителем"
+
+#~ msgid "Choose your relatives"
+#~ msgstr "Выберите родственников"
+
+#~ msgid "Username"
+#~ msgstr "Имя пользователя"
+
+#~ msgid "Profile of user \"%(username)s\""
+#~ msgstr "Профиль пользователя \"%(username)s\""
+
+#~ msgid "Editing profile of \"%(username)s\""
+#~ msgstr "Редактирование профиля пользователя \"%(username)s\""
 
 #~ msgid "%(action)s from %(actor)s"
 #~ msgstr "%(action)s от %(actor)s"

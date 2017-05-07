@@ -135,7 +135,9 @@ class UserForm(ModelForm):
 
     def save(self, commit=True):
         instance = super(UserForm, self).save(commit=False)
-        instance.username = instance.email
+        if not User.objects.filter(username=instance.email).exists():
+            # We should not duplicate usernames
+            instance.username = instance.email
         instance.notify_onsite = self.cleaned_data['notify_onsite']
         instance.notify_email = self.cleaned_data['notify_email']
         instance.notify_telegram = self.cleaned_data['notify_telegram']

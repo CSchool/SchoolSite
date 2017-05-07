@@ -7,7 +7,7 @@
     <link rel='stylesheet' type='text/css' href='{% static 'css/jquery-ui-onoff.all.css' %}' />
 {% endblock %}
 
-{% block page_title %}{% blocktrans with username=user.username %}Editing profile of "{{ username }}"{% endblocktrans %}{% endblock %}
+{% block page_title %}{% trans 'Editing profile' %}{% endblock %}
 
 {% block content %}
 

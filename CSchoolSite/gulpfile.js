@@ -29,7 +29,6 @@ gulp.task('build', function(callback) {
         'compiler_all_js',
         'datatables_all_js',
         'enrolled_all_js',
-        'relatives_choice_all_js',
         'user_profile_all_js',
         'news_all_js',
         'default_all_css',
@@ -37,7 +36,6 @@ gulp.task('build', function(callback) {
         'choose_group_all_css',
         'jqueryui_all_css',
         'user_profile_all_css',
-        'relatives_choice_all_css',
     callback)
 });
 
@@ -132,12 +130,6 @@ gulp.task('enrolled_all_js', function () {
         .pipe(uglify())
         .pipe(gulp.dest('./static/js'));
 });
-gulp.task('relatives_choice_all_js', function () {
-    return gulp.src(['./static/js/datatables.all.js', './userprofile/static/js/relatives_choice.js'])
-        .pipe(concat('relatives_choice.all.js'))
-        .pipe(uglify())
-        .pipe(gulp.dest('./static/js'));
-});
 gulp.task('user_profile_all_js', function () {
     return gulp.src(['./static/js/datatables.all.js', './userprofile/static/js/user_profile.js'])
         .pipe(concat('user_profile.all.js'))
@@ -184,11 +176,5 @@ gulp.task('user_profile_all_css', function () {
     return gulp.src(['./static/css/default.all.css', './userprofile/static/css/user_profile.css', './static/css/dataTables.bootstrap.css'])
         .pipe(cleanCSS({level: 2}))
         .pipe(concat('user_profile.all.css'))
-        .pipe(gulp.dest('./static/css'));
-});
-gulp.task('relatives_choice_all_css', function () {
-    return gulp.src(['./static/css/default.all.css', './userprofile/static/css/relatives_choice.css', './static/css/dataTables.bootstrap.css'])
-        .pipe(cleanCSS({level: 2}))
-        .pipe(concat('relatives_choice.all.css'))
         .pipe(gulp.dest('./static/css'));
 });
