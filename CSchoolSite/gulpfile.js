@@ -9,6 +9,8 @@ var runSequence = require('run-sequence');
 
 gulp.task('build', function(callback) {
     runSequence(
+        'copy_fontawesome_css',
+        'copy_fontawesome_fonts',
         'copy_bootstrap_css',
         'copy_bootstrap_js',
         'copy_bootstrap_fonts',
@@ -31,6 +33,7 @@ gulp.task('build', function(callback) {
         'user_profile_all_js',
         'news_all_js',
         'default_all_css',
+        'social_all_css',
         'choose_group_all_css',
         'jqueryui_all_css',
         'user_profile_all_css',
@@ -38,7 +41,14 @@ gulp.task('build', function(callback) {
     callback)
 });
 
-
+gulp.task('copy_fontawesome_css', function() {
+    return gulp.src('./node_modules/font-awesome/css/font-awesome.min.css')
+        .pipe(gulp.dest('./static/css'));
+});
+gulp.task('copy_fontawesome_fonts', function() {
+    return gulp.src('./node_modules/font-awesome/fonts/*')
+        .pipe(gulp.dest('./static/fonts'));
+});
 gulp.task('copy_bootstrap_css', function() {
     return gulp.src('./node_modules/bootstrap/dist/css/*')
         .pipe(gulp.dest('./static/css'));
@@ -144,6 +154,12 @@ gulp.task('default_all_css', function () {
     return gulp.src(['./main/static/css/common.css', './static/css/bootstrap.min.css'])
         .pipe(cleanCSS({level: 2}))
         .pipe(concat('default.all.css'))
+        .pipe(gulp.dest('./static/css'));
+});
+gulp.task('social_all_css', function () {
+    return gulp.src(['./static/css/default.all.css', './main/static/css/social.css', './static/css/font-awesome.min.css'])
+        .pipe(cleanCSS({level: 2}))
+        .pipe(concat('social.all.css'))
         .pipe(gulp.dest('./static/css'));
 });
 gulp.task('choose_group_all_css', function () {

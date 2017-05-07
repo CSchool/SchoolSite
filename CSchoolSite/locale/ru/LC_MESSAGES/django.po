@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-05-07 10:54+0300\n"
+"POT-Creation-Date: 2017-05-07 18:52+0300\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -1057,7 +1057,7 @@ msgstr "Профиль"
 msgid "Sign off"
 msgstr "Выйти"
 
-#: templates/base.html:63 templates/registration/login.html:16
+#: templates/base.html:63 templates/registration/login.html:26
 msgid "Sign in"
 msgstr "Войти"
 
@@ -1065,11 +1065,15 @@ msgstr "Войти"
 msgid "Sign up"
 msgstr "Зарегистироваться"
 
-#: templates/registration/login.html:4 templates/registration/login.html:7
+#: templates/registration/login.html:5 templates/registration/login.html:11
 msgid "Authorization"
 msgstr "Вход в систему"
 
-#: templates/registration/login.html:13
+#: templates/registration/login.html:17
+msgid "VK"
+msgstr "ВКонтакте"
+
+#: templates/registration/login.html:23
 #: templates/registration/password_reset_form.html:5
 #: templates/registration/password_reset_form.html:8
 msgid "Password recovery"

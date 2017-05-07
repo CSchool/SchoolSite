@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'bootstrap3',
     'registration',
     'tinymce',
+    'social_django',
 
     'main',
     'news',
@@ -89,6 +90,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
             'loaders': [
                 'django.template.loaders.filesystem.Loader',
@@ -131,6 +135,15 @@ AUTH_PASSWORD_VALIDATORS = [
         }
     }
 ]
+
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.vk.VKOAuth2',
+
+    'django.contrib.auth.backends.ModelBackend'
+]
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = ''
+SOCIAL_AUTH_VK_OAUTH2_SECRET = ''
 
 AUTH_USER_MODEL = 'userprofile.User'
 ADMIN_TOOLS_MENU = 'menu.CustomMenu'
