@@ -812,7 +812,7 @@ msgstr "Отменить заявку"
 
 #: applications/templates/applications/group_application.html:335
 msgid "Submit application for review"
-msgstr "Отправить заявку на рассмотрение"
+msgstr "Отправить на рассмотрение"
 
 #: applications/templates/applications/group_application_edit_info.html:26
 msgid "Uploaded"

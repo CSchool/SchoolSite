@@ -5,9 +5,18 @@ var uglify = require('gulp-uglify');
 var gutil = require('gulp-util');
 var cleanCSS = require('gulp-clean-css');
 var runSequence = require('run-sequence');
+var download = require('gulp-download');
 
 
 gulp.task('build', function(callback) {
+    runSequence(
+        'copy_all',
+        'build_css',
+        'build_js',
+    callback)
+});
+
+gulp.task('copy_all', function(callback) {
     runSequence(
         'copy_fontawesome_css',
         'copy_fontawesome_fonts',
@@ -21,20 +30,30 @@ gulp.task('build', function(callback) {
         'copy_datatables_js',
         'copy_datatablesbs_js',
         'copy_datatablesbs_css',
+    callback)
+});
+
+gulp.task('build_js', function(callback) {
+    runSequence(
         'merge_datatables',
         'default_all_js',
         'jqueryui_all_js',
-        'jqueryui_onoff_all_css',
         'jqueryui_datepicker_all_js',
         'compiler_all_js',
         'datatables_all_js',
         'enrolled_all_js',
         'user_profile_all_js',
         'news_all_js',
+    callback)
+});
+
+gulp.task('build_css', function(callback) {
+    runSequence(
         'default_all_css',
         'social_all_css',
         'choose_group_all_css',
         'jqueryui_all_css',
+        'jqueryui_onoff_all_css',
         'user_profile_all_css',
     callback)
 });
@@ -48,8 +67,10 @@ gulp.task('copy_fontawesome_fonts', function() {
         .pipe(gulp.dest('./static/fonts'));
 });
 gulp.task('copy_bootstrap_css', function() {
-    return gulp.src('./node_modules/bootstrap/dist/css/*')
-        .pipe(gulp.dest('./static/css'));
+    return download('https://bootswatch.com/readable/bootstrap.min.css')
+          .pipe(gulp.dest('./static/css'))
+//    return gulp.src('./node_modules/bootstrap/dist/css/*')
+//        .pipe(gulp.dest('./static/css'));
 });
 gulp.task('copy_bootstrap_js', function() {
     return gulp.src('./node_modules/bootstrap/dist/js/*')
