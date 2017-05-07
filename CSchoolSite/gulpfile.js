@@ -22,7 +22,7 @@ gulp.task('build', function(callback) {
         'merge_datatables',
         'default_all_js',
         'jqueryui_all_js',
-        'jqueryui_onoff_all_js',
+        'jqueryui_onoff_all_css',
         'jqueryui_datepicker_all_js',
         'compiler_all_js',
         'datatables_all_js',
