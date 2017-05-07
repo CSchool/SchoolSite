@@ -16,7 +16,7 @@ from django.utils.timezone import utc
 from django.utils.translation import ugettext as _
 from django.contrib.auth.views import LoginView
 
-from userprofile.forms import UserForm, ExtendedAuthenticationForm
+from userprofile.forms import UserForm, ExtendedAuthenticationForm, UserNotificationsRenderForm, UserRenderForm
 from userprofile.utils import is_group_member
 from userprofile.models import User, Relationship
 from main.helpers import get_sapp
@@ -78,14 +78,16 @@ def logout(req):
 def edit_profile(request):
     if not request.user.personal:
         raise PermissionDenied
-    form = UserForm(request.POST or None, instance=request.user)
+    form = UserRenderForm(request.POST or None, instance=request.user)
+    nform = UserNotificationsRenderForm(request.POST or None, instance=request.user)
 
     if request.method == 'POST':
-        if form.is_valid():
-            form.save()
+        xform = UserForm(request.POST, instance=request.user)
+        if xform.is_valid():
+            xform.save()
             return HttpResponseRedirect(reverse('user_profile'))
 
-    return render(request, 'userprofile/user_profile_edit.html', {"form": form, "sapp": get_sapp(request)})
+    return render(request, 'userprofile/user_profile_edit.html', {"form": form, "nform": nform, "sapp": get_sapp(request)})
 
 
 @csrf_exempt

@@ -104,8 +104,12 @@
         </div>
         <div class="panel-footer clearfix">
             <div class="pull-right">
-                <a href="{% url 'password_change' %}" class="btn btn-default">{% bootstrap_icon 'edit' %} {% trans 'Change password' %}</a>
-                <a href="{% url 'user_profile_edit' %}" class="btn btn-success">{% bootstrap_icon 'edit' %} {% trans 'user_profile_edit_profile' %}</a>
+                <a href="{% url 'password_change' %}" class="btn btn-default">
+                    {% bootstrap_icon 'edit' %} {% trans 'Change password' %}
+                </a>
+                <a href="{% url 'user_profile_edit' %}" class="btn btn-success">
+                    {% bootstrap_icon 'edit' %} {% trans 'user_profile_edit_profile' %}
+                </a>
             </div>
         </div>
     </div>

@@ -28,6 +28,10 @@ class User(AbstractUser):
     telegram_id = models.BigIntegerField(null=True, blank=True, default=None, unique=True)
     telegram_username = models.CharField(max_length=256, default=None, unique=True, blank=True, null=True)
 
+    notify_onsite = models.BooleanField(null=False, blank=False, default=True)
+    notify_email = models.BooleanField(null=False, blank=False, default=True)
+    notify_telegram = models.BooleanField(null=False, blank=False, default=True)
+
     def __str__(self):
         if not self.email:
             return self.get_aliased_username()

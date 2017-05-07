@@ -22,6 +22,7 @@ gulp.task('build', function(callback) {
         'merge_datatables',
         'default_all_js',
         'jqueryui_all_js',
+        'jqueryui_onoff_all_js',
         'jqueryui_datepicker_all_js',
         'compiler_all_js',
         'datatables_all_js',
@@ -155,6 +156,12 @@ gulp.task('jqueryui_all_css', function () {
     return gulp.src(['./static/css/default.all.css', './static/css/jquery-ui.min.css'])
         .pipe(cleanCSS({level: 2}))
         .pipe(concat('jquery-ui.all.css'))
+        .pipe(gulp.dest('./static/css'));
+});
+gulp.task('jqueryui_onoff_all_css', function () {
+    return gulp.src(['./static/css/jquery-ui.all.css', './main/static/css/onoffswitch.css'])
+        .pipe(cleanCSS({level: 2}))
+        .pipe(concat('jquery-ui-onoff.all.css'))
         .pipe(gulp.dest('./static/css'));
 });
 gulp.task('user_profile_all_css', function () {

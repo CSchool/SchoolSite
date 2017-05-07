@@ -4,7 +4,7 @@
 {% load i18n %}
 
 {% block css %}
-    <link rel='stylesheet' type='text/css' href='{% static 'css/jquery-ui.all.css' %}' />
+    <link rel='stylesheet' type='text/css' href='{% static 'css/jquery-ui-onoff.all.css' %}' />
 {% endblock %}
 
 {% block page_title %}{% blocktrans with username=user.username %}Editing profile of "{{ username }}"{% endblocktrans %}{% endblock %}
@@ -12,14 +12,31 @@
 {% block content %}
 
     <div class="col-md-6 col-md-offset-3">
+        <h3 class="text-center page-header">{% trans 'Edit profile' %}</h3>
+
         <form method="POST" class="form" role="form">
-            {% csrf_token %}
-            {% bootstrap_form form %}
-            {% buttons %}
-                <button type="submit" class="btn btn-lg btn-primary btn-block">{% trans 'Edit profile' %}</button>
-            {% endbuttons %}
+        {% csrf_token %}
+        {% bootstrap_form form %}
+
+        <h3 class="text-center page-header">{% trans 'Notification settings' %}</h3>
+
+        {% for field in nform %}
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="pull-right">{{ field.label_tag }}</div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="pull-left">{{ field }}</div>
+                </div>
+            </div>
+        {% endfor %}
+        <br />
+        {% buttons %}
+            <button type="submit" class="btn btn-lg btn-primary btn-block">{% trans 'Save' %}</button>
+        {% endbuttons %}
         </form>
     </div>
+
 
 {% endblock %}
 

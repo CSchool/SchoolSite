@@ -37,6 +37,8 @@ def notify_telegram(id, msg):
 
 
 def notify_email(email, subject, msg):
+    if not email:
+        return
     try:
         from mistune import markdown
         html = markdown(msg)
@@ -48,8 +50,7 @@ def notify_email(email, subject, msg):
 Системное время: {date} <br />
 Пожалуйста, не отвечайте на это письмо <br />
 '''.format(date=date)
-        if email:
-            send_mail(subject, msg, None, recipient_list=[email], html_message=html)
+        send_mail(subject, msg, None, recipient_list=[email], html_message=html)
     except:
         pass
 
@@ -75,9 +76,12 @@ def notify(user, subject, msg, async=True):
     notify_insite(user, subject, msg)
     if async:
         from CSchoolSite.celery import notify_async
-        return notify_async.delay(user.telegram_id, user.email, subject, msg)
-    notify_email(user.email, subject, msg)
-    notify_telegram(user.telegram_id, msg)
+        return notify_async.delay(user.telegram_id if user.notify_telegram else None,
+                                  user.email if user.notify_email else None, subject, msg)
+    if user.notify_email:
+        notify_email(user.email, subject, msg)
+    if user.notify_telegram:
+        notify_telegram(user.telegram_id, msg)
 
 
 def read_template(name):
