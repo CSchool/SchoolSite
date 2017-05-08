@@ -2,7 +2,7 @@ import datetime
 
 
 def get_user_vk_info(backend, user, response, *args, **kwargs):
-    if getattr(backend, 'name', None) != 'vk':
+    if getattr(backend, 'name', None) != 'vk-oauth2':
         return
     try:
         import vk
@@ -10,8 +10,8 @@ def get_user_vk_info(backend, user, response, *args, **kwargs):
         api = vk.API(session, v='5.64', lang='ru', timeout=10)
         res = api.users.get(user_ids=response.get('user_id'), fields='bdate,nickname')
         if res:
-            bdate = res.get('bdate')
-            nickname = res.get('nickname')
+            bdate = res[0].get('bdate')
+            nickname = res[0].get('nickname')
             if bdate:
                 sp = bdate.split('.')
                 if len(sp) == 3:
