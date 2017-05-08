@@ -1,7 +1,7 @@
 import datetime
 
 
-def get_user_vk_info(backend, details, response, social_user, uid, user, *args, **kwargs):
+def get_user_vk_info(backend, user, response, *args, **kwargs):
     if getattr(backend, 'name', None) != 'vk':
         return
     try:
