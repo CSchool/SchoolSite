@@ -10,6 +10,7 @@ from userprofile.models import User
 
 
 class TextDisplayWidget(forms.widgets.TextInput):
+    """A simple widget, that displays text"""
     def render(self, name, value, attrs=None, renderer=None):
         if isinstance(value, bool):
             return '<p>%s</p>' % (_('Yes') if value else _('No'))
@@ -64,7 +65,6 @@ class EventApplicationGenericForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
-
 
 
 class EventApplicationPrivForm(EventApplicationGenericForm):

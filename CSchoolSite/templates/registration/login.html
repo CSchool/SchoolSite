@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load static %}
 {% load bootstrap3 %}
+{% block login_button_class %} class="active"{% endblock %}
 {% block page_title %}{% trans 'Authorization' %}{% endblock %}
 {% block css %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/social.all.css' %}" />
@@ -12,7 +13,7 @@
 </div>
 
 <div class="col-md-4 col-md-offset-4">
-    <a class="btn btn-block btn-social btn-vk btn-lg" href="{% url "social:begin" "vk-oauth2" %}">
+    <a class="btn btn-block btn-social btn-vk" href="{% url "social:begin" "vk-oauth2" %}">
         <i class="fa fa-vk"></i>
         {% trans 'VK' %}
     </a>
